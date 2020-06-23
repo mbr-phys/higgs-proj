@@ -32,29 +32,31 @@ def mHmin(contour):
 
     return minh_loc, mint_loc, maxt_loc
 
-def ckm_func(mVub,Vcb,Vus,delta):
+def ckm_func(par):
     '''
         Function to calculate all CKM element magnitudes using standard parameterisation
         Returns: (Vud,Vus,Vub,Vcd,Vcs,Vcb,Vtd,Vts,Vtb)
+
+        flavio had its own ckm function, might as well use it so this is redundant now
     '''
-    s13 = mVub
+    s13 = par['Vub']
     c13 = np.sqrt(1-s13**2)
-    Vub = s13*np.exp(-1j*delta)
-    s23 = Vcb/c13
+    delt = np.exp(1j*par['delta'])
+    Vub = s13/delt
+    s23 = par['Vcb']/c13
     c23 = np.sqrt(1-s23**2)
-    s12 = Vus/c13
+    s12 = par['Vus']/c13
     c12 = np.sqrt(1-s12**2)
     Vud = c12*c13
-    delt = np.exp(1j*delta)
     Vcd = -s12*c23-c12*s23*s13*delt
     Vcs = c12*c23-s12*s23*s13*delt
     Vtd = s12*s23-c12*c23*s13*delt
     Vts = -c12*s23-s12*c23*s13*delt
     Vtb = c23*c13
 
-    return Vud,Vus,Vub,Vcd,Vcs,Vcb,Vtd,Vts,Vtb
+    return np.array([[Vud,par['Vus'],Vub],[Vcd,Vcs,par['Vcb']],[Vtd,Vts,Vtb]])
 
-def bsgamma(mt,mW,lam_QCD,mH,tanb):
+def bsgamma(mt,mW,lam_QCD,tanb,mH):
     '''
         Find BR[B->Xsgamma] 2HDM contributions to Wilson Coeffs C7 & C8 as fns of mH+ and tanb
     '''
@@ -67,13 +69,7 @@ def bsgamma(mt,mW,lam_QCD,mH,tanb):
     factor = 1 - (4/3 + lmuM)*amu - (9.125 + 419*lmuM/72 + (2/9)*lmuM**2)*amu**2 - (0.3125*lmuM**3 + 4.5937*lmuM**2 + 25.3188*lmuM + 81.825)*amu**3
     mtmu = mt*factor
 
-    xtW = (mtmu/mW)**2
     xtH = (mtmu/mH)**2
-
-    F1_tW = (xtW**3 - 6*xtW**2 + 3*xtW + 2 + 6*xtW*np.log(xtW))/(12*(xtW-1)**4)
-    F2_tW = (2*xtW**3 + 3*xtW**2 - 6*xtW + 1 - 6*np.log(xtW)*xtW**2)/(12*(xtW-1)**4)
-    # C_7SM = -(xtW/2)*(2*F1_tW + 3*F2_tW)
-    # C_8SM = -(3*xtW/2)*F1_tW
 
     F1_tH = (xtH**3 - 6*(xtH**2) + 3*xtH + 2 + 6*xtH*np.log(xtH))/(12*((xtH-1)**4))
     F2_tH = (2*xtH**3 + 3*xtH**2 - 6*xtH + 1 - 6*np.log(xtH)*xtH**2)/(12*((xtH-1)**4))
@@ -82,15 +78,17 @@ def bsgamma(mt,mW,lam_QCD,mH,tanb):
     C_7H = -(xtH/2)*((1/(tanb**2))*((2/3)*F1_tH + F2_tH) + (2/3)*F3_tH + F4_tH)
     C_8H = -(xtH/2)*(F1_tH/(tanb**2) + F3_tH)
 
-    # C_7 = C_7SM + C_7H
-    # C_8 = C_8SM + C_8H
-
     return C_7H, C_8H
 
-def bmumu(mt,Vtb,Vts,mmu,mW,mb,ms,mc,mu,wangle,higgs,v,Vus,Vub,Vcs,Vcb,mH0,QCD,tanb,mH):
+def bmumu(mt,mmu,mW,mb,ms,mc,mu,wangle,higgs,v,CKM,mH0,QCD,tanb,mH):
     '''
         Find BR[B(s/d)->mumu] 2HDM contributions to Wilson Coeffs C10, C10', CS (=CP), CS' (=CP')
     '''
+    Vub, Vcb, Vtb = CKM[0,2], CKM[1,2], CKM[2,2]
+    if ms > 0.08:
+        Vus, Vcs, Vts = CKM[0,1], CKM[1,1], CKM[2,1]
+    else:
+        Vus, Vcs, Vts = CKM[0,0], CKM[1,0], CKM[2,0]
     def I0(b):
         i = (1-3*b)/(-1+b) + 2*(b**2)*np.log(b)/((b-1)**2)
         return i
@@ -167,10 +165,11 @@ def bmumu(mt,Vtb,Vts,mmu,mW,mb,ms,mc,mu,wangle,higgs,v,Vus,Vub,Vcs,Vcb,mH0,QCD,t
 
     return C10, C10P, CS, CSP
 
-def mixing(ckm,vev,mu,md,mW,QCD,tanb,mH):
+def mixing(CKM,vev,mu,md,mW,QCD,tanb,mH):
     '''
         Find DeltaMq 2HDM contributions to Wilson Coeffs C1, C1', C2, C2', C4, C5 using 1903.10440
     '''
+    Vus, Vub, Vcs, Vcb, Vts, Vtb = CKM[0,1], CKM[0,2], CKM[1,1], CKM[1,2], CKM[2,1], CKM[2,2]
     def I1(b):
         i = -1/(b-1) + b*np.log(b)/((b-1)**2)
         return i
@@ -197,8 +196,8 @@ def mixing(ckm,vev,mu,md,mW,QCD,tanb,mH):
     eu = [cob*mu[0]/vev,cob*mu[1]/vev,cob*mu[2]/vev]
     ed = [tanb*md[0]/vev,tanb*md[1]/vev,tanb*md[2]/vev]
     zs = [(mu[0]/mH)**2,(mu[1]/mH)**2,(mu[2]/mH)**2]
-    v2 = [np.conj(ckm[1]),np.conj(ckm[4]),np.conj(ckm[7])]
-    v3 = [ckm[2],ckm[5],ckm[8]]
+    v2 = [np.conj(Vus),np.conj(Vcs),np.conj(Vts)]
+    v3 = [Vub,Vcb,Vtb]
 
     def c1_1():
         pref = -1/(32*(np.pi*mH)**2)
@@ -276,7 +275,8 @@ def mixing(ckm,vev,mu,md,mW,QCD,tanb,mH):
 
 if __name__ == '__main__':
     par = flavio.default_parameters.get_central_all()
-    #print(par['Vub'])
-    ckm_els = ckm_func(0.003683,0.04162,0.224834,65.80*np.pi/180)
-    for i in range(len(ckm_els)):
-        print(abs(ckm_els[i]))
+    ckfl = flavio.physics.ckm.get_ckm(par)
+    ckm_els = ckm_func(par)
+    for i in range(3):
+        for j in range(3):
+            print(ckfl[i,j],ckm_els[i,j])
