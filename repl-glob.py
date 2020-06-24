@@ -13,7 +13,7 @@ pars = flavio.default_parameters
 
 vev = Parameter('vev')
 vev.tex = r"$v$"
-vev.description = "Vacuum Expectation Value of the SM Higgs Mechanism"
+vev.description = "Vacuum Expectation Value of the SM Higgs"
 pars.set_constraint('vev','246')
 
 lam_QCD = Parameter('lam_QCD')
@@ -27,19 +27,19 @@ mH0 = 1500 # mass of heavy neutral Higgs, GeV
 
 my_obs = [
     # what observables are we considering in the fit
-#    'BR(B+->taunu)',
-#    'BR(B+->munu)',
-#    'BR(D+->munu)',
-#    'BR(Ds->munu)',
-#    'BR(Ds->taunu)',
-#    'BR(tau->Knu)',
-#    'BR(tau->pinu)',
+    'BR(B+->taunu)',
+    'BR(B+->munu)',
+    'BR(D+->munu)',
+    'BR(Ds->munu)',
+    'BR(Ds->taunu)',
+    'BR(tau->Knu)',
+    'BR(tau->pinu)',
 #    'RKpi(P+->munu)',
-#    'BR(B->Xsgamma)',
-#    'BR(Bs->mumu)',
-#    'BR(B0->mumu)',
-#    'Rtaul(B->Dlnu)',
-#    'Rtaul(B->D*lnu)',
+    'BR(B->Xsgamma)',
+    'BR(Bs->mumu)',
+    'BR(B0->mumu)',
+    'Rtaul(B->Dlnu)',
+    'Rtaul(B->D*lnu)',
 ]
 
 FL2 = FastLikelihood(name="likelihood test",observables=my_obs,
@@ -72,21 +72,24 @@ def func(wcs):
     C7_bs, C8_bs = bsgamma(par,10**tanb,10**mH)
     C10_s, C10p_s, CS_s, CSp_s = bmumu(par,['m_s',1],ckm_els,mH0,10**tanb,10**mH)
     C10_d, C10p_d, CS_d, CSp_d = bmumu(par,['m_d',0],ckm_els,mH0,10**tanb,10**mH)
+    CSL_tr, CSR_tr = rat_d(par,'m_tau',10**tanb,10**mH)
+    CSL_mr, CSR_mr = rat_d(par,'m_mu',10**tanb,10**mH)
+    CSL_er, CSR_er = rat_d(par,'m_e',10**tanb,10**mH)
 
     wc = flavio.WilsonCoefficients()
     wc.set_initial({ # tell flavio what WCs you're referring to with your variables
-#                    'CSR_butaunutau': CSR_b, 'CSL_butaunutau': CSL_b, # B+->taunu
-#                    'CSR_bumunumu': CSR_b, 'CSL_bumunumu': CSL_b, # B+->munu
-#                    'CSR_dcmunumu': CSR_d, 'CSL_dcmunumu': CSL_d, # D+->munu
-#                    'CSR_scmunumu': CSR_ds, 'CSL_scmunumu': CSL_ds, # Ds->munu
-#                    'CSR_sctaunutau': CSR_ds, 'CSL_sctaunutau': CSL_ds, # Ds->taunu
-#                    'CSR_sutaunutau': CSR_k, 'CSL_sutaunutau': CSL_k, # tau->Knu
-#                    'CSR_dutaunutau': CSR_p, 'CSL_dutaunutau': CSL_p, # tau->pinu
+                    'CSR_butaunutau': CSR_b, 'CSL_butaunutau': CSL_b, # B+->taunu
+                    'CSR_bumunumu': CSR_b, 'CSL_bumunumu': CSL_b, # B+->munu
+                    'CSR_dcmunumu': CSR_d, 'CSL_dcmunumu': CSL_d, # D+->munu
+                    'CSR_scmunumu': CSR_ds, 'CSL_scmunumu': CSL_ds, # Ds->munu
+                    'CSR_sctaunutau': CSR_ds, 'CSL_sctaunutau': CSL_ds, # Ds->taunu
+                    'CSR_sutaunutau': CSR_k, 'CSL_sutaunutau': CSL_k, # tau->Knu
+                    'CSR_dutaunutau': CSR_p, 'CSL_dutaunutau': CSL_p, # tau->pinu
 #                    'CSR_sumunumu': CSR_k, 'CSL_sumunumu': CSL_k,'CSR_dumunumu': CSR_p, 'CSL_dumunumu': CSL_p, # RKpi->munu
-#                    'C7_bs': C7_bs,'C8_bs': C8_bs, # B->Xsgamma
-#                    'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CS_s,'CPp_bsmumu': CSp_s, # Bs->mumu
-#                    'C10_bdmumu': C10_d,'C10p_bdmumu': C10p_d,'CS_bdmumu': CS_d,'CSp_bdmumu': CSp_d,'CP_bdmumu': CS_d,'CPp_bdmumu': CSp_d, # B0->mumu
-#                    'CSR_bctaunutau': CSR_rd, 'CSL_bctaunutau': CSL_rd,'CSR_bcmunumu': CSR_rd, 'CSL_bcmunumu': CSL_rd,'CSR_bcenue': CSR_rd, 'CSL_bcenue': CSL_rd, # R(D) and R(D*) I think?
+                    'C7_bs': C7_bs,'C8_bs': C8_bs, # B->Xsgamma
+                    'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CS_s,'CPp_bsmumu': CSp_s, # Bs->mumu
+                    'C10_bdmumu': C10_d,'C10p_bdmumu': C10p_d,'CS_bdmumu': CS_d,'CSp_bdmumu': CSp_d,'CP_bdmumu': CS_d,'CPp_bdmumu': CSp_d, # B0->mumu
+                    'CSR_bctaunutau': CSR_tr, 'CSL_bctaunutau': CSL_tr,'CSR_bcmunumu': CSR_mr, 'CSL_bcmunumu': CSL_mr,'CSR_bcenue': CSR_er, 'CSL_bcenue': CSL_er, # R(D) and R(D*) 
                     },
                     scale=4.18, # mub I think, will almost always be the b-quark mass
                     eft='WET', basis='flavio')

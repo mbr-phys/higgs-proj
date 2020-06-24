@@ -275,3 +275,17 @@ def rh(mu,md,tanb,mH):
     csr = mu/(mH**2)
     csl = md*(tanb/mH)**2
     return csr, csl
+
+def rat_d(par,ml,tanb,mH):
+    '''
+        Function for WCs of B->Dlnu for R(D) and R(D*) in 2HDM
+
+        I think this is right for the WCs, I've tried to derive it from the Lagrangian given in 
+        https://arxiv.org/pdf/1705.02465.pdf
+    '''
+    ml, mc, mb = par[ml], par['m_c'], par['m_b']
+    Gf, vev = par['GF'], par['vev']
+    csl = ml*mc/(Gf*vev*mH**2)
+    csr = (ml*mb*tanb**2)/(Gf*vev*mH**2)
+
+    return csl, csr
