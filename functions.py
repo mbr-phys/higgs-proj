@@ -1,20 +1,24 @@
 #!/bin/env python3
 
 import flavio
+from flavio.physics.running import running
 import matplotlib.pyplot as plt
 import numpy as np
 
 def mHmin(contour):
     '''
-        Finding the minimum mH and tanb range in the contours 
+        Finding the minimum mH and tanb range in the contours
     '''
     x = contour['x']
     y = contour['y']
     z = contour['z']
     levels = contour['levels']
 
-    minh_loc, mint_loc, maxt_loc = [],[],[]
+    xf, yf = np.where(z==np.min(z))
+    xbf = 10**x[xf[0],yf[0]]
+    ybf = 10**y[xf[0],yf[0]]
 
+    minh_loc, mint_loc, maxt_loc = [],[],[]
     for i in levels:
         minh, mint, maxt = 100,100,-2
         x_loc, y_loc = np.where(z<i)
@@ -30,7 +34,7 @@ def mHmin(contour):
         mint_loc.append(10**mint)
         maxt_loc.append(10**maxt)
 
-    return minh_loc, mint_loc, maxt_loc
+    return [xbf,ybf], minh_loc, mint_loc, maxt_loc
 
 def ckm_func(par):
     '''
@@ -56,18 +60,11 @@ def ckm_func(par):
 
     return np.array([[Vud,par['Vus'],Vub],[Vcd,Vcs,par['Vcb']],[Vtd,Vts,Vtb]])
 
-def bsgamma(mt,mW,lam_QCD,tanb,mH):
+def bsgamma(par,tanb,mH):
     '''
         Find BR[B->Xsgamma] 2HDM contributions to Wilson Coeffs C7 & C8 as fns of mH+ and tanb
     '''
-    mu0 = 2*mW
-    lmu = 2*np.log(mu0/lam_QCD)
-    as_mu0 = (12*np.pi/(23*lmu))*(1 - (348/529)*(np.log(lmu)/lmu))
-
-    lmuM = 2*np.log(mu0/mt)
-    amu = as_mu0/np.pi
-    factor = 1 - (4/3 + lmuM)*amu - (9.125 + 419*lmuM/72 + (2/9)*lmuM**2)*amu**2 - (0.3125*lmuM**3 + 4.5937*lmuM**2 + 25.3188*lmuM + 81.825)*amu**3
-    mtmu = mt*factor
+    mtmu = running.get_mt(par,2*par['m_W'])
 
     xtH = (mtmu/mH)**2
 
@@ -80,15 +77,15 @@ def bsgamma(mt,mW,lam_QCD,tanb,mH):
 
     return C_7H, C_8H
 
-def bmumu(mt,mmu,mW,mb,ms,mc,mu,wangle,higgs,v,CKM,mH0,QCD,tanb,mH):
+def bmumu(par,msd,CKM,mH0,tanb,mH):
     '''
         Find BR[B(s/d)->mumu] 2HDM contributions to Wilson Coeffs C10, C10', CS (=CP), CS' (=CP')
     '''
+    mmu,mW,mb,mc,mu = par['m_mu'],par['m_W'],par['m_b'],par['m_c'],par['m_u']
+    wangle,higgs,v,QCD = par['s2w'],par['m_h'],par['vev'],par['lam_QCD']
+    ms = par[msd[0]] # picking either ms or md
     Vub, Vcb, Vtb = CKM[0,2], CKM[1,2], CKM[2,2]
-    if ms > 0.08:
-        Vus, Vcs, Vts = CKM[0,1], CKM[1,1], CKM[2,1]
-    else:
-        Vus, Vcs, Vts = CKM[0,0], CKM[1,0], CKM[2,0]
+    Vus, Vcs, Vts = CKM[0,msd[1]], CKM[1,msd[1]], CKM[2,msd[1]]
     def I0(b):
         i = (1-3*b)/(-1+b) + 2*(b**2)*np.log(b)/((b-1)**2)
         return i
@@ -123,18 +120,8 @@ def bmumu(mt,mmu,mW,mb,ms,mc,mu,wangle,higgs,v,CKM,mH0,QCD,tanb,mH):
     def I7(b):
         i = -b*I1(b)
         return i
-    lmu = 2*np.log(mW/QCD)
-    as_m = (12*np.pi/(23*lmu))*(1 - (348/529)*(np.log(lmu)/lmu))
-    lmuM = 2*np.log(mW/mt)
-    amu = as_m/np.pi
-    lmut = 2*np.log(mt/QCD)
-    as_mt = (12*np.pi/(23*lmut))*(1 - (348/529)*(np.log(lmut)/lmut))
-    lmuMt = 2*np.log(mt/mt)
-    amut = as_mt/np.pi
-    factor1 = 1 - (4/3 + lmuM)*amu - (9.125 + 419*lmuM/72 + (2/9)*lmuM**2)*amu**2 - (0.3125*lmuM**3 + 4.5937*lmuM**2 + 25.3188*lmuM + 81.825)*amu**3
-    factor2 = 1 - (4/3 + lmuMt)*amut - (9.125 + 419*lmuMt/72 + (2/9)*lmuMt**2)*amut**2 - (0.3125*lmuMt**3 + 4.5937*lmuMt**2 + 25.3188*lmuMt + 81.825)*amut**3
-    mtmu = mt*factor1
-    mtmut = 163.1#mt*factor2
+    mtmu = running.get_mt(par,mW)
+    mtmut = running.get_mt(par,par['m_t'])
 
     cob,g2,b = 1/tanb,0.65,np.arctan(tanb)
     a = b - np.pi/2 # alignment limit
@@ -165,11 +152,17 @@ def bmumu(mt,mmu,mW,mb,ms,mc,mu,wangle,higgs,v,CKM,mH0,QCD,tanb,mH):
 
     return C10, C10P, CS, CSP
 
-def mixing(CKM,vev,mu,md,mW,QCD,tanb,mH):
+def mixing(par,CKM,mds,tanb,mH):
     '''
         Find DeltaMq 2HDM contributions to Wilson Coeffs C1, C1', C2, C2', C4, C5 using 1903.10440
+        mds is list ['m_s',1,'m_d'] or ['m_d',0,'m_s'] depending on Bs or Bd
     '''
-    Vus, Vub, Vcs, Vcb, Vts, Vtb = CKM[0,1], CKM[0,2], CKM[1,1], CKM[1,2], CKM[2,1], CKM[2,2]
+    Vus, Vub = CKM[0,mds[1]], CKM[0,2],
+    Vcs, Vcb = CKM[1,mds[1]], CKM[1,2]
+    Vts, Vtb = CKM[2,mds[1]], CKM[2,2]
+    vev,mu,md,mW,QCD = par['vev'],par['m_W'],par['lam_QCD']
+    mu = [par['m_u'],par['m_c'],running.get_mt(par,par['m_t'])]
+    md = [par[mds[2]],par[mds[0]],par['m_b']]
     def I1(b):
         i = -1/(b-1) + b*np.log(b)/((b-1)**2)
         return i
@@ -188,8 +181,6 @@ def mixing(CKM,vev,mu,md,mW,QCD,tanb,mH):
     def I12(a,b):
         i = a*b*np.log(a)/((1-a)*(a-b)) - a*b*np.log(b)/((1-b)*(a-b))
         return i
-
-    mu[2] = 163.1
 
     y = (mW/mH)**2
     cob = 1/tanb
@@ -278,17 +269,9 @@ def rh(mu,md,tanb,mH):
 
         I think from looking at the operators, the 2HDM contributions appear in the CSR and CSL WCs, where (m_M**2/(m_l*(m_u+m_d))*(CSR-CSL) = rH
 
-        Using https://github.com/flav-io/flavio/blob/master/flavio/physics/bdecays/blnu.py - line 22 - to figure this out
+        Used https://github.com/flav-io/flavio/blob/master/flavio/physics/bdecays/blnu.py - line 22 - to figure this out
     '''
 #    r = ((mu-md*tanb**2)/(mu+md))*(mm/mH)**2
     csr = mu/(mH**2)
     csl = md*(tanb/mH)**2
     return csr, csl
-
-if __name__ == '__main__':
-    par = flavio.default_parameters.get_central_all()
-    ckfl = flavio.physics.ckm.get_ckm(par)
-    ckm_els = ckm_func(par)
-    for i in range(3):
-        for j in range(3):
-            print(ckfl[i,j],ckm_els[i,j])

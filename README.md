@@ -13,15 +13,16 @@ _Research extension from [4th Year project](https://github.com/mbr-phys/cpviolat
 
 ## To Do
 
-- [x] sorted leptonics as well, need to add the couple I haven't put in yet and check with Alex
-- [ ] Switch from manual running top quark calculation to using flavio's running 
+- [x] sorted leptonics as well, need to check with Alex I've done it right
+- [x] Switch from manual running top quark calculation to using flavio's running 
+- [ ] Add B mixing - _waiting on operator interpretation from Alex_
+- [ ] Add R(D), R(Dst)  - _trying to find expressions using operators and how to describe the operators simultaneousl_
 - [ ] Finish adding to `world_avgs.yml`
 - [ ] Add `vev`, `lambda_QCD` and any other new nuisance parameters to the `parameter_x.yml` files in `flavio/data`
 
 ## General Project Stuff
 
 - [ ] Sort out WC language for observables not yet added
-- [ ] Add B mixing, R(D), R(Dst) to fit
 - [ ] Sort out obliques - do we need to add WCs to the basis?
 - [ ] What do we do about extra parameters in fit when coming to SM4 etc?
 - [ ] Higgs signal strengths, semileptonics, R(K)s
