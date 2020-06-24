@@ -28,6 +28,10 @@ mH0 = 1500 # mass of heavy neutral Higgs, GeV
 my_obs = [
     # what observables are we considering in the fit
     'BR(B+->taunu)',
+    'BR(B+->munu)',
+    'BR(D+->munu)',
+    'BR(Ds->munu)',
+    'BR(Ds->taunu)',
 #    'BR(B->Xsgamma)',
 #    'BR(B0->mumu)',
 #    'BR(Bs->mumu)',
