@@ -272,6 +272,18 @@ def mixing(CKM,vev,mu,md,mW,QCD,tanb,mH):
 
     return c1, c1p, c2, c2p, c4, c5
 
+def rh(mu,md,tanb,mH):
+    '''
+        Function for M->lnu 2HDM WC contribution, based on rH we used from 0907.5135
+
+        I think from looking at the operators, the 2HDM contributions appear in the CSR and CSL WCs, where (m_M**2/(m_l*(m_u+m_d))*(CSR-CSL) = rH
+
+        Using https://github.com/flav-io/flavio/blob/master/flavio/physics/bdecays/blnu.py - line 22 - to figure this out
+    '''
+#    r = ((mu-md*tanb**2)/(mu+md))*(mm/mH)**2
+    csr = mu/(mH**2)
+    csl = md*(tanb/mH)**2
+    return csr, csl
 
 if __name__ == '__main__':
     par = flavio.default_parameters.get_central_all()
