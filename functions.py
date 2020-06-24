@@ -285,7 +285,7 @@ def rat_d(par,ml,tanb,mH):
     '''
     ml, mc, mb = par[ml], par['m_c'], par['m_b']
     Gf, vev = par['GF'], par['vev']
-    csl = ml*mc/(Gf*vev*mH**2)
-    csr = (ml*mb*tanb**2)/(Gf*vev*mH**2)
+    csl = ml*mc/(np.sqrt(2)*Gf*(vev*mH**2))
+    csr = (ml*mb*tanb**2)/(np.sqrt(2)*Gf*(vev*mH**2))
 
     return csl, csr

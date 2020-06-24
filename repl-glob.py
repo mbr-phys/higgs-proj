@@ -111,14 +111,8 @@ print("Maximum value of tanb is:", maxt)
 plt.figure(figsize=(8,6))
 fpl.contour(**cdat, # data
         interpolation_factor=3) # smoothing out the contour in another way than steps
-#plt.title(r'$B\to X_s\gamma$')
-#plt.title(r'$B_q\to\mu\mu$')
-#plt.title(r'$M\to l\nu$')
-#plt.title(r'Combined $B_q\to\mu\mu$ and $B\to X_s\gamma$')
+plt.title(r'All Observables')
 plt.xlabel(r'$\tan\beta$') # log10
 plt.ylabel(r'$m_{H^+}$') #log10
-#plt.savefig('bsgamma_plot.png')
-#plt.savefig('bmumu_plot.png')
-#plt.savefig('comb_plot.png')
-#plt.savefig('mlnu_plot.png')
-plt.show()
+plt.savefig('comb_plot.png')
+#plt.show()
