@@ -20,7 +20,7 @@ _Research extension from [4th Year project](https://github.com/mbr-phys/cpviolat
 
 ## General Project Stuff
 
-- Sort out WC language for observables not yet added
+- [ ] Sort out WC language for observables not yet added
 - [ ] Add B mixing, R(D), R(Dst) to fit
 - [ ] Sort out obliques - do we need to add WCs to the basis?
 - [ ] What do we do about extra parameters in fit when coming to SM4 etc?
