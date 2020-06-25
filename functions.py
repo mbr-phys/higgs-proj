@@ -160,7 +160,7 @@ def mixing(par,CKM,mds,tanb,mH):
     Vus, Vub = CKM[0,mds[1]], CKM[0,2],
     Vcs, Vcb = CKM[1,mds[1]], CKM[1,2]
     Vts, Vtb = CKM[2,mds[1]], CKM[2,2]
-    vev,mu,md,mW,QCD = par['vev'],par['m_W'],par['lam_QCD']
+    vev,mW,QCD = par['vev'],par['m_W'],par['lam_QCD']
     mu = [par['m_u'],par['m_c'],running.get_mt(par,par['m_t'])]
     md = [par[mds[2]],par[mds[0]],par['m_b']]
     def I1(b):
@@ -263,6 +263,22 @@ def mixing(par,CKM,mds,tanb,mH):
 
     return c1, c1p, c2, c2p, c4, c5
 
+def mixing2(par,ckm_els,tanb,mH):
+
+    mtmu = running.get_mt(par,par['m_W'])
+    mtmut = running.get_mt(par,par['m_t'])
+
+    x_tH1 = (mtmut/mH)**2
+    x_tW1 = (mtmut/par['m_W'])**2
+    x_tH = (mtmu/mH)**2
+    x_tW = (mtmu/par['m_W'])**2
+    S_WH = (x_tH1*x_tW1/(4*tanb**2))*((2*x_tW1-8*x_tH1)*np.log(x_tH1)/((x_tH1-x_tW1)*(1-x_tH1)**2) + 6*x_tW1*np.log(x_tW1)/((x_tH1-x_tW1)*(1-x_tW1)**2) - (8-2*x_tW1)/((1-x_tW1)*(1-x_tH1)))
+    S_HH = (x_tH1*x_tW1/(4*tanb**4))*((1+x_tH1)/((1-x_tH1)**2)+2*x_tH1*np.log(x_tH1)/((1-x_tH1)**3))
+
+    pref = ((1/4)*(par['GF']/np.pi)**2)*(par['m_W']**2)*ckm_els*0.85
+
+    return pref*(S_WH + S_HH)
+
 def rh(mu,md,tanb,mH):
     '''
         Function for M->lnu 2HDM WC contribution, based on rH we used from 0907.5135
@@ -280,7 +296,7 @@ def rat_d(par,ml,tanb,mH):
     '''
         Function for WCs of B->Dlnu for R(D) and R(D*) in 2HDM
 
-        I think this is right for the WCs, I've tried to derive it from the Lagrangian given in 
+        I think this is right for the WCs, I've tried to derive it from the Lagrangian given in
         https://arxiv.org/pdf/1705.02465.pdf
     '''
     ml, mc, mb = par[ml], par['m_c'], par['m_b']
