@@ -36,30 +36,6 @@ def mHmin(contour):
 
     return [xbf,ybf], minh_loc, mint_loc, maxt_loc
 
-def ckm_func(par):
-    '''
-        Function to calculate all CKM element magnitudes using standard parameterisation
-        Returns: (Vud,Vus,Vub,Vcd,Vcs,Vcb,Vtd,Vts,Vtb)
-
-        flavio had its own ckm function, might as well use it so this is redundant now
-    '''
-    s13 = par['Vub']
-    c13 = np.sqrt(1-s13**2)
-    delt = np.exp(1j*par['delta'])
-    Vub = s13/delt
-    s23 = par['Vcb']/c13
-    c23 = np.sqrt(1-s23**2)
-    s12 = par['Vus']/c13
-    c12 = np.sqrt(1-s12**2)
-    Vud = c12*c13
-    Vcd = -s12*c23-c12*s23*s13*delt
-    Vcs = c12*c23-s12*s23*s13*delt
-    Vtd = s12*s23-c12*c23*s13*delt
-    Vts = -c12*s23-s12*c23*s13*delt
-    Vtb = c23*c13
-
-    return np.array([[Vud,par['Vus'],Vub],[Vcd,Vcs,par['Vcb']],[Vtd,Vts,Vtb]])
-
 def bsgamma(par,tanb,mH):
     '''
         Find BR[B->Xsgamma] 2HDM contributions to Wilson Coeffs C7 & C8 as fns of mH+ and tanb
@@ -185,74 +161,107 @@ def mixing(par,CKM,mds,tanb,mH):
     y = (mW/mH)**2
     cob = 1/tanb
     eu = [cob*mu[0]/vev,cob*mu[1]/vev,cob*mu[2]/vev]
-    ed = [tanb*md[0]/vev,tanb*md[1]/vev,tanb*md[2]/vev]
-    zs = [(mu[0]/mH)**2,(mu[1]/mH)**2,(mu[2]/mH)**2]
+    ed = [-tanb*md[0]/vev,-tanb*md[1]/vev,-tanb*md[2]/vev]
+    zs = [0,0,(mu[2]/mH)**2]
+#    zs = [(mu[0]/mH)**2,(mu[1]/mH)**2,(mu[2]/mH)**2]
     v2 = [np.conj(Vus),np.conj(Vcs),np.conj(Vts)]
     v3 = [Vub,Vcb,Vtb]
 
     def c1_1():
         pref = -1/(32*(np.pi*mH)**2)
-        sum = 0
+        ai, bi, ci = 0,0,0
         for i in range(3):
-            for j in range(3):
-                sum += (v2[j]*v3[j]*eu[j]**2)*(v2[i]*v3[i]*eu[i]**2)*I8(zs[j],zs[i])
-        return pref*sum
+            ai += v2[i]*v3[i]*(eu[i]**2)*I8(zs[0],zs[i])
+            bi += v2[i]*v3[i]*(eu[i]**2)*I8(zs[1],zs[i])
+            ci += v2[i]*v3[i]*(eu[i]**2)*I8(zs[2],zs[i])
+        a = (v2[0]*v3[0]*eu[0]**2)*ai
+        b = (v2[1]*v3[1]*eu[1]**2)*bi
+        c = (v2[2]*v3[2]*eu[2]**2)*ci
+        return pref*(a+b+c)
 
     def c1p():
         pref = -((ed[1]*ed[2])**2)/(32*(np.pi*mH)**2)
-        sum = 0
+        ai, bi, ci = 0,0,0
         for i in range(3):
-            for j in range(3):
-                sum += (v2[i]*v3[i])*(v2[j]*v3[j])*I9(zs[i],zs[j])
-        return pref*sum
+            ai += v2[i]*v3[i]*I9(zs[0],zs[i])
+            bi += v2[i]*v3[i]*I9(zs[1],zs[i])
+            ci += v2[i]*v3[i]*I9(zs[2],zs[i])
+        a = (v2[0]*v3[0])*ai
+        b = (v2[1]*v3[1])*bi
+        c = (v2[2]*v3[2])*ci
+        return pref*(a+b+c)
 
     def c2():
         pref = -(ed[1]**2)/(8*(np.pi*mH)**2)
-        sum = 0
+        ai, bi, ci = 0,0,0
         for i in range(3):
-            for j in range(3):
-                sum += (v2[j]*v3[j]*eu[j])*(v2[i]*v3[i]*eu[i])*np.sqrt(zs[i]*zs[j])*I10(zs[i],zs[j])
-        return pref*sum
+            ai += v2[i]*v3[i]*eu[i]*np.sqrt(zs[i])*I10(zs[i],zs[0])
+            bi += v2[i]*v3[i]*eu[i]*np.sqrt(zs[i])*I10(zs[i],zs[1])
+            ci += v2[i]*v3[i]*eu[i]*np.sqrt(zs[i])*I10(zs[i],zs[2])
+        a = v2[0]*v3[0]*eu[0]*np.sqrt(zs[0])*ai
+        b = v2[1]*v3[1]*eu[1]*np.sqrt(zs[1])*bi
+        c = v2[2]*v3[2]*eu[2]*np.sqrt(zs[2])*ci
+        return pref*(a+b+c)
 
     def c2p():
         pref = -(ed[2]**2)/(8*(np.pi*mH)**2)
-        sum = 0
+        ai, bi, ci = 0,0,0
         for i in range(3):
-            for j in range(3):
-                sum += (v2[i]*eu[i]*v3[i])*(v2[j]*eu[j]*v3[j])*np.sqrt(zs[i]*zs[j])*I10(zs[i],zs[j])
-        return pref*sum
+            ai += v2[i]*v3[i]*eu[i]*np.sqrt(zs[i])*I10(zs[i],zs[0])
+            bi += v2[i]*v3[i]*eu[i]*np.sqrt(zs[i])*I10(zs[i],zs[1])
+            ci += v2[i]*v3[i]*eu[i]*np.sqrt(zs[i])*I10(zs[i],zs[2])
+        a = v2[0]*v3[0]*eu[0]*np.sqrt(zs[0])*ai
+        b = v2[1]*v3[1]*eu[1]*np.sqrt(zs[1])*bi
+        c = v2[2]*v3[2]*eu[2]*np.sqrt(zs[2])*ci
+        return pref*(a+b+c)
 
     def c4_1():
         pref = -(ed[1]*ed[2]/(4*(np.pi*mH)**2))
-        sum = 0
+        ai, bi, ci = 0,0,0
         for i in range(3):
-            for j in range(3):
-                sum += (v2[j]*eu[j]*v3[j])*(v2[i]*eu[i]*v3[i])*np.sqrt(zs[i]*zs[j])*I10(zs[i],zs[j])
-        return pref*sum
+            ai += v2[i]*v3[i]*eu[i]*np.sqrt(zs[i])*I10(zs[i],zs[0])
+            bi += v2[i]*v3[i]*eu[i]*np.sqrt(zs[i])*I10(zs[i],zs[1])
+            ci += v2[i]*v3[i]*eu[i]*np.sqrt(zs[i])*I10(zs[i],zs[2])
+        a = v2[0]*v3[0]*eu[0]*np.sqrt(zs[0])*ai
+        b = v2[1]*v3[1]*eu[1]*np.sqrt(zs[1])*bi
+        c = v2[2]*v3[2]*eu[2]*np.sqrt(zs[2])*ci
+        return pref*(a+b+c)
 
     def c5():
         pref = ed[1]*ed[2]/(8*(np.pi*mH)**2)
-        sum = 0
-        for k in range(3):
-            for j in range(3):
-                sum += (v2[j]*v3[j])*(v2[k]*(eu[k]**2)*v3[k])*(I8(zs[j],zs[k])+I1(zs[j]))
-        return pref*sum
+        ai, bi, ci = 0,0,0
+        for i in range(3):
+            ai += v2[i]*v3[i]*(eu[i]**2)*(I8(zs[0],zs[i])+I1(zs[0]))
+            bi += v2[i]*v3[i]*(eu[i]**2)*(I8(zs[1],zs[i])+I1(zs[1]))
+            ci += v2[i]*v3[i]*(eu[i]**2)*(I8(zs[2],zs[i])+I1(zs[2]))
+        a = v2[0]*v3[0]*ai
+        b = v2[1]*v3[1]*bi
+        c = v2[2]*v3[2]*ci
+        return pref*(a+b+c)
 
     def c1_2():
         pref = (0.65**2)/(64*(np.pi*mW)**2)
-        sum = 0
-        for k in range(3):
-            for j in range(3):
-                sum += (v2[j]*eu[j]*v3[j])*(v2[k]*eu[k]*v3[k])*np.sqrt(zs[j]*zs[k])*I11(y,zs[k],zs[j])
-        return pref*sum
+        ai, bi, ci = 0,0,0
+        for i in range(3):
+            ai += v2[i]*v3[i]*eu[i]*np.sqrt(zs[i])*I11(y,zs[0],zs[i])
+            bi += v2[i]*v3[i]*eu[i]*np.sqrt(zs[i])*I11(y,zs[1],zs[i])
+            ci += v2[i]*v3[i]*eu[i]*np.sqrt(zs[i])*I11(y,zs[2],zs[i])
+        a = v2[0]*v3[0]*eu[0]*np.sqrt(zs[0])*ai
+        b = v2[1]*v3[1]*eu[1]*np.sqrt(zs[1])*bi
+        c = v2[2]*v3[2]*eu[2]*np.sqrt(zs[2])*ci
+        return pref*(a+b+c)
 
     def c4_2():
         pref = -(ed[1]*ed[2]*0.65**2)/(16*(np.pi*mW)**2)
-        sum = 0
-        for k in range(3):
-            for j in range(3):
-                sum += (v2[k]*v3[k])*(v2[j]*v3[j])*I12(zs[j],zs[k])
-        return pref*sum
+        ai, bi, ci = 0,0,0
+        for i in range(3):
+            ai += v2[i]*v3[i]*I12(zs[0],zs[i])
+            bi += v2[i]*v3[i]*I12(zs[1],zs[i])
+            ci += v2[i]*v3[i]*I12(zs[2],zs[i])
+        a = v2[0]*v3[0]*ai
+        b = v2[1]*v3[1]*bi
+        c = v2[2]*v3[2]*ci
+        return pref*(a+b+c)
 
     c1 = c1_1() + c1_2()
     c1p = c1p()
@@ -264,7 +273,9 @@ def mixing(par,CKM,mds,tanb,mH):
     return c1, c1p, c2, c2p, c4, c5
 
 def mixing2(par,ckm_els,tanb,mH):
-
+    '''
+        LO Expressions for 2HDM contributions to DeltaM_q
+    '''
     mtmu = running.get_mt(par,par['m_W'])
     mtmut = running.get_mt(par,par['m_t'])
 
