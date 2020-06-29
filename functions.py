@@ -309,6 +309,8 @@ def rat_d(par,ml,tanb,mH):
 
         I think this is right for the WCs, I've tried to derive it from the Lagrangian given in
         https://arxiv.org/pdf/1705.02465.pdf
+
+        It gives the right plot at least
     '''
     ml, mc, mb = par[ml], par['m_c'], par['m_b']
     Gf, vev = par['GF'], par['vev']

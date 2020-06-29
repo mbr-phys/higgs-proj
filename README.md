@@ -16,7 +16,7 @@ _Research extension from [4th Year project](https://github.com/mbr-phys/cpviolat
 - [x] sorted leptonics as well, need to check with Alex I've done it right
 - [x] Switch from manual running top quark calculation to using flavio's running 
 - [x] Add LO B Mixing 
-- [ ] Add higher-order B mixing from Crivellin - _waiting on operator interpretation from Alex_ 
+- [ ] Add higher-order B mixing from Crivellin - _waiting on operator interpretation to help_ 
 - [x] Add R(D), R(Dst) 
 - [ ] Look into `RKpi(P+->munu)`, it's going all funky right now - maybe errors in FFs?
 - [ ] `Bs->mumu` also seems to have some weird issues at 1 sigma that I want to check - errors might be a bit tight
