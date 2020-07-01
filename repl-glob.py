@@ -55,13 +55,9 @@ my_obs = [
 #    'BR(B0->mumu)',
 #    'Rtaul(B->Dlnu)',
 #    'Rtaul(B->D*lnu)',
-    'DeltaM_d',
+#    'DeltaM_d',
     'DeltaM_s',
 ]
-
-for i in my_obs:
-    print(flavio.sm_prediction(i)*1.519e12)
-quit()
 
 FL2 = FastLikelihood(name="likelihood test",observables=my_obs,
         include_measurements=[
@@ -95,9 +91,9 @@ def func(wcs):
 #    CSL_tr, CSR_tr = rat_d(par,'m_tau',10**tanb,10**mH)
 #    CSL_mr, CSR_mr = rat_d(par,'m_mu',10**tanb,10**mH)
 #    CSL_er, CSR_er = rat_d(par,'m_e',10**tanb,10**mH)
-#    C1bs, C1pbs, C2bs, C2pbs, C4bs, C5bs = mixing(par,ckm_els,['m_s',1,'m_d'],10**tanb,10**mH)
-    C1bs = mixing2(par,abs(ckm_els[2,1]*np.conj(ckm_els[2,2]))**2,10**tanb,10**mH)
-    C1bd = mixing2(par,abs(ckm_els[2,0]*np.conj(ckm_els[2,2]))**2,10**tanb,10**mH)
+    CVLL_bs, CVRR_bs, CSLL_bs, CSRR_bs, CSLR_bs, CVLR_bs = mixing(par,ckm_els,['m_s',1,'m_d'],10**tanb,10**mH)
+#    C1bs = mixing2(par,abs(ckm_els[2,1]*np.conj(ckm_els[2,2]))**2,10**tanb,10**mH)
+#    C1bd = mixing2(par,abs(ckm_els[2,0]*np.conj(ckm_els[2,2]))**2,10**tanb,10**mH)
 
     wc = flavio.WilsonCoefficients()
     wc.set_initial({ # tell flavio what WCs you're referring to with your variables
@@ -113,8 +109,8 @@ def func(wcs):
 #                    'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CS_s,'CPp_bsmumu': CSp_s, # Bs->mumu
 #                    'C10_bdmumu': C10_d,'C10p_bdmumu': C10p_d,'CS_bdmumu': CS_d,'CSp_bdmumu': CSp_d,'CP_bdmumu': CS_d,'CPp_bdmumu': CSp_d, # B0->mumu
 #                    'CSR_bctaunutau': CSR_tr, 'CSL_bctaunutau': CSL_tr,'CSR_bcmunumu': CSR_mr, 'CSL_bcmunumu': CSL_mr,'CSR_bcenue': CSR_er, 'CSL_bcenue': CSL_er, # R(D) and R(D*)
-                    'CVLL_bsbs': C1bs,#'CVRR_bsbs': C1pbs,'CSLL_bsbs': C2bs,'CSRR_bsbs': C2pbs,'CSLR_bsbs': C4bs,'CVLR_bsbs': C5bs, # DeltaM_s
-                    'CVLL_bdbd': C1bd, # DeltaM_d
+                    'CVLL_bsbs': CVLL_bs,'CVRR_bsbs': CVRR_bs,'CSLL_bsbs': CSLL_bs,'CSRR_bsbs': CSRR_bs,'CSLR_bsbs': CSLR_bs,'CVLR_bsbs': CVLR_bs, # DeltaM_s
+#                    'CVLL_bdbd': C1bd, # DeltaM_d
                     },
                     scale=4.2, # mub I think, will almost always be the b-quark mass
                     eft='WET', basis='flavio')
@@ -126,12 +122,12 @@ cdat = fpl.likelihood_contour_data(func,-1,2,1,3.5,
                 threads=4, # multiprocessing stuff, essentially makes it run faster if your computer can handle doing it
                 steps=40) # increments for going round contours, i.e. smoothing out the plot (this has more obvious effects when just plotting WCs)
 
-bf,minh,mint,maxt = mHmin(cdat)
-print("Best fit value is found for (tanb,mH) =", bf)
-print("Print outs are lists for values at", sigmas, "sigmas")
-print("Minimum value of mH+ is:", minh)
-print("Minimum value of tanb is:", mint)
-print("Maximum value of tanb is:", maxt)
+#bf,minh,mint,maxt = mHmin(cdat)
+#print("Best fit value is found for (tanb,mH) =", bf)
+#print("Print outs are lists for values at", sigmas, "sigmas")
+#print("Minimum value of mH+ is:", minh)
+#print("Minimum value of tanb is:", mint)
+#print("Maximum value of tanb is:", maxt)
 
 plt.figure(figsize=(4,6))
 fpl.contour(**cdat, # data

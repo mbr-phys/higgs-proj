@@ -263,14 +263,14 @@ def mixing(par,CKM,mds,tanb,mH):
         c = v2[2]*v3[2]*ci
         return pref*(a+b+c)
 
-    c1 = c1_1() + c1_2()
-    c1p = c1p()
-    c2 = c2()
-    c2p = c2p()
-    c4 = c4_1() + c4_2()
-    c5 = c5()
+    CVLL = (c1_1() + c1_2())
+    CVRR = c1p()
+    CSLL = c2()
+    CSRR = c2p()
+    CSLR = (c4_1() + c4_2())
+    CVLR = 2*c5()
 
-    return c1, c1p, c2, c2p, c4, c5
+    return CVLL, CVRR, CSLL, CSRR, CSLR, CVLR
 
 def mixing2(par,ckm_els,tanb,mH):
     '''
