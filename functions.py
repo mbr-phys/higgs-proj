@@ -72,21 +72,20 @@ def bmumu(par,msd,CKM,mH0,tanb,mH):
         i = (1-b)*I1(b)-1
         return i
     def I3(a,b):
-        i = (7*a-b)*b/(a-b) + 2*(b**2)*np.log(b)*(2*a**2 -b**2 -6*a+3*b+2*a*b)/((b-1)*(a-b)**2) - 6*(a**2)*b*np.log(a)/(a-b)**2
+        if a == b:
+            i = -2*b*(b-1+(b-3)*np.log(b))/(b-1)
+        else:
+            i = (7*a-b)*b/(a-b) + 2*(b**2)*np.log(b)*(2*a**2 -b**2 -6*a+3*b+2*a*b)/((b-1)*(a-b)**2) - 6*(a**2)*b*np.log(a)/(a-b)**2
         return i
     def I4(a,b):
-        if a < 3600 or b < 3600:
-            i = 0
+        if a == b:
+            i = b*(b-1-np.log(b))/((b-1)**2)
         else:
             i = np.sqrt(b*a**3)*np.log(a)/((a-1)*(a-b)) - np.sqrt(a*b**3)*np.log(b)/((b-1)*(a-b))
         return i
     def I5(a,b):
-        if a < 3600 and b < 3600:
-            i = -1
-        elif b < 3600 and a > 3600:
-            i = -1 + a*np.log(a)/(a-1)
-        elif b > 3600 and a < 3600:
-            i = -1 + b*np.log(b)/(b-1)
+        if a == b:
+            i = (b+1+(b-2)*b*np.log(b))/((b-1)**2)
         else:
             i = -1+(a**2)*np.log(a)/((a-1)*(a-b)) - (b**2)*np.log(b)/((b-1)*(a-b))
         return i
@@ -140,30 +139,40 @@ def mixing(par,CKM,mds,tanb,mH):
     mu = [par['m_u'],par['m_c'],running.get_mt(par,par['m_t'])]
     md = [par[mds[2]],par[mds[0]],par['m_b']]
     def I1(b):
-        i = -1/(b-1) + b*np.log(b)/((b-1)**2)
+        i = -1/(b-1) + b*np.log(b)/((b-1)**2) 
         return i
     def I8(a,b):
-        i = -1/((1-a)*(1-b)) + (np.log(b)*b**2)/((a-b)*(1-b)**2) + (np.log(a)*a**2)/((b-a)*(1-a)**2)
+        i = -1/((1-a)*(1-b))
+        if a != b:
+            i += (np.log(b)*b**2)/((a-b)*(1-b)**2) + (np.log(a)*a**2)/((b-a)*(1-a)**2)
         return i
     def I9(a,b):
-        i = -a*b/((1-a)*(1-b)) + a*b*np.log(b)/((a-b)*(1-b)**2) + a*b*np.log(a)/((b-a)*(1-a)**2)
+        i = -a*b/((1-a)*(1-b)) 
+        if a != b:
+            i += a*b*np.log(b)/((a-b)*(1-b)**2) + a*b*np.log(a)/((b-a)*(1-a)**2)
         return i
     def I10(a,b):
-        i = -1/((1-a)*(1-b)) + a*np.log(a)/((b-a)*(1-a)**2) + b*np.log(b)/((a-b)*(1-b)**2)
+        i = -1/((1-a)*(1-b)) 
+        if a != b:
+            i += a*np.log(a)/((b-a)*(1-a)**2) + b*np.log(b)/((a-b)*(1-b)**2)
         return i
     def I11(a,b,c):
-        i = -3*(a**2)*np.log(a)/((a-1)*(a-b)*(a-c)) + b*(4*a-b)*np.log(b)/((b-1)*(a-b)*(b-c)) + c*(4*a-c)*np.log(c)/((c-1)*(a-c)*(c-b))
+        i = -3*(a**2)*np.log(a)/((a-1)*(a-b)*(a-c)) 
+        if b != c: 
+            i += b*(4*a-b)*np.log(b)/((b-1)*(a-b)*(b-c)) + c*(4*a-c)*np.log(c)/((c-1)*(a-c)*(c-b))
         return i
     def I12(a,b):
-        i = a*b*np.log(a)/((1-a)*(a-b)) - a*b*np.log(b)/((1-b)*(a-b))
+        if a != b:
+            i = a*b*np.log(a)/((1-a)*(a-b)) - a*b*np.log(b)/((1-b)*(a-b)) 
+        else:
+            i = 0
         return i
 
     y = (mW/mH)**2
     cob = 1/tanb
     eu = [cob*mu[0]/vev,cob*mu[1]/vev,cob*mu[2]/vev]
     ed = [-tanb*md[0]/vev,-tanb*md[1]/vev,-tanb*md[2]/vev]
-    zs = [0,0,(mu[2]/mH)**2]
-#    zs = [(mu[0]/mH)**2,(mu[1]/mH)**2,(mu[2]/mH)**2]
+    zs = [(mu[0]/mH)**2,(mu[1]/mH)**2,(mu[2]/mH)**2]
     v2 = [np.conj(Vus),np.conj(Vcs),np.conj(Vts)]
     v3 = [Vub,Vcb,Vtb]
 
@@ -177,7 +186,7 @@ def mixing(par,CKM,mds,tanb,mH):
         a = (v2[0]*v3[0]*eu[0]**2)*ai
         b = (v2[1]*v3[1]*eu[1]**2)*bi
         c = (v2[2]*v3[2]*eu[2]**2)*ci
-        return pref*(a+b+c)
+        return pref*(a+b+c) 
 
     def c1p():
         pref = -((ed[1]*ed[2])**2)/(32*(np.pi*mH)**2)
@@ -189,7 +198,7 @@ def mixing(par,CKM,mds,tanb,mH):
         a = (v2[0]*v3[0])*ai
         b = (v2[1]*v3[1])*bi
         c = (v2[2]*v3[2])*ci
-        return pref*(a+b+c)
+        return pref*(a+b+c) 
 
     def c2():
         pref = -(ed[1]**2)/(8*(np.pi*mH)**2)
@@ -201,7 +210,7 @@ def mixing(par,CKM,mds,tanb,mH):
         a = v2[0]*v3[0]*eu[0]*np.sqrt(zs[0])*ai
         b = v2[1]*v3[1]*eu[1]*np.sqrt(zs[1])*bi
         c = v2[2]*v3[2]*eu[2]*np.sqrt(zs[2])*ci
-        return pref*(a+b+c)
+        return pref*(a+b+c) 
 
     def c2p():
         pref = -(ed[2]**2)/(8*(np.pi*mH)**2)
@@ -213,7 +222,7 @@ def mixing(par,CKM,mds,tanb,mH):
         a = v2[0]*v3[0]*eu[0]*np.sqrt(zs[0])*ai
         b = v2[1]*v3[1]*eu[1]*np.sqrt(zs[1])*bi
         c = v2[2]*v3[2]*eu[2]*np.sqrt(zs[2])*ci
-        return pref*(a+b+c)
+        return pref*(a+b+c) 
 
     def c4_1():
         pref = -(ed[1]*ed[2]/(4*(np.pi*mH)**2))
@@ -225,7 +234,7 @@ def mixing(par,CKM,mds,tanb,mH):
         a = v2[0]*v3[0]*eu[0]*np.sqrt(zs[0])*ai
         b = v2[1]*v3[1]*eu[1]*np.sqrt(zs[1])*bi
         c = v2[2]*v3[2]*eu[2]*np.sqrt(zs[2])*ci
-        return pref*(a+b+c)
+        return pref*(a+b+c) 
 
     def c5():
         pref = ed[1]*ed[2]/(8*(np.pi*mH)**2)
@@ -237,7 +246,7 @@ def mixing(par,CKM,mds,tanb,mH):
         a = v2[0]*v3[0]*ai
         b = v2[1]*v3[1]*bi
         c = v2[2]*v3[2]*ci
-        return pref*(a+b+c)
+        return pref*(a+b+c) 
 
     def c1_2():
         pref = (0.65**2)/(64*(np.pi*mW)**2)
@@ -249,7 +258,7 @@ def mixing(par,CKM,mds,tanb,mH):
         a = v2[0]*v3[0]*eu[0]*np.sqrt(zs[0])*ai
         b = v2[1]*v3[1]*eu[1]*np.sqrt(zs[1])*bi
         c = v2[2]*v3[2]*eu[2]*np.sqrt(zs[2])*ci
-        return pref*(a+b+c)
+        return pref*(a+b+c) 
 
     def c4_2():
         pref = -(ed[1]*ed[2]*0.65**2)/(16*(np.pi*mW)**2)
@@ -261,7 +270,7 @@ def mixing(par,CKM,mds,tanb,mH):
         a = v2[0]*v3[0]*ai
         b = v2[1]*v3[1]*bi
         c = v2[2]*v3[2]*ci
-        return pref*(a+b+c)
+        return pref*(a+b+c) 
 
     CVLL = (c1_1() + c1_2())
     CVRR = c1p()
