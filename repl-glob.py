@@ -42,13 +42,13 @@ mH0 = 1500 # mass of heavy neutral Higgs, GeV
 
 my_obs = [
     # what observables are we considering in the fit
-#    'BR(B+->taunu)',
-#    'BR(B+->munu)',
+    'BR(B+->taunu)',
+    'BR(B+->munu)',
 #    'BR(D+->munu)',
 #    'BR(Ds->munu)',
 #    'BR(Ds->taunu)',
-    'BR(tau->Knu)',
-    'BR(K+->munu)',
+#    'BR(tau->Knu)',
+#    'BR(K+->munu)',
 #    'BR(tau->pinu)',
 #    'Gamma(pi+->munu)',
 #    'BR(B->Xsgamma)',
@@ -74,7 +74,7 @@ FL2.make_measurement(N=500,threads=4)
 
 V_vals = [0.5,0.75,0.9,1.0,1.1,1.25,1.5]
 
-for Vus in V_vals:
+for Vub in V_vals:
     def func(wcs):
         tanb, mH = wcs # state what the two parameters are going to be on the plot
 
@@ -84,10 +84,10 @@ for Vus in V_vals:
         # we want functions to generate the NP contributions to WCs
         # i.e. convert our parameters into operator language
 
-    #    CSR_b, CSL_b, CVL_b = rh(par['m_u'],par['m_b'],10**tanb,10**mH,Vub)
+        CSR_b, CSL_b, CVL_b = rh(par['m_u'],par['m_b'],10**tanb,10**mH,Vub)
     #    CSR_d, CSL_d, CVL_d = rh(par['m_c'],par['m_s'],10**tanb,10**mH,Vcd)
     #    CSR_ds, CSL_ds, CVL_ds = rh(par['m_c'],par['m_s'],10**tanb,10**mH,Vcs)
-        CSR_k, CSL_k, CVL_k = rh(par['m_u'],par['m_s'],10**tanb,10**mH,Vus)
+    #    CSR_k, CSL_k, CVL_k = rh(par['m_u'],par['m_s'],10**tanb,10**mH,Vus)
     #    CSR_p, CSL_p, CVL_p = rh(par['m_u'],par['m_d'],10**tanb,10**mH,Vud)
     #    C7_bs, C8_bs = bsgamma(par,10**tanb,10**mH)
     #    C10_s, C10p_s, CS_s, CSp_s = bmumu(par,['m_s',1],ckm_els,mH0,10**tanb,10**mH)
@@ -102,24 +102,24 @@ for Vus in V_vals:
 
         wc = flavio.WilsonCoefficients()
         wc.set_initial({ # tell flavio what WCs you're referring to with your variables
-    #            'CSR_butaunutau': CSR_b, 'CSL_butaunutau': CSL_b, 'CVL_butaunutau': CVL_b, # B+->taunu
-    #            'CSR_bumunumu': CSR_b, 'CSL_bumunumu': CSL_b, 'CVL_bumunumu': CVL_b, # B+->munu
+                'CSR_butaunutau': CSR_b, 'CSL_butaunutau': CSL_b, 'CVL_butaunutau': CVL_b, # B+->taunu
+                'CSR_bumunumu': CSR_b, 'CSL_bumunumu': CSL_b, 'CVL_bumunumu': CVL_b, # B+->munu
     #            'CSR_dcmunumu': CSR_d, 'CSL_dcmunumu': CSL_d, 'CVL_dcmunumu': CVL_d, # D+->munu
     #            'CSR_scmunumu': CSR_ds, 'CSL_scmunumu': CSL_ds, 'CVL_scmunumu': CVL_ds, # Ds->munu
     #            'CSR_sctaunutau': CSR_ds, 'CSL_sctaunutau': CSL_ds, 'CVL_sctaunutau': CVL_ds,# Ds->taunu
-                'CSR_sumunumu': CSR_k, 'CSL_sumunumu': CSL_k, 'CVL_sumunumu': CVL_k,  # K+->munu
-                'CSR_sutaunutau': CSR_k, 'CSL_sutaunutau': CSL_k, 'CVL_sutaunutau': CVL_k, # tau->Knu
+    #            'CSR_sumunumu': CSR_k, 'CSL_sumunumu': CSL_k, 'CVL_sumunumu': CVL_k,  # K+->munu
+    #            'CSR_sutaunutau': CSR_k, 'CSL_sutaunutau': CSL_k, 'CVL_sutaunutau': CVL_k, # tau->Knu
     #            'CSR_dumunumu': CSR_p, 'CSL_dumunumu': CSL_p, 'CVL_dumunumu': CVL_p, # pi+->munu
     #            'CSR_dutaunutau': CSR_p, 'CSL_dutaunutau': CSL_p, 'CVL_dutaunutau': CVL_p, # tau->pinu
-    #                    'C7_bs': C7_bs,'C8_bs': C8_bs, # B->Xsgamma
-    #                    'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CS_s,'CPp_bsmumu': CSp_s, # Bs->mumu
-    #                    'C10_bdmumu': C10_d,'C10p_bdmumu': C10p_d,'CS_bdmumu': CS_d,'CSp_bdmumu': CSp_d,'CP_bdmumu': CS_d,'CPp_bdmumu': CSp_d, # B0->mumu
-    #                    'CSR_bctaunutau': CSR_tr, 'CSL_bctaunutau': CSL_tr,'CSR_bcmunumu': CSR_mr, 'CSL_bcmunumu': CSL_mr,'CSR_bcenue': CSR_er, 'CSL_bcenue': CSL_er, # R(D) and R(D*)
-    #                    'CVLL_bsbs': CVLL_bs,#'CVRR_bsbs': CVRR_bs,'CSLL_bsbs': CSLL_bs,'CSRR_bsbs': CSRR_bs,'CSLR_bsbs': CSLR_bs,'CVLR_bsbs': CVLR_bs, # DeltaM_s
-    #                    'CVLL_bdbd': CVLL_bd,#'CVRR_bdbd': CVRR_bd,'CSLL_bdbd': CSLL_bd,'CSRR_bdbd': CSRR_bd,'CSLR_bdbd': CSLR_bd,'CVLR_bdbd': CVLR_bd, # DeltaM_d
-                        },
-                        scale=4.2, # mub I think, will almost always be the b-quark mass
-                        eft='WET', basis='flavio')
+    #            'C7_bs': C7_bs,'C8_bs': C8_bs, # B->Xsgamma
+    #            'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CS_s,'CPp_bsmumu': CSp_s, # Bs->mumu
+    #            'C10_bdmumu': C10_d,'C10p_bdmumu': C10p_d,'CS_bdmumu': CS_d,'CSp_bdmumu': CSp_d,'CP_bdmumu': CS_d,'CPp_bdmumu': CSp_d, # B0->mumu
+    #            'CSR_bctaunutau': CSR_tr, 'CSL_bctaunutau': CSL_tr,'CSR_bcmunumu': CSR_mr, 'CSL_bcmunumu': CSL_mr,'CSR_bcenue': CSR_er, 'CSL_bcenue': CSL_er, # R(D) and R(D*)
+    #            'CVLL_bsbs': CVLL_bs,#'CVRR_bsbs': CVRR_bs,'CSLL_bsbs': CSLL_bs,'CSRR_bsbs': CSRR_bs,'CSLR_bsbs': CSLR_bs,'CVLR_bsbs': CVLR_bs, # DeltaM_s
+    #            'CVLL_bdbd': CVLL_bd,#'CVRR_bdbd': CVRR_bd,'CSLL_bdbd': CSLL_bd,'CSRR_bdbd': CSRR_bd,'CSLR_bdbd': CSLR_bd,'CVLR_bdbd': CVLR_bd, # DeltaM_d
+            },
+            scale=4.2, # mub I think, will almost always be the b-quark mass
+            eft='WET', basis='flavio')
         return FL2.log_likelihood(par,wc)
 
     sigmas = (1,2)
@@ -135,9 +135,9 @@ for Vus in V_vals:
     #print("Minimum value of tanb is:", mint)
     #print("Maximum value of tanb is:", maxt)
 
-    fig_title = r"$\tau\to K\nu$ \& $K\to\mu\nu$ from " + str(Vus) + r"$\times$Vus"
-    #fig_title = r"$Ds\to l\nu$ from " + str(Vcs) + r"$\times$Vcs"
-    fig_name = "Klnu" + str(Vus) + ".png"
+    #fig_title = r"$\tau\to K\nu$ \& $K\to\mu\nu$ from " + str(Vus) + r"$\times$Vus"
+    fig_title = r"$B\to l\nu$ from " + str(Vub) + r"$\times$Vub"
+    fig_name = "Blnu" + str(Vub) + ".png"
 
     plt.figure(figsize=(6,5))
     fpl.contour(**cdat, # data
