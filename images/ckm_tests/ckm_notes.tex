@@ -1,0 +1,54 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,mathtools,siunitx}
+\usepackage[a4paper,left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{enumitem,pifont}
+\renewcommand{\labelitemi}{\ding{228}}
+\renewcommand{\labelitemii}{\ding{229}}
+\renewcommand{\labelitemiii}{\ding{225}}
+\setlist[itemize]{noitemsep}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{color,hyperref}
+\hypersetup{colorlinks=true}
+
+\newcommand{\tVVt}{\frac{|\tilde{V}_{ij}|^2}{|V_{ij}|^2}}
+\newcommand{\tVV}{\frac{|\tilde{V}_{ij}|}{|V_{ij}|}}
+
+\begin{document}
+{\Large\bfseries Some notes on CKM element stuff}
+\begin{itemize}
+    \item So we have the usual BR description in 2HDM:
+        \begin{equation*}
+            \mathcal{B}r_{exp} = \mathcal{B}r_{SM}\times(1+r_H)^2
+        \end{equation*}
+    \item Here, $(1+r_H)^2$ describes the WC terms, and the CKM element is part of the SM equation, but if the 2HDM is correct, then what we get from experiment for the value of $|V_{ij}|^2$ is really $|V_{ij}|^2\times(1+r_H)^2$
+        \begin{itemize}
+            \item $r_H=0$ means that 2HDM is wrong, and we're back to the SM value being correct
+            \item $r_H=-2$ means we're in the fine-tuned solution of the 2HDM and what we measure as the SM CKM element is the correct value, although the 2HDM is still correct
+            \item $r_H\neq0,-2$ means that the real CKM element is different from the measured one and we can't use the given SM values
+        \end{itemize}
+    \item So if we assume 2HDM to be right, we're probably using the wrong CKM element
+    \item Now consider having
+        \begin{equation*}
+            \mathcal{B}r_{exp} = \mathcal{B}r_{SM}\times\tVVt(1+r_H)^2
+        \end{equation*}
+        as our equation, with $\tilde{V}_{ij}$ being the real CKM element value and $V_{ij}$ being the measured one in the SM
+    \item This lets us cancel the SM CKM value and input the `real' one, if there is a difference in their value
+    \item For working in flavio, we need to write any modifications to SM formulae as NP WCs to be added to the SM WCs, so we need to rewrite this:
+        \begin{align*}
+            \tVVt(1+r_H)^2 &= \left\{\tVV+\tVV r_H\right\}^2 \\
+                           &= \left\{1+\left(\tVV-1\right)+\tVV r_H\right\}^2
+        \end{align*}
+    \item Writing like this means we can just add on $\tVV-1$ to a WC (e.g. to \textbf{CVL\_bumunumu} in \href{https://wcxf.github.io/assets/pdf/WET.flavio.pdf}{flavio's WET basis}) and just multiply the WCs involved with $r_H$ by $\tVV$ 
+    \item If the CKM element is not changed in the 2HDM, its contribution to the above will go away and we'll be back to our original consideration for the 2HDM; if it is changed, then we will be able to notice it
+        \begin{itemize}
+            \item \textit{NB - It may be possible to do something similar with semileptonic tree-levels without too much difficultly, I'm going to look into it}
+        \end{itemize}
+    \item This leaves us with 3 free parameters to fit, and I'm not sure if we can do that properly within flavio as it is, but it is simple enough to build up a picture of this modification's impact by doing a range of 2D contours as before for various values of $\tVV$
+    \item The issue with this is that then you have to fit for each quark current so that you're only considering a single CKM element at once, and for some, i.e. kaons and pions, their errors in form factors are quite large so I'm not sure if we can really resolve much information from those fits
+    \item I've done some quick contours for various values of $\tVV$ for the leptonic decays we've been using, which you can look through at \href{https://github.com/mbr-phys/higgs-proj/images/ckm_tests/}{https://github.com/mbr-phys/higgs-proj/images/ckm\_tests/} in individual folders for each CKM element consider
+    \item It would probably be worthwhile adding more leptonic decays to these fits for better indication of our validity of choice in $\tVV$ but I haven't looked into any extras yet
+\end{itemize}
+
+\end{document}
+

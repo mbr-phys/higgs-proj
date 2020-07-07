@@ -299,7 +299,7 @@ def mixing2(par,ckm_els,tanb,mH):
 
     return pref*(S_WH + S_HH)
 
-def rh(mu,md,tanb,mH):
+def rh(mu,md,tanb,mH,VVp):
     '''
         Function for M->lnu 2HDM WC contribution, based on rH we used from 0907.5135
 
@@ -308,9 +308,10 @@ def rh(mu,md,tanb,mH):
         Used https://github.com/flav-io/flavio/blob/master/flavio/physics/bdecays/blnu.py - line 22 - to figure this out
     '''
 #    r = ((mu-md*tanb**2)/(mu+md))*(mm/mH)**2
-    csr = mu/(mH**2)
-    csl = md*(tanb/mH)**2
-    return csr, csl
+    csr = VVp*mu/(mH**2)
+    csl = VVp*md*(tanb/mH)**2
+    cvl = VVp - 1
+    return csr, csl, cvl
 
 def rat_d(par,ml,tanb,mH):
     '''
