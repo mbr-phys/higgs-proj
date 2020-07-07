@@ -32,22 +32,25 @@
         \begin{equation*}
             \mathcal{B}r_{exp} = \mathcal{B}r_{SM}\times\tVVt(1+r_H)^2
         \end{equation*}
-        as our equation, with $\tilde{V}_{ij}$ being the real CKM element value and $V_{ij}$ being the measured one in the SM
+        as our equation, with $\tilde{V}_{ij}$ being the `real' CKM element value and $V_{ij}$ being the measured one in the SM
     \item This lets us cancel the SM CKM value and input the `real' one, if there is a difference in their value
     \item For working in flavio, we need to write any modifications to SM formulae as NP WCs to be added to the SM WCs, so we need to rewrite this:
         \begin{align*}
             \tVVt(1+r_H)^2 &= \left\{\tVV+\tVV r_H\right\}^2 \\
                            &= \left\{1+\left(\tVV-1\right)+\tVV r_H\right\}^2
         \end{align*}
-    \item Writing like this means we can just add on $\tVV-1$ to a WC (e.g. to \textbf{CVL\_bumunumu} in \href{https://wcxf.github.io/assets/pdf/WET.flavio.pdf}{flavio's WET basis}) and just multiply the WCs involved with $r_H$ by $\tVV$ 
+    \item Writing like this means we can just add on $\tVV-1$ to a WC (e.g. to \textbf{CVL\_bumunumu} in \href{https://wcxf.github.io/assets/pdf/WET.flavio.pdf}{flavio's WET basis} for $B^+\to\mu^+\nu_\mu$) and just multiply the WCs involved with $r_H$ by $\tVV$ 
     \item If the CKM element is not changed in the 2HDM, its contribution to the above will go away and we'll be back to our original consideration for the 2HDM; if it is changed, then we will be able to notice it
-        \begin{itemize}
-            \item \textit{NB - It may be possible to do something similar with semileptonic tree-levels without too much difficultly, I'm going to look into it}
-        \end{itemize}
     \item This leaves us with 3 free parameters to fit, and I'm not sure if we can do that properly within flavio as it is, but it is simple enough to build up a picture of this modification's impact by doing a range of 2D contours as before for various values of $\tVV$
     \item The issue with this is that then you have to fit for each quark current so that you're only considering a single CKM element at once, and for some, i.e. kaons and pions, their errors in form factors are quite large so I'm not sure if we can really resolve much information from those fits
-    \item I've done some quick contours for various values of $\tVV$ for the leptonic decays we've been using, which you can look through at \href{https://github.com/mbr-phys/higgs-proj/images/ckm_tests/}{https://github.com/mbr-phys/higgs-proj/images/ckm\_tests/} in individual folders for each CKM element consider
+    \item I've done some quick contours for various values of $\tVV$ for the leptonic decays we've been using, which you can look through at \href{https://github.com/mbr-phys/higgs-proj/tree/master/images/ckm_tests}{github/mbr-phys/higgs-proj/tree/master/images/ckm\_tests} in individual folders for each CKM element consider
     \item It would probably be worthwhile adding more leptonic decays to these fits for better indication of our validity of choice in $\tVV$ but I haven't looked into any extras yet
+    \item Using our leptonic decays so far, we can analyse how Vud, Vus, Vub, Vcd, and Vcs can be modified in the 2HDM, but for the other elements, we would have to extract from unitarity 
+        \begin{itemize}
+            \item We have all the first row elements here which means we could use unitarity as an extra constraint and test the elements together
+            \item It might be possible to do similar to above for $\mathcal{R}(D^{(*)})$ and Vcb so we could then use unitarity constraints on the first two rows
+        \end{itemize}
+    \item Since $\gamma$ comes from the phase of the elements, it shouldn't be affected by the 2HDM, so while just considering 2HDM, we can use the usual method to construct the full matrix from knowing how to modify Vub, Vcb, Vus
 \end{itemize}
 
 \end{document}

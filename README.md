@@ -18,8 +18,9 @@ _Research extension from [4th Year project](https://github.com/mbr-phys/cpviolat
 - [x] Add LO B Mixing 
 - [x] Add higher-order B mixing from Crivellin - _need to fix some issues with it still_
 - [x] Add R(D), R(Dst) 
+- [ ] Look into resolving Bsgamma SM value - I think this is going to be a faff cause of how all the data is stored for this and I'm not sure how to add to it 
 - [ ] Does the likelihood function change if observables are correlated or not?
-- [ ] Look into `RKpi(P+->munu)`, it's going all funky right now - maybe errors in FFs?
+- [x] Look into `RKpi(P+->munu)`, it's going all funky right now - maybe errors in FFs? _doing the individual BRs instead seems to fix this_
 - [ ] Finish adding to `world_avgs.yml`
 - [ ] Add `vev`, `lambda_QCD` and any other new nuisance parameters to the `parameter_x.yml` files in `flavio/data`
 
