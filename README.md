@@ -13,7 +13,7 @@ _Research extension from [4th Year project](https://github.com/mbr-phys/cpviolat
 
 ## To Do
 
-- [x] sorted leptonics as well
+- [x] sorted leptonics 
 - [x] Switch from manual running top quark calculation to using flavio's running 
 - [x] Add LO B Mixing 
 - [x] Add general B mixing from Crivellin - _need to fix some issues with it still_

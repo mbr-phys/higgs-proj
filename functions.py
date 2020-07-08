@@ -313,7 +313,7 @@ def rh(mu,md,tanb,mH,VVp):
     cvl = VVp - 1
     return csr, csl, cvl
 
-def rat_d(par,ml,tanb,mH):
+def rat_d(par,ml,tanb,mH,VVp):
     '''
         Function for WCs of B->Dlnu for R(D) and R(D*) in 2HDM
 
@@ -324,7 +324,7 @@ def rat_d(par,ml,tanb,mH):
     '''
     ml, mc, mb = par[ml], par['m_c'], par['m_b']
     Gf, vev = par['GF'], par['vev']
-    csl = ml*mc/(np.sqrt(2)*Gf*(vev*mH**2))
-    csr = (ml*mb*tanb**2)/(np.sqrt(2)*Gf*(vev*mH**2))
+    csl = VVp*ml*mc/(np.sqrt(2)*Gf*(vev*mH**2))
+    csr = VVp*(ml*mb*tanb**2)/(np.sqrt(2)*Gf*(vev*mH**2))
 
     return csl, csr
