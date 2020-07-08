@@ -1,7 +1,7 @@
 \documentclass[11pt]{article}
 
 \usepackage{amsmath,mathtools,siunitx}
-\usepackage[a4paper,left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage[a4paper,left=1.5cm,right=1.5cm,top=2cm,bottom=2cm]{geometry}
 \usepackage{float,subcaption,graphicx}
 \usepackage{enumitem,pifont}
 \renewcommand{\labelitemi}{\ding{228}}
@@ -44,7 +44,7 @@
     \item If the CKM element is not changed in the 2HDM, its contribution to the above will go away and we'll be back to our original consideration for the 2HDM; if it is changed, then we will be able to notice it
     \item This leaves us with 3 free parameters to fit, and I'm not sure if we can do that properly within flavio as it is, but it is simple enough to build up a picture of this modification's impact by doing a range of 2D contours as before for various values of $\tVV$
     \item The issue with this is that then you have to fit for each quark current so that you're only considering a single CKM element at once, and for some, i.e. kaons and pions, their errors in form factors are quite large so I'm not sure if we can really resolve much information from those fits
-    \item I've done some quick contours for various values of $\tVV$ for the leptonic decays we've been using, which you can look through at \href{https://github.com/mbr-phys/higgs-proj/tree/master/images/ckm_tests}{github/mbr-phys/higgs-proj/tree/master/images/ckm\_tests} in individual folders for each CKM element consider
+    \item I've done some quick contours for various values of $\tVV$ for the leptonic decays we've been using, which you can look through at \href{https://github.com/mbr-phys/higgs-proj/tree/master/ckm_tests}{github/mbr-phys/higgs-proj/tree/master/ckm\_tests} in individual folders for each CKM element consider
     \item It would probably be worthwhile adding more leptonic decays to these fits for better indication of our validity of choice in $\tVV$ but I haven't looked into any extras yet
     \item Using our leptonic decays so far, we can analyse how Vud, Vus, Vub, Vcd, and Vcs can be modified in the 2HDM, but for the other elements, we would have to extract from unitarity 
         \begin{itemize}
@@ -114,13 +114,15 @@
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=0.45\textwidth]{mB-rH0.png}
-        \includegraphics[width=0.45\textwidth]{mB-rH1.png}
+        \centering
+        \includegraphics[width=0.45\textwidth]{heatmaps/mB-rH0.png}
+        \includegraphics[width=0.45\textwidth]{heatmaps/mB-rH1.png}
         \caption{$m_{B^+} \implies V_{ub}$}
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=0.45\textwidth]{mD-rH0.png}
-        \includegraphics[width=0.45\textwidth]{mD-rH1.png}
+        \centering
+        \includegraphics[width=0.45\textwidth]{heatmaps/mD-rH0.png}
+        \includegraphics[width=0.45\textwidth]{heatmaps/mD-rH1.png}
         \caption{$m_{D^+} \implies V_{cd}$}
     \end{subfigure}
 \end{figure}
@@ -128,18 +130,21 @@
 \begin{figure}[H]\ContinuedFloat
     \centering
     \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=0.45\textwidth]{mDs-rH0.png}
-        \includegraphics[width=0.45\textwidth]{mDs-rH1.png}
+        \centering
+        \includegraphics[width=0.45\textwidth]{heatmaps/mDs-rH0.png}
+        \includegraphics[width=0.45\textwidth]{heatmaps/mDs-rH1.png}
         \caption{$m_{D_s} \implies V_{cs}$}
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=0.45\textwidth]{mK-rH0.png}
-        \includegraphics[width=0.45\textwidth]{mK-rH1.png}
+        \centering
+        \includegraphics[width=0.45\textwidth]{heatmaps/mK-rH0.png}
+        \includegraphics[width=0.45\textwidth]{heatmaps/mK-rH1.png}
         \caption{$m_{K^+} \implies V_{us}$}
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=0.45\textwidth]{mpi-rH0.png}
-        \includegraphics[width=0.45\textwidth]{mpi-rH1.png}
+        \centering
+        \includegraphics[width=0.45\textwidth]{heatmaps/mpi-rH0.png}
+        \includegraphics[width=0.45\textwidth]{heatmaps/mpi-rH1.png}
         \caption{$m_{\pi^+} \implies V_{ud}$}
     \end{subfigure}
 \end{figure}
