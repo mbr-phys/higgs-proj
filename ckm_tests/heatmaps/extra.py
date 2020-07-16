@@ -111,4 +111,4 @@ def errors2(ckm_els,ckm_errs,heatmap,errmap,i,j):
 
     a1, a2 = np.sqrt(at1), np.sqrt(at2)
 
-    return a1, a2
+    return 2*a1, 2*a2

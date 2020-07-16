@@ -1,7 +1,7 @@
 #!/bin/env python3
 
 import flavio
-from flavio.physics.running import running
+from flavio.physics.running.running import get_mt, get_alpha
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -40,7 +40,7 @@ def bsgamma(par,tanb,mH):
     '''
         Find BR[B->Xsgamma] 2HDM contributions to Wilson Coeffs C7 & C8 as fns of mH+ and tanb
     '''
-    mtmu = running.get_mt(par,2*par['m_W'])
+    mtmu = get_mt(par,2*par['m_W'])
 
     xtH = (mtmu/mH)**2
 
@@ -95,8 +95,8 @@ def bmumu(par,msd,CKM,mH0,tanb,mH):
     def I7(b):
         i = -b*I1(b)
         return i
-    mtmu = running.get_mt(par,mW)
-    mtmut = running.get_mt(par,par['m_t'])
+    mtmu = get_mt(par,mW)
+    mtmut = get_mt(par,par['m_t'])
 
     cob,g2,b = 1/tanb,0.65,np.arctan(tanb)
     a = b - np.pi/2 # alignment limit
@@ -136,7 +136,7 @@ def mixing(par,CKM,mds,tanb,mH):
     Vcs, Vcb = CKM[1,mds[1]], CKM[1,2]
     Vts, Vtb = CKM[2,mds[1]], CKM[2,2]
     vev,mW,QCD = par['vev'],par['m_W'],par['lam_QCD']
-    mu = [par['m_u'],par['m_c'],running.get_mt(par,par['m_t'])]
+    mu = [par['m_u'],par['m_c'],get_mt(par,par['m_t'])]
     md = [par[mds[2]],par[mds[0]],par['m_b']]
     def I1(b):
         i = -1/(b-1) + b*np.log(b)/((b-1)**2) 
@@ -285,8 +285,9 @@ def mixing2(par,ckm_els,tanb,mH):
     '''
         LO Expressions for 2HDM contributions to DeltaM_q
     '''
-    mtmu = running.get_mt(par,par['m_W'])
-    mtmut = running.get_mt(par,par['m_t'])
+    mtmu = get_mt(par,par['m_W'])
+    mtmut = get_mt(par,par['m_t'])
+    etat = (get_alpha(par,par['m_W'],nf_out=5)['alpha_s']/get_alpha(par,par['m_b'],nf_out=5)['alpha_s'])**(6/23)
 
     x_tH1 = (mtmut/mH)**2
     x_tW1 = (mtmut/par['m_W'])**2
@@ -295,11 +296,11 @@ def mixing2(par,ckm_els,tanb,mH):
     S_WH = (x_tH1*x_tW1/(4*tanb**2))*((2*x_tW1-8*x_tH1)*np.log(x_tH1)/((x_tH1-x_tW1)*(1-x_tH1)**2) + 6*x_tW1*np.log(x_tW1)/((x_tH1-x_tW1)*(1-x_tW1)**2) - (8-2*x_tW1)/((1-x_tW1)*(1-x_tH1)))
     S_HH = (x_tH1*x_tW1/(4*tanb**4))*((1+x_tH1)/((1-x_tH1)**2)+2*x_tH1*np.log(x_tH1)/((1-x_tH1)**3))
 
-    pref = ((1/4)*(par['GF']/np.pi)**2)*(par['m_W']**2)*ckm_els*0.85
+    pref = ((1/4)*(par['GF']/np.pi)**2)*(par['m_W']**2)*ckm_els*etat
 
     return pref*(S_WH + S_HH)
 
-def rh(mu,md,tanb,mH,VVp):
+def rh(mu,md,tanb,mH):
     '''
         Function for M->lnu 2HDM WC contribution, based on rH we used from 0907.5135
 
@@ -307,24 +308,22 @@ def rh(mu,md,tanb,mH,VVp):
 
         Used https://github.com/flav-io/flavio/blob/master/flavio/physics/bdecays/blnu.py - line 22 - to figure this out
     '''
-#    r = ((mu-md*tanb**2)/(mu+md))*(mm/mH)**2
-    csr = VVp*mu/(mH**2)
-    csl = VVp*md*(tanb/mH)**2
-    cvl = VVp - 1
-    return csr, csl, cvl
+    csr = mu/(mH**2)
+    csl = md*(tanb/mH)**2
+    return csr, csl
 
-def rat_d(par,ml,tanb,mH,VVp):
-    '''
-        Function for WCs of B->Dlnu for R(D) and R(D*) in 2HDM
-
-        I think this is right for the WCs, I've tried to derive it from the Lagrangian given in
-        https://arxiv.org/pdf/1705.02465.pdf
-
-        It gives the right plot at least
-    '''
-    ml, mc, mb = par[ml], par['m_c'], par['m_b']
-    Gf, vev = par['GF'], par['vev']
-    csl = VVp*ml*mc/(np.sqrt(2)*Gf*(vev*mH**2))
-    csr = VVp*(ml*mb*tanb**2)/(np.sqrt(2)*Gf*(vev*mH**2))
-
-    return csl, csr
+#def rat_d(par,m_l,m_u,m_d,tanb,mH):
+#    '''
+#        Function for WCs of semileptonics in 2HDM
+#
+#        I think this is right for the WCs, I've tried to derive it from the Lagrangian given in
+#        https://arxiv.org/pdf/1705.02465.pdf
+#
+#        I don't think we need this actually - the WCs should be the same for tree-level leps and semi-leps so will us rh above
+#    '''
+#    ml, mu, md = par[ml], par[m_u], par[m_d]
+#    Gf, vev = par['GF'], par['vev']
+#    csl = ml*mu/(np.sqrt(2)*Gf*(vev*mH**2))
+#    csr = (ml*md*tanb**2)/(np.sqrt(2)*Gf*(vev*mH**2))
+#
+#    return csl, csr
