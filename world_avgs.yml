@@ -64,6 +64,22 @@ LFU D Ratios:
     Rtaul(B->Dlnu): 0.340 ± 0.030
     Rtaul(B->D*lnu): 0.295 ± 0.014
 
+LFU K Ratios:
+  experiment: LHCb 1705.05802 + 1903.09252
+  values:
+    - name: <Rmue>(B+->Kll)
+      q2min: 1.0
+      q2max: 6.0
+      value: 0.846 + 0.060 - 0.054 + 0.016 - 0.014
+    - name: <Rmue>(B0->K*ll)
+      q2min: 0.045
+      q2max: 1.1
+      value: 0.66 + 0.11 - 0.07 ± 0.03
+    - name: <Rmue>(B0->K*ll)
+      q2min: 1.1
+      q2max: 6.0
+      value: 0.69 + 0.11 - 0.07 ± 0.05
+
 Higgs Signal Strengths:
   experiment: ATLAS 1909.02845
   # double check that's the right resource for all of them with Oliver

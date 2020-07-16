@@ -22,6 +22,7 @@ _Research extension from [4th Year project](https://github.com/mbr-phys/cpviolat
 - [x] Add tree level semileptonics to fit - _same WCs as other tree levels so pretty simple_
 - [ ] Does the likelihood function change if observables are correlated or not?
 - [x] Look into `RKpi(P+->munu)`, it's going all funky right now - _doing the individual BRs instead seems to fix this_
+- [x] `RK` and `RK*` need added - should use same WCs as `Bsmumu` so simple enough
 - [ ] Conclude from heatmap results for CKM modification
 - [ ] Finish adding to `world_avgs.yml`
 
@@ -30,5 +31,5 @@ _Research extension from [4th Year project](https://github.com/mbr-phys/cpviolat
 - [ ] Sort out WC language for observables not yet added
 - [ ] Sort out obliques - do we need to add WCs to the basis?
 - [ ] What do we do about extra parameters in fit when coming to SM4 etc?
-- [ ] Higgs signal strengths, R(K)s
+- [ ] Higgs signal strengths
 - [ ] Is it better to use `Likelihood` instead of `FastLikelihood`?
