@@ -22,7 +22,8 @@ _Research extension from [4th Year project](https://github.com/mbr-phys/cpviolat
 - [x] Add tree level semileptonics to fit - _same WCs as other tree levels so pretty simple_
 - [ ] Does the likelihood function change if observables are correlated or not?
 - [x] Look into `RKpi(P+->munu)`, it's going all funky right now - _doing the individual BRs instead seems to fix this_
-- [x] `RK` and `RK*` need added - should use same WCs as `Bsmumu` so simple enough
+- [x] `RK` and `RK*` need added - uses same WCs as `Bsmumu` so simple enough 
+- [ ] C7,8 contributions from Crivellin to `RK`, `RK*`, and `bsgamma`
 - [ ] Conclude from heatmap results for CKM modification
 - [ ] Finish adding to `world_avgs.yml`
 

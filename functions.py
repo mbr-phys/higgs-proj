@@ -53,11 +53,149 @@ def bsgamma(par,tanb,mH):
 
     return C_7H, C_8H
 
-def bmumu(par,msd,CKM,mH0,tanb,mH):
+def bsgamma2(par,CKM,mub1,tanb,mH):
+    '''
+        Finding C7 and C8 2HDM contributions using 1903.10440
+    '''
+    def f1(b):
+        i = (12*b*(np.log(b)-1)-3*(6*np.log(b)+1)*b**2 + 8*b**3 + 7)/((1-b)**4)
+        return i
+    def f2(b):
+        i = (4*np.log(b)+3-2*b*(3*np.log(b)+4)+5*b**2)/((1-b)**3)
+        return i
+    def f3(b):
+        i = (3*b*(2*np.log(b)+1)-6*b**2 + b**3 + 2)/((1-b)**4)
+        return i
+    def f4(b):
+        i = (2*np.log(b)+3-4*b+b**2)/((1-b)**3)
+        return i
+
+    Vus, Vub = CKM[0,1], CKM[0,2]
+    Vcs, Vcb = CKM[1,1], CKM[1,2]
+    Vts, Vtb = CKM[2,1], CKM[2,2]
+    vev,mW,QCD = par['vev'],par['m_W'],par['lam_QCD']
+    mu = [par['m_u'],par['m_c'],get_mt(par,par['m_t'])]
+    md = [par['m_d'],par['m_s'],par['m_b']]
+
+    y = (mW/mH)**2
+#    yA, yh, yH0 = (mH/mA0)**2, (mH/par['m_h'])**2, (mH/mH0)**2
+#    b = np.arctan(tanb)
+#    a = b - np.pi/2 # alignment limit
+#    sba, cba = np.sin(b-a), np.cos(b-a)
+#    cba,sba = np.sin(2*b),-np.sin(2*b) # wrong sign limit
+    cob = 1/tanb
+    eu = np.array([[cob*mu[0]/vev,0,0],[0,cob*mu[1]/vev,0],[0,0,cob*mu[2]/vev]])
+    ed = np.array([[-tanb*md[0]/vev,0,0],[0,-tanb*md[1]/vev,0],[0,0,-tanb*md[2]/vev]])
+    zs = [(mu[0]/mH)**2,(mu[1]/mH)**2,(mu[2]/mH)**2]
+    mub2 = 4.2
+    mul, mulb = (mub1/mH)**2, (mub2/mub1)**2
+
+    def c7_1():
+        p1,p2 = 0,0
+        for k in range(3):
+            for n in range(3):
+                p1 += np.conj(CKM[k,1])*eu[k,2]*eu[n,2]*CKM[n,2]
+                p2 += np.conj(CKM[k,2])*eu[k,2]*CKM[2,n]*ed[n,2]
+        c7 = -y*p1*f1(zs[2])/18 - mu[2]*y*p2*f2(zs[2])/(3*md[2])
+        return c7/(Vtb*np.conj(Vts)*0.65**2)
+
+    def c7p_1():
+        p1,p2 = 0,0
+        for k in range(3):
+            for n in range(3):
+                p1 += ed[k,2]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,2]
+                p2 += ed[k,2]*np.conj(CKM[2,k])*eu[n,2]*CKM[n,2]
+        c7p = -y*p1*f1(zs[2])/18 - mu[2]*y*p2*f2(zs[2])/(3*md[2])
+        return c7p/(Vtb*np.conj(Vts)*0.65**2)
+
+    def c8_1():
+        p1,p2 = 0,0
+        for k in range(3):
+            for n in range(3):
+                p1 += np.conj(CKM[k,1])*eu[k,2]*eu[n,2]*CKM[n,2]
+                p2 += np.conj(CKM[k,1])*eu[k,2]*CKM[2,n]*ed[n,2]
+        c8 = -y*p1*f3(zs[2])/6 - mu[2]*y*p2*f4(zs[2])/md[2]
+        return c8/(Vtb*np.conj(Vts)*0.65**2)
+
+    def c8p_1():
+        p1,p2 = 0,0
+        for k in range(3):
+            for n in range(3):
+                p1 += ed[k,1]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,2]
+                p2 += ed[k,2]*np.conj(CKM[2,k])*eu[n,2]*CKM[n,2]
+        c8p = -y*p1*f3(zs[2])/6 - mu[2]*y*p2*f4(zs[2])/md[2]
+        return c8p/(Vtb*np.conj(Vts)*0.65**2)
+
+    def c7_2():
+        p1,p2 = 0,0
+        for k in range(3):
+            for n in range(3):
+                p1 += np.conj(CKM[k,1])*eu[k,1]*eu[n,1]*CKM[n,2]
+                p2 += np.conj(CKM[k,1])*eu[k,1]*CKM[1,n]*ed[n,2]
+        c7 = -7*y*p1/18 - mu[1]*y*p2*(3+4*np.log(mul))/(3*md[2])
+        return c7/(Vtb*np.conj(Vts)*0.65**2)
+
+    def c7p_2():
+        p1,p2 = 0,0
+        for k in range(3):
+            for n in range(3):
+                p1 += ed[k,1]*np.conj(CKM[1,k])*CKM[1,n]*ed[n,2]
+                p2 += ed[k,1]*np.conj(CKM[1,k])*eu[n,1]*CKM[n,2]
+        c7p = -7*y*p1/18 - mu[1]*y*p2*(3+4*np.log(mul))/(3*md[2])
+        return c7p/(Vtb*np.conj(Vts)*0.65**2)
+
+    def c8_2():
+        p1,p2 = 0,0
+        for k in range(3):
+            for n in range(3):
+                p1 += np.conj(CKM[k,1])*eu[k,1]*eu[n,1]*CKM[n,2]
+                p2 += np.conj(CKM[k,1])*eu[k,1]*CKM[1,n]*ed[n,2]
+        c8 = -y*p1/3 - mu[1]*y*p2*(3+2*np.log(mul))/(md[2])
+        return c8/(Vtb*np.conj(Vts)*0.65**2)
+
+    def c8p_2():
+        p1,p2 = 0,0
+        for k in range(3):
+            for n in range(3):
+                p1 += ed[k,1]*np.conj(CKM[1,k])*CKM[1,n]*ed[n,2]
+                p2 += ed[k,1]*np.conj(CKM[1,k])*eu[n,1]*CKM[n,2]
+        c8p = -y*p1/3 - mu[1]*y*p2*(3+2*np.log(mul))/(md[2])
+        return c8p/(Vtb*np.conj(Vts)*0.65**2)
+
+    def c7_3():
+        p1,p2 = 0,0
+        for k in range(3):
+            for n in range(3):
+                p1 += np.conj(CKM[k,1])*eu[k,1]*CKM[1,n]*ed[n,2]
+        c7 = -4*mu[1]*y*p1*np.log(mulb)/3
+        return c7/(Vtb*np.conj(Vts)*0.65**2)
+
+    def c7p_3():
+        p1,p2 = 0,0
+        for k in range(3):
+            for n in range(3):
+                p1 += ed[k,1]*np.conj(CKM[1,k])*eu[n,1]*CKM[n,2]
+        c7p = -4*mu[1]*y*p1*np.log(mulb)/3
+        return c7p/(Vtb*np.conj(Vts)*0.65**2)
+
+    def c8_3():
+        return 3*c7_3()/2
+
+    def c8p_3():
+        return 3*c7p_3()/2
+
+    C7 = c7_1() + c7_2() + c7_3() # non-effective WCs
+    C7p = c7p_1() + c7p_2() + c7p_3()
+    C8 = c8_1() + c8_2() + c8_3()
+    C8p = c8p_1() + c8p_2() + c8p_3()
+
+    return C7, C7p, C8, C8p
+
+def bmumu(par,msd,CKM,ml,mH0,tanb,mH):
     '''
         Find BR[B(s/d)->mumu] 2HDM contributions to Wilson Coeffs C10, C10', CS (=CP), CS' (=CP')
     '''
-    mmu,mW,mb,mc,mu = par['m_mu'],par['m_W'],par['m_b'],par['m_c'],par['m_u']
+    mmu,mW,mb,mc,mu = par[ml],par['m_W'],par['m_b'],par['m_c'],par['m_u']
     wangle,higgs,v,QCD = par['s2w'],par['m_h'],par['vev'],par['lam_QCD']
     ms = par[msd[0]] # picking either ms or md
     Vub, Vcb, Vtb = CKM[0,2], CKM[1,2], CKM[2,2]
@@ -127,12 +265,117 @@ def bmumu(par,msd,CKM,mH0,tanb,mH):
 
     return C10, C10P, CS, CSP
 
+def bsll_c9(par,CKM,mls,tanb,mH):
+    '''
+        Calculating C9 and C9' 2HDM WCs
+    '''
+    def I1(b):
+        i = -1/(b-1) + b*np.log(b)/((b-1)**2) 
+        return i
+    def I8(a,b):
+        i = -1/((1-a)*(1-b))
+        if a != b:
+            i += (np.log(b)*b**2)/((a-b)*(1-b)**2) + (np.log(a)*a**2)/((b-a)*(1-a)**2)
+        return i
+    def f5(b):
+        i1 = 2*(12*np.log(b)+19)-9*b*(4*np.log(b)+13)
+        i2 = 126*b**2 + (18*np.log(b)-47)*b**3
+        return (i1+i2)/((1-b)**4)
+
+    Vus, Vub = CKM[0,1], CKM[0,2]
+    Vcs, Vcb = CKM[1,1], CKM[1,2]
+    Vts, Vtb = CKM[2,1], CKM[2,2]
+    vev,mW,QCD,s2w,e = par['vev'],par['m_W'],par['lam_QCD'],par['s2w'],1.6e-19
+    mu = [par['m_u'],par['m_c'],get_mt(par,par['m_t'])]
+    md = [par['m_d'],par['m_s'],par['m_b']]
+    ml = [par[mls[1]],par[mls[0]],par['m_tau']]
+    y = (mW/mH)**2
+    cob = 1/tanb
+    eu = np.array([[cob*mu[0]/vev,0,0],[0,cob*mu[1]/vev,0],[0,0,cob*mu[2]/vev]])
+    ed = np.array([[-tanb*md[0]/vev,0,0],[0,-tanb*md[1]/vev,0],[0,0,-tanb*md[2]/vev]])
+    el = np.array([[-tanb*ml[0]/vev,0,0],[0,-tanb*ml[1]/vev,0],[0,0,-tanb*ml[2]/vev]])
+    zs = [(mu[0]/mH)**2,(mu[1]/mH)**2,(mu[2]/mH)**2]
+    mul = (4.2/mH)**2
+
+    def c9_1():
+        p1 = 0
+        for k in range(3):
+            for n in range(3):
+                p1 += np.conj(CKM[k,1])*eu[k,2]*eu[n,2]*CKM[n,2]
+        c9 = -p1*(1-4*s2w)*(I1(zs[2])-1)/(2*np.conj(Vts)*Vtb*e**2)
+        return c9
+
+    def c9p_1():
+        p1 = 0
+        for k in range(3):
+            for n in range(3):
+                p1 += ed[k,1]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,2]
+        c9p = p1*(1-4*s2w)*(I1(zs[2])-1)/(2*np.conj(Vts)*Vtb*e**2)
+        return c9p
+
+    def c9_2():
+        p1 = 0 
+        for k in range(3):
+            for n in range(3):
+                p1 += np.conj(CKM[k,1])*eu[k,2]*eu[n,2]*CKM[n,2]
+        c9 = p1*y*f5(zs[2])/(27*Vtb*np.conj(Vts)*0.65**2)
+        return c9
+
+    def c9p_2():
+        p1 = 0 
+        for k in range(3):
+            for n in range(3):
+                p1 += ed[k,1]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,2]
+        c9p = p1*y*f5(zs[2])/(27*Vtb*np.conj(Vts)*0.65**2)
+        return c9p
+
+    def c9_3():
+        p1 = 0 
+        for k in range(3):
+            for n in range(3):
+                p1 += np.conj(CKM[k,1])*eu[k,1]*eu[n,1]*CKM[n,2]
+        c9 = 2*p1*y*(19+12*np.log(mul))/(27*Vtb*np.conj(Vts)*0.65**2)
+        return c9
+
+    def c9p_3():
+        p1 = 0 
+        for k in range(3):
+            for n in range(3):
+                p1 += ed[k,1]*np.conj(CKM[1,k])*CKM[1,n]*ed[n,2]
+        c9p = 2*p1*y*(19+12*np.log(mul))/(27*Vtb*np.conj(Vts)*0.65**2)
+        return c9p
+
+    def c9_4():
+        p1 = 0 
+        for k in range(3):
+            for n in range(3):
+                for i in range(3):
+                    for m in range(3):
+                        p1 += np.conj(CKM[k,1])*eu[k,i]*eu[n,i]*CKM[n,2]*I1(zs[i])*el[m,mls[2]]**2
+        c9 = -y*p1/(s2w*Vtb*np.conj(Vts)*0.65**4)
+        return c9
+
+    def c9p_4():
+        p1 = 0 
+        for k in range(3):
+            for n in range(3):
+                for i in range(3):
+                    for m in range(3):
+                        p1 += ed[k,1]*np.conj(CKM[i,k])*CKM[i,n]*ed[n,2]*I1(zs[i])*el[m,mls[2]]**2
+        c9p = -y*p1/(s2w*Vtb*np.conj(Vts)*0.65**4)
+        return c9p
+
+    C9 = c9_1() + c9_2() + c9_3() + c9_4()
+    C9p = c9p_1() + c9p_2() + c9p_3() + c9p_4()
+
+    return C9, C9p
+
 def mixing(par,CKM,mds,tanb,mH):
     '''
         Find DeltaMq 2HDM contributions to Wilson Coeffs C1, C1', C2, C2', C4, C5 using 1903.10440
         mds is list ['m_s',1,'m_d'] or ['m_d',0,'m_s'] depending on Bs or Bd
     '''
-    Vus, Vub = CKM[0,mds[1]], CKM[0,2],
+    Vus, Vub = CKM[0,mds[1]], CKM[0,2]
     Vcs, Vcb = CKM[1,mds[1]], CKM[1,2]
     Vts, Vtb = CKM[2,mds[1]], CKM[2,2]
     vev,mW,QCD = par['vev'],par['m_W'],par['lam_QCD']
