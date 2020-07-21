@@ -27,18 +27,23 @@
             \includegraphics[width=0.45\textwidth]{bcriv_plot.png}
             \includegraphics[width=0.45\textwidth]{comb1_plot.png}
         \end{figure}
-    \item Like Oliver, the main difference seems to be with $b\to s\gamma$ where it fits higher than before -- \textbf{the combined fit yields $m_{H^+}>970\,$GeV at $2\sigma$ compared to $m_{H^+}\gtrsim\,$GeV in my previous fits}
+    \item Like Oliver, the main difference seems to be with $b\to s\gamma$ where it fits higher than before -- \textbf{the combined fit yields $m_{H^+}\gtrsim970\,$GeV at $2\sigma$ compared to $m_{H^+}\gtrsim\,$GeV in my previous fits}
     \item \textit{Note: all the plots here are showing contours for $1,2\sigma$}
     \item I have modified the SM value in flavio for $b\to s\gamma$ to fit the current result of $(3.40\pm0.17)e^{-4}$ but still got this higher result
     \item It seems like it could be down to how flavio fits, but we would need to confirm this if we want to leave it as is
-    \item I have also included the fit for B mixing from higher-order expressions in \href{https://arxiv.org/pdf/1903.10440}{Crivellin 1903.10440} to show the difference -- I'm still looking into if there are errors causing the lines or if it's correct so it isn't included in the global fit yet
-    \item Adding in $B_{s,d}\to\mu\mu$ and $\mathcal{R}(D^{(*)})$ yields similar results to what I had before:
+    \item I have also included the fit for B mixing from higher-order expressions in \href{https://arxiv.org/pdf/1903.10440}{Crivellin 1903.10440} to show the difference 
+    \item Adding in $B_{s,d}\to\mu\mu$ and $\mathcal{R}(D^{(*)})$ yields similar results to what I had before
         \begin{figure}[H]
             \centering
-            \includegraphics[width=0.45\textwidth]{rds_plot.png} \\
-            \includegraphics[width=0.45\textwidth]{bmumu_apx.png}
-            \includegraphics[width=0.45\textwidth]{bmumu_fix.png}
+            \includegraphics[width=0.45\textwidth]{rd_both.png}
         \end{figure}
+    \item $\mathcal{R}(D)$ and $\mathcal{R}(D^*)$ are fitting simultaneously it seems right now, which wasn't what we had before, so looking at individual plots:
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.45\textwidth]{rd_plot.png}
+            \includegraphics[width=0.45\textwidth]{rdst_plot.png}
+        \end{figure}
+    \item It appears that both of them do fit individually which is not what we had before -- I'm not quite sure why this is the case currently
     \item For $B_{s,d}\to\mu\mu$, the left diagram is approximating $m_{H^+}\sim m_{H^0}$ which is the rough limit James has from the obliques, and the right diagram is fixing $m_{H^0}=1500\,$GeV
     \item Using the convention from 1903.10440 for the trilinear couplings means that instead of using $M=m_{12}/(\sin\beta\cos\beta)$ as I did previously, you use $\lambda_3$ from the 2HDM potential
     \item The two trilinear couplings we have to consider are
@@ -47,9 +52,13 @@
             \lambda_{H^0 H^+ H^-} &= v\cos(\beta-\alpha)\lambda_3 
         \end{align*}
     \item In the alignment limit which I have been using so far for these, $\sin(\beta-\alpha)=1$, so we only have to consider $\lambda_{h^0 H^+ H^-}$ 
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.45\textwidth]{bmumu_apx.png}
+            \includegraphics[width=0.45\textwidth]{bmumu_fix.png}
+        \end{figure}
     \item The contributions from the trilinear coupling seems to be minimal anyway, varying $\lambda_3$ from $0.01\to2$ doesn't change the results to any noticeable level, so for now I have set $\lambda_3=0.1$, but it's probably better to fit it properly at some point
     \item The coupling only contributes to $C_S$ and $C_P$ operators so far which only impact $B\to\mu\mu$
-        \newpage
     \item Checking the combined fit for all these observables to compare to my overall project work (bar the inclusion of James' obliques):
         \begin{figure}[H]
             \centering

@@ -22,6 +22,11 @@ def ckm_err(par,err):
 
     return abs(centrals), np.sqrt(a1 + a2 + a3 + a4)
 
+def vcb(mu,md,tanb,mH):
+    csr = mu/(mH**2)
+    csl = md*(tanb/mH)**2
+    return csr, csl
+
 def rh(mu,md,mm,tanb,mH):
     r = ((mu-md*tanb**2)/(mu+md))*(mm/mH)**2
     return 1/(1+r)
@@ -40,10 +45,11 @@ def vp(ckm_els,heatmap,i,j):
     Vcsp = heatmap['mDs'][i,j]*Vcs
     Vusp = heatmap['mK'][i,j]*Vus
     Vudp = heatmap['mpi'][i,j]*Vud
+    Vcbp = heatmap['Vcb'][i,j]*Vcb
     #row1 = abs(Vudp)**2 + abs(Vusp)**2 + abs(Vubp)**2
     #row2 = abs(Vcdp)**2 + abs(Vcsp)**2 + abs(Vcb)**2 
     row1 = Vudp**2 + Vusp**2 + Vubp**2
-    row2 = Vcdp**2 + Vcsp**2 + Vcb**2 
+    row2 = Vcdp**2 + Vcsp**2 + Vcbp**2 
 
     return row1, row2
 
@@ -65,6 +71,7 @@ def errors2(ckm_els,ckm_errs,heatmap,errmap,i,j):
     heatmap1['mDs'] = 1*heatmap['mDs']
     heatmap1['mK'] = 1*heatmap['mK']
     heatmap1['mpi'] = 1*heatmap['mpi']
+    heatmap1['Vcb'] = 1*heatmap['Vcb']
     ce1 = vp(ckm_els,heatmap1,i,j)
     at1 += abs(ce1[0]-central[0])**2
     at2 += abs(ce1[1]-central[1])**2
@@ -75,6 +82,7 @@ def errors2(ckm_els,ckm_errs,heatmap,errmap,i,j):
     heatmap2['mDs'] = 1*heatmap['mDs']
     heatmap2['mK'] = 1*heatmap['mK']
     heatmap2['mpi'] = 1*heatmap['mpi']
+    heatmap2['Vcb'] = 1*heatmap['Vcb']
     ce2 = vp(ckm_els,heatmap2,i,j)
     at1 += abs(ce2[0]-central[0])**2
     at2 += abs(ce2[1]-central[1])**2
@@ -85,6 +93,7 @@ def errors2(ckm_els,ckm_errs,heatmap,errmap,i,j):
     heatmap3['mDs'] = heatmap['mDs']+errmap['mDs']
     heatmap3['mK'] = 1*heatmap['mK']
     heatmap3['mpi'] = 1*heatmap['mpi']
+    heatmap3['Vcb'] = 1*heatmap['Vcb']
     ce3 = vp(ckm_els,heatmap3,i,j)
     at1 += abs(ce3[0]-central[0])**2
     at2 += abs(ce3[1]-central[1])**2
@@ -95,6 +104,7 @@ def errors2(ckm_els,ckm_errs,heatmap,errmap,i,j):
     heatmap4['mDs'] = 1*heatmap['mDs']
     heatmap4['mK'] = heatmap['mK']+errmap['mK']
     heatmap4['mpi'] = 1*heatmap['mpi']
+    heatmap4['Vcb'] = 1*heatmap['Vcb']
     ce4 = vp(ckm_els,heatmap4,i,j)
     at1 += abs(ce4[0]-central[0])**2
     at2 += abs(ce4[1]-central[1])**2
@@ -105,7 +115,19 @@ def errors2(ckm_els,ckm_errs,heatmap,errmap,i,j):
     heatmap5['mDs'] = 1*heatmap['mDs']
     heatmap5['mK'] = 1*heatmap['mK']
     heatmap5['mpi'] = heatmap['mpi']+errmap['mpi']
+    heatmap5['Vcb'] = 1*heatmap['Vcb']
     ce5 = vp(ckm_els,heatmap5,i,j)
+    at1 += abs(ce5[0]-central[0])**2
+    at2 += abs(ce5[1]-central[1])**2
+
+    heatmap6 = {}
+    heatmap6['mB'] = 1*heatmap['mB']
+    heatmap6['mD'] = 1*heatmap['mD']
+    heatmap6['mDs'] = 1*heatmap['mDs']
+    heatmap6['mK'] = 1*heatmap['mK']
+    heatmap6['mpi'] = 1*heatmap['mpi']
+    heatmap6['Vcb'] = 1*heatmap['Vcb']+errmap['Vcb']
+    ce5 = vp(ckm_els,heatmap6,i,j)
     at1 += abs(ce5[0]-central[0])**2
     at2 += abs(ce5[1]-central[1])**2
 

@@ -8,7 +8,7 @@ _Research extension from [4th Year project](https://github.com/mbr-phys/cpviolat
 - [tutorial with some useful examples](https://github.com/DavidMStraub/flavio-tutorial)
 - [pdg 2020 for world avgs and parameter values](http://pdg.lbl.gov/)
 - [hflav 2019 for some world avgs](https://arxiv.org/pdf/1909.12524.pdf)
-- [Crivellin 2019 for bsmumu WC stuff](https://arxiv.org/pdf/1903.10440.pdf)
+- [Crivellin 1903 for bsmumu WC stuff](https://arxiv.org/pdf/1903.10440.pdf)
 - will add more in time if needed
 
 ## To Do
@@ -23,6 +23,7 @@ _Research extension from [4th Year project](https://github.com/mbr-phys/cpviolat
 - [ ] Does the likelihood function change if observables are correlated or not?
 - [x] Look into `RKpi(P+->munu)`, it's going all funky right now - _doing the individual BRs instead seems to fix this_
 - [x] `RK` and `RK*` need added - uses same WCs as `Bsmumu` so simple enough 
+- [ ] Is there a reason R(D) and R(Dst) are fitting simultaneously fine?
 - [ ] C7,8 contributions from Crivellin to `RK`, `RK*`, and `bsgamma`
 - [ ] Conclude from heatmap results for CKM modification
 - [ ] Finish adding to `world_avgs.yml`

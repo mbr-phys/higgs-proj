@@ -17,6 +17,7 @@
 
 \begin{document}
 {\Large\bfseries Some notes on CKM element stuff}
+\section{Basic Framework}
 \begin{itemize}
     \item So we have the usual BR description in 2HDM:
         \begin{equation*}
@@ -99,7 +100,7 @@
     \end{subfigure}
 \end{figure}
 
-\newpage
+\section{Mapping Out the Modification}
 \begin{itemize}
     \item For leptonic decays, using $r_H$ as above, I've done some heatmaps showing values that $\tVV$ can take
     \item As James discussed in his notes, if the 2HDM is real then the value we measure and assume in the SM is
@@ -110,7 +111,6 @@
     \item On the left are the plots across the full parameter space we've been using before; on the right are the plots in a reduced range for clarity - this region also corresponds to the approximate region seen in our usual plots for the leptonic decays
     \item Again, all plots and code are on the github link if you want to look closer
 \end{itemize}
-
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{\textwidth}
@@ -123,15 +123,15 @@
         \includegraphics[width=0.5\textwidth]{heatmaps/mD-rH1.png}
         \caption{$m_{D^+} \implies V_{cd}$; on the right, the range is $\sim0.99965185\to0.99999978$}
     \end{subfigure}
-\end{figure}
-\newpage
-\begin{figure}[H]\ContinuedFloat
-    \centering
     \begin{subfigure}[b]{\textwidth}
         \includegraphics[width=0.49\textwidth]{heatmaps/mDs-rH0.png}
         \includegraphics[width=0.5\textwidth]{heatmaps/mDs-rH1.png}
         \caption{$m_{D_s} \implies V_{cs}$; on the right, the range is $\sim0.99964\to1.00227$}
     \end{subfigure}
+\end{figure}
+\newpage
+\begin{figure}[H]\ContinuedFloat
+    \centering
     \begin{subfigure}[b]{\textwidth}
         \includegraphics[width=0.49\textwidth]{heatmaps/mK-rH0.png}
         \includegraphics[width=0.5\textwidth]{heatmaps/mK-rH1.png}
@@ -143,20 +143,17 @@
         \caption{$m_{\pi^+} \implies V_{ud}$; on the right, the range is $\sim0.9999994\to1.000132$}
     \end{subfigure}
 \end{figure}
-\textit{It's a bit unclear for the right hand diagram for $\pi^+$, but the values along the colourbar are all 1+ that value}
-
-\newpage
 \begin{itemize}
-    \item For each point in parameter space, I have taken the modification factors for each CKM element from the heatmaps, modified the accepted CKM elements accordingly, and tested for unitarity in the first two rows
-    \item I haven't looked at any modification of $V_{cb}$ yet either from building a similar sort of heatmap if possible from semileptonics, or using $B_c$ leptonic decays (though I don't know if there's enough data to use these)
-    \item There's no likelihood tests on this at all, it is just a scan for now
-\end{itemize}
-
+    \item For each point in parameter space, I have taken the modification factors for each CKM element from the heatmaps, modified the accepted CKM elements accordingly, and tested for unitarity in the first two rows -- this is just using a scan, no statistics yet
+    \item I haven't looked at any modification of $V_{cb}$ yet either from building a similar sort of heatmap if possible from semileptonics
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.49\textwidth]{heatmaps/ckm_mod_errs.png}
-    \caption{The black region represents areas where the first two rows of the CKM matrix break unitarity from 2HDM modification as discussed above; the white is where unitarity is still possible within standard errors.}
+    \includegraphics[width=0.45\textwidth]{heatmaps/ckm_mod_2sig.png}
+    \caption{The black region represents areas where the first two rows of the CKM matrix break unitarity from 2HDM modification as discussed above; the white is where unitarity is still possible within $2\sigma$.}
 \end{figure}
+\end{itemize}
+
+\section{Conclusions}
 
 \end{document}
 
