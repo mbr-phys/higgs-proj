@@ -78,11 +78,6 @@ def bsgamma2(par,CKM,mub1,tanb,mH):
     md = [par['m_d'],par['m_s'],par['m_b']]
 
     y = (mW/mH)**2
-#    yA, yh, yH0 = (mH/mA0)**2, (mH/par['m_h'])**2, (mH/mH0)**2
-#    b = np.arctan(tanb)
-#    a = b - np.pi/2 # alignment limit
-#    sba, cba = np.sin(b-a), np.cos(b-a)
-#    cba,sba = np.sin(2*b),-np.sin(2*b) # wrong sign limit
     cob = 1/tanb
     eu = np.array([[cob*mu[0]/vev,0,0],[0,cob*mu[1]/vev,0],[0,0,cob*mu[2]/vev]])
     ed = np.array([[-tanb*md[0]/vev,0,0],[0,-tanb*md[1]/vev,0],[0,0,-tanb*md[2]/vev]])

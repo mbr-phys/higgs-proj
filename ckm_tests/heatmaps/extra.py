@@ -27,14 +27,20 @@ def vcb(mu,md,tanb,mH):
     csl = md*(tanb/mH)**2
     return csr, csl
 
-def rh(mu,md,mm,tanb,mH):
-    r = ((mu-md*tanb**2)/(mu+md))*(mm/mH)**2
+def rh(args,th):
+    mu,md,mm = args
+    tanb, mH = th
+    r = ((mu-md*(10**tanb)**2)/(mu+md))*(mm/(10**mH))**2
     return 1/(1+r)
 
-def errors1(par,err,mus,mds,mms,tanb,mH,i,j,m,hp):
-    a1 = abs(rh(par[mus[m]]+err[mus[m]],par[mds[m]],par[mms[m]],10**tanb[j],10**mH[i])-hp)**2
-    a2 = abs(rh(par[mus[m]],par[mds[m]]+err[mds[m]],par[mms[m]],10**tanb[j],10**mH[i])-hp)**2
-    a3 = abs(rh(par[mus[m]],par[mds[m]],par[mms[m]]+err[mms[m]],10**tanb[j],10**mH[i])-hp)**2
+#def errors1(par,err,mus,mds,mms,tanb,mH,i,j,m,hp):
+def errors1(args,th):
+    par,err,mus,mds,mms,m = args
+    tanb, mH = th
+    hp = rh([par[mus[m]],par[mds[m]],par[mms[m]]],[tanb,mH])
+    a1 = abs(rh([par[mus[m]]+err[mus[m]],par[mds[m]],par[mms[m]]],[tanb,mH])-hp)**2
+    a2 = abs(rh([par[mus[m]],par[mds[m]]+err[mds[m]],par[mms[m]]],[tanb,mH])-hp)**2
+    a3 = abs(rh([par[mus[m]],par[mds[m]],par[mms[m]]+err[mms[m]]],[tanb,mH])-hp)**2
 
     return np.sqrt(a1 + a2 + a3)
 
@@ -134,3 +140,52 @@ def errors2(ckm_els,ckm_errs,heatmap,errmap,i,j):
     a1, a2 = np.sqrt(at1), np.sqrt(at2)
 
     return 2*a1, 2*a2
+
+def testing(args,ijs):
+    ckm_els,ckm_errs,heatmap,errmap = args
+    j,i = ijs
+    r1, r2 = vp(ckm_els,heatmap,i,j)
+    re1, re2 = errors2(ckm_els,ckm_errs,heatmap,errmap,i,j)
+    if r1 < 1 and r2 < 1:
+        return 1
+    elif (r1 + re1) < 1 and r2 < 1:
+        return 1
+    elif (r1 - re1) < 1 and r2 < 1:
+        return 1
+    elif r1 < 1 and (r2 + re2) < 1:
+        return 1
+    elif r1 < 1 and (r2 - re2) < 1:
+        return 1
+    elif (r1 + re1) < 1 and (r2 + re2) < 1:
+        return 1
+    elif (r1 + re1) < 1 and (r2 - re2) < 1:
+        return 1
+    elif (r1 - re1) < 1 and (r2 + re2) < 1:
+        return 1
+    elif (r1 - re1) < 1 and (r2 - re2) < 1:
+        return 1
+    else: 
+        return 0
+
+def vcb_mult(args,ths):
+    par, err, my_obs, filt = args
+    tanb, mH = ths
+    smp, npp, mod = [],[],[]
+    smpe, nppe, mode = [],[],[]
+    Vcb = par['Vcb']
+    CSL_bc, CSR_bc = vcb(par['m_c'],par['m_b'],10**tanb,10**mH)
+    wc_np = flavio.WilsonCoefficients()
+    wc_np.set_initial({'CSR_bctaunutau': CSR_bc, 'CSL_bctaunutau': CSL_bc,'CSR_bcmunumu': CSR_bc,'CSL_bcmunumu': CSL_bc,'CSR_bcenue': CSR_bc,'CSL_bcenue': CSL_bc,},scale=4.2,eft='WET',basis='flavio')
+    for k in range(len(my_obs)):
+        smp.append(flavio.sm_prediction(my_obs[k])/Vcb)
+        npp.append(flavio.np_prediction(my_obs[k],wc_obj=wc_np)/Vcb)
+        mod.append(smp[k]/npp[k])
+        smpe.append(np.sqrt((flavio.sm_uncertainty(my_obs[k])/flavio.sm_prediction(my_obs[k]))**2 + (err['Vcb']/Vcb)**2)*smp[k])
+        nppe.append(np.sqrt((flavio.np_uncertainty(my_obs[k],wc_obj=wc_np)/flavio.np_prediction(my_obs[k],wc_obj=wc_np))**2 + (err['Vcb']/Vcb)**2)*npp[k])
+        mode.append(np.sqrt((smpe[k]/smp[k])**2 + (nppe[k]/npp[k])**2)*mod[k])
+    mods = np.average(mod)
+    modse = np.average(mode)
+    if filt == 1:
+        return mods
+    else: 
+        return modse
