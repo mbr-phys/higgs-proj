@@ -167,25 +167,26 @@ def testing(args,ijs):
     else: 
         return 0
 
-def vcb_mult(args,ths):
-    par, err, my_obs, filt = args
-    tanb, mH = ths
-    smp, npp, mod = [],[],[]
-    smpe, nppe, mode = [],[],[]
-    Vcb = par['Vcb']
-    CSL_bc, CSR_bc = vcb(par['m_c'],par['m_b'],10**tanb,10**mH)
-    wc_np = flavio.WilsonCoefficients()
-    wc_np.set_initial({'CSR_bctaunutau': CSR_bc, 'CSL_bctaunutau': CSL_bc,'CSR_bcmunumu': CSR_bc,'CSL_bcmunumu': CSL_bc,'CSR_bcenue': CSR_bc,'CSL_bcenue': CSL_bc,},scale=4.2,eft='WET',basis='flavio')
-    for k in range(len(my_obs)):
-        smp.append(flavio.sm_prediction(my_obs[k])/Vcb)
-        npp.append(flavio.np_prediction(my_obs[k],wc_obj=wc_np)/Vcb)
-        mod.append(smp[k]/npp[k])
-        smpe.append(np.sqrt((flavio.sm_uncertainty(my_obs[k])/flavio.sm_prediction(my_obs[k]))**2 + (err['Vcb']/Vcb)**2)*smp[k])
-        nppe.append(np.sqrt((flavio.np_uncertainty(my_obs[k],wc_obj=wc_np)/flavio.np_prediction(my_obs[k],wc_obj=wc_np))**2 + (err['Vcb']/Vcb)**2)*npp[k])
-        mode.append(np.sqrt((smpe[k]/smp[k])**2 + (nppe[k]/npp[k])**2)*mod[k])
-    mods = np.average(mod)
-    modse = np.average(mode)
-    if filt == 1:
-        return mods
-    else: 
-        return modse
+#def vcb_mult(args,ths):
+#    par, err, my_obs, filt = args
+#    tanb, mH = ths
+#    smp, npp, mod = [],[],[]
+#    smpe, nppe, mode = [],[],[]
+#    Vcb = par['Vcb']
+#    CSL_bc, CSR_bc = vcb(par['m_c'],par['m_b'],10**tanb,10**mH)
+#    wc_np = flavio.WilsonCoefficients()
+#    wc_np.set_initial({'CSR_bctaunutau': CSR_bc, 'CSL_bctaunutau': CSL_bc,'CSR_bcmunumu': CSR_bc,'CSL_bcmunumu': CSL_bc,'CSR_bcenue': CSR_bc,'CSL_bcenue': CSL_bc,},scale=4.2,eft='WET',basis='flavio')
+#    for k in range(len(my_obs)):
+#        smp.append(flavio.sm_prediction(my_obs[k])/Vcb)
+#        npp.append(flavio.np_prediction(my_obs[k],wc_obj=wc_np)/Vcb)
+#        mod.append(smp[k]/npp[k])
+#        smpe.append(np.sqrt((flavio.sm_uncertainty(my_obs[k])/flavio.sm_prediction(my_obs[k]))**2 + (err['Vcb']/Vcb)**2)*smp[k])
+#        nppe.append(np.sqrt((flavio.np_uncertainty(my_obs[k],wc_obj=wc_np)/flavio.np_prediction(my_obs[k],wc_obj=wc_np))**2 + (err['Vcb']/Vcb)**2)*npp[k])
+#        mode.append(np.sqrt((smpe[k]/smp[k])**2 + (nppe[k]/npp[k])**2)*mod[k])
+#    mods = np.average(mod)
+#    modse = np.average(mode)
+#    if filt == 1:
+#        shared_array[
+##        return mods
+#    else: 
+##        return modse

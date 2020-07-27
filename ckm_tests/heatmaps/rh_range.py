@@ -5,9 +5,40 @@ import numpy as np
 import flavio
 import matplotlib.pyplot as plt
 from extra import *
+import multiprocessing as mp
 from multiprocessing import Pool
-from pickle import PicklingError
+import ctypes
 from functools import partial
+
+def shared_zeros(n1,n2):
+    ''' create a 2D numpy array which can be then changed in different threads '''
+    shared_array_base = mp.Array(ctypes.c_double, n1 * n2)
+    shared_array = np.ctypeslib.as_array(shared_array_base.get_obj())
+    shared_array = shared_array.reshape(n1, n2)
+    return shared_array
+
+def vcb_mult(args,ths):
+    par, err, my_obs, steps = args
+    tanb, mH = ths
+    tb, ah = np.linspace(-1,2,steps), np.linspace(1,3.5,steps)
+    i, j  = np.where(tb==tanb)[0][0], np.where(ah==mH)[0][0]
+    smp, npp, mod = [],[],[]
+    smpe, nppe, mode = [],[],[]
+    Vcb = par['Vcb']
+    CSL_bc, CSR_bc = vcb(par['m_c'],par['m_b'],10**tanb,10**mH)
+    wc_np = flavio.WilsonCoefficients()
+    wc_np.set_initial({'CSR_bctaunutau': CSR_bc, 'CSL_bctaunutau': CSL_bc,'CSR_bcmunumu': CSR_bc,'CSL_bcmunumu': CSL_bc,'CSR_bcenue': CSR_bc,'CSL_bcenue': CSL_bc,},scale=4.2,eft='WET',basis='flavio')
+    for k in range(len(my_obs)):
+        smp.append(flavio.sm_prediction(my_obs[k])/Vcb)
+        npp.append(flavio.np_prediction(my_obs[k],wc_obj=wc_np)/Vcb)
+        mod.append(smp[k]/npp[k])
+        smpe.append(np.sqrt((flavio.sm_uncertainty(my_obs[k])/flavio.sm_prediction(my_obs[k]))**2 + (err['Vcb']/Vcb)**2)*smp[k])
+        nppe.append(np.sqrt((flavio.np_uncertainty(my_obs[k],wc_obj=wc_np)/flavio.np_prediction(my_obs[k],wc_obj=wc_np))**2 + (err['Vcb']/Vcb)**2)*npp[k])
+        mode.append(np.sqrt((smpe[k]/smp[k])**2 + (nppe[k]/npp[k])**2)*mod[k])
+    #mods = np.average(mod)
+    #modse = np.average(mode)
+    array_vs[j,i] = np.average(mod)
+    array_es[j,i] = np.average(mode)
 
 steps = 100
 
@@ -57,18 +88,24 @@ for m in range(len(mus)):
         #        plt.savefig(fig_name)
         #        plt.show()
 
-pool2 = Pool()
-args = [par,err,my_obs,1]
-arge = [par,err,my_obs,2]
+args = [par,err,my_obs,steps]
+#arge = [par,err,my_obs,2,steps]
 multy_vs = partial(vcb_mult,args)
-multy_es = partial(vcb_mult,arge)
-heatmap_v = np.array(pool2.map(multy_vs,th)).reshape((steps,steps))
-heatmap_e = np.array(pool2.map(multy_es,th)).reshape((steps,steps))
+#multy_es = partial(vcb_mult,arge)
+
+array_vs = shared_zeros(steps,steps)
+array_es = shared_zeros(steps,steps)
+
+pool2 = Pool(processes=4)
+#heatmap_v = np.array(
+pool2.map(multy_vs,th)#).reshape((steps,steps))
+#heatmap_e = np.array(
+#pool2.map(multy_es,th)#).reshape((steps,steps))
 pool2.close()
 pool2.join()
 
-heatmap['Vcb'] = heatmap_v
-errmap['Vcb'] = heatmap_e
+heatmap['Vcb'] = array_vs # heatmap_v
+errmap['Vcb'] = array_es # heatmap_e
 
 pool3 = Pool()
 argus = [ckm_els,ckm_errs,heatmap,errmap]
