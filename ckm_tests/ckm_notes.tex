@@ -1,6 +1,6 @@
 \documentclass[11pt]{article}
 
-\usepackage{amsmath,mathtools,siunitx}
+\usepackage{amsmath,mathtools,siunitx,amssymb}
 \usepackage[a4paper,left=1.5cm,right=1.5cm,top=2cm,bottom=2cm]{geometry}
 \usepackage{float,subcaption,graphicx}
 \usepackage{enumitem,pifont}
@@ -145,15 +145,29 @@
 \end{figure}
 \begin{itemize}
     \item For each point in parameter space, I have taken the modification factors for each CKM element from the heatmaps, modified the accepted CKM elements accordingly, and tested for unitarity in the first two rows -- this is just using a scan, no statistics yet
-    \item I haven't looked at any modification of $V_{cb}$ yet either from building a similar sort of heatmap if possible from semileptonics
+    \item This is using purely leptonic modifications for the first five elements, and semileptonic modifications for $V_{cb}$ from the same principles
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.45\textwidth]{heatmaps/ckm_mod_2sig.png}
+    \includegraphics[width=0.45\textwidth]{heatmaps/mod.png}
     \caption{The black region represents areas where the first two rows of the CKM matrix break unitarity from 2HDM modification as discussed above; the white is where unitarity is still possible within $2\sigma$.}
 \end{figure}
 \end{itemize}
 
 \section{Conclusions}
+\begin{itemize}
+    \item It looks like from my heatmaps and the unitarity scan that it is a reasonable assumption to neglect any modification to the CKM elements in the first two rows
+    \item Direct searches limit $m_{H^+}\gtrsim160\,$GeV which cuts off most of the disallowed region in Figure 3
+    \item Similarly, $b\to s\gamma$ will cut off practically all of the disallowed region -- I don't think that any minor modification of CKM elements will change $b\to s\gamma$ significantly so it should roughly remain the same as we've had previously, although it will be worth double checking this in case there is some additional effect
+    \item From my heatmaps, we can see that there will be small modifications to some CKM elements, although these can be mostly negligible in the regions our fits are moving towards 
+    \item Instead of calculating for the CKM elements individually as I've done so far, I think what will be best moving forward is considering $|V_{ub}|,V_{us},V_{cb},\gamma$ only and checking unitarity and magnitudes of modifications of the full CKM matrix from the standard parameterisation calculation
+    \item I have the framework from what I have done above for $|V_{ub}|,V_{us},V_{cb}$, so I need to work on modifications to $\gamma$ before I can give further results 
+    \item It is likely that there will not be much difference compared to the above results, but it is better to be rigorous in case there is
+    \item From the definition of $\gamma$,
+        \begin{equation*}
+            \gamma = \text{arg}\left(-\frac{V_{ud}V_{ub}^*}{V_{cd}V_{cb}^*}\right),
+        \end{equation*}
+        I would naively assume that the 2HDM will not modify it as it should only affect the CKM element magnitudes and not their complex phases 
+\end{itemize}
 
 \end{document}
 
