@@ -38,7 +38,7 @@ pars.set_constraint('eta_tt_Bs','0.537856') # Alex, private correspondence
 
 flavio.measurements.read_file('world_avgs.yml') # read in the world averages we want to use
 
-#flavio.config['renormalization scale']['bxgamma'] = 1.8045
+#flavio.config['renormalization scale']['bxgamma'] = 1.831
 flavio.config['renormalization scale']['bxgamma'] = 1.74
 
 mH0 = 1500 # mass of heavy neutral Higgs, GeV
@@ -55,7 +55,7 @@ my_obs = [
     ("<Rmue>(B0->K*ll)", 1.1, 6.0), # [40]
 ]
 
-sigmas = (1,2)
+sigmas = (1,2,3)
 
 #Fleps = FastLikelihood(name="trees",observables=my_obs[:9]+my_obs[14:38],include_measurements=['Tree Level Leptonics','LFU D Ratios','Tree Level Semileptonics']) 
 #Fleps = FastLikelihood(name="trees",observables=[my_obs[14]],include_measurements=['LFU D Ratios']) 
@@ -120,7 +120,7 @@ sigmas = (1,2)
 #
 #cmix = fpl.likelihood_contour_data(mix,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
 
-Frad = FastLikelihood(name="rad",observables=[my_obs[9]],include_measurements=['Radiative Decays'])
+Frad = FastLikelihood(name="rad",observables=[my_obs[9]]),include_measurements=['Radiative Decays'])
 Frad.make_measurement(N=500,threads=4)
 
 def rad(wcs):
@@ -129,8 +129,8 @@ def rad(wcs):
     par = flavio.default_parameters.get_central_all()
     ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
 
-#    C7, C8 = bsgamma(par,10**tanb,10**mH)
-    C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],10**tanb,10**mH)
+    C7, C8 = bsgamma(par,10**tanb,10**mH)
+#    C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],10**tanb,10**mH)
 
     wc = flavio.WilsonCoefficients()
     wc.set_initial({ # tell flavio what WCs you're referring to with your variables
@@ -153,7 +153,7 @@ crad = fpl.likelihood_contour_data(rad,-1,2,1,3.5, n_sigma=sigmas, threads=4, st
 #    ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
 #
 #    C10_s, C10p_s, CS_s, CSp_s = bmumu(par,['m_s',1],ckm_els,'m_mu',10**mH,10**tanb,10**mH)
-#    C10_se, C10p_se, CS_se, CSp_se = bmumu(par,['m_s',1],ckm_els,'m_e',1500,10**tanb,10**mH)
+#    C10_se, C10p_se, CS_se, CSp_se = bmumu(par,['m_s',1],ckm_els,'m_e',10**mH,10**tanb,10**mH)
 #    C9_s, C9p_s = bsll_c9(par,ckm_els,['m_mu','m_e',1],10**tanb,10**mH)
 #    C9_se, C9p_se = bsll_c9(par,ckm_els,['m_e','m_mu',0],10**tanb,10**mH)
 #    C7, C8 = bsgamma(par,10**tanb,10**mH)
@@ -229,12 +229,12 @@ crad = fpl.likelihood_contour_data(rad,-1,2,1,3.5, n_sigma=sigmas, threads=4, st
 #   Print Out Values
 #------------------------------
 
-#bf,minh,mint,maxt = mHmin(cdat)
-#print("Best fit value is found for (tanb,mH) =", bf)
-#print("Print outs are lists for values at", sigmas, "sigmas")
-#print("Minimum value of mH+ is:", minh)
-#print("Minimum value of tanb is:", mint)
-#print("Maximum value of tanb is:", maxt)
+bf,minh,mint,maxt = mHmin(crad)
+print("Best fit value is found for (tanb,mH) =", bf)
+print("Print outs are lists for values at", sigmas, "sigmas")
+print("Minimum value of mH+ is:", minh)
+print("Minimum value of tanb is:", mint)
+print("Maximum value of tanb is:", maxt)
 
 #------------------------------
 #   Plotting
@@ -257,7 +257,7 @@ crad = fpl.likelihood_contour_data(rad,-1,2,1,3.5, n_sigma=sigmas, threads=4, st
 ##plt.savefig('bmix_plot.png')
 #plt.savefig('bcriv_plot.png')
 
-plt.figure(figsize=(6,5))
+plt.figure(figsize=(4,5))
 fpl.contour(**crad,col=3) 
 plt.title(r'$\bar{B}\to X_s\gamma$ Radiative Decay')
 plt.xlabel(r'$\log_{10}[\tan\beta]$') # log10

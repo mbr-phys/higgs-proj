@@ -88,24 +88,24 @@ for m in range(len(mus)):
         #        plt.savefig(fig_name)
         #        plt.show()
 
-args = [par,err,my_obs,steps]
-#arge = [par,err,my_obs,2,steps]
-multy_vs = partial(vcb_mult,args)
-#multy_es = partial(vcb_mult,arge)
-
-array_vs = shared_zeros(steps,steps)
-array_es = shared_zeros(steps,steps)
-
-pool2 = Pool(processes=4)
-#heatmap_v = np.array(
-pool2.map(multy_vs,th)#).reshape((steps,steps))
-#heatmap_e = np.array(
-#pool2.map(multy_es,th)#).reshape((steps,steps))
-pool2.close()
-pool2.join()
-
-heatmap['Vcb'] = array_vs # heatmap_v
-errmap['Vcb'] = array_es # heatmap_e
+#args = [par,err,my_obs,steps]
+##arge = [par,err,my_obs,2,steps]
+#multy_vs = partial(vcb_mult,args)
+##multy_es = partial(vcb_mult,arge)
+#
+#array_vs = shared_zeros(steps,steps)
+#array_es = shared_zeros(steps,steps)
+#
+#pool2 = Pool(processes=4)
+##heatmap_v = np.array(
+#pool2.map(multy_vs,th)#).reshape((steps,steps))
+##heatmap_e = np.array(
+##pool2.map(multy_es,th)#).reshape((steps,steps))
+#pool2.close()
+#pool2.join()
+#
+#heatmap['Vcb'] = array_vs # heatmap_v
+#errmap['Vcb'] = array_es # heatmap_e
 
 pool3 = Pool()
 argus = [ckm_els,ckm_errs,heatmap,errmap]
@@ -119,8 +119,7 @@ s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m
 im = s.imshow(units,extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower',cmap='gray')
 #fig.colorbar(im)
 plt.title("Modification Regions Allowed By Unitarity \n using CKM first two rows")#, inc Vcb")
-plt.savefig("mod.png")
-#plt.savefig("vcb_mod.png")
+plt.savefig("test.png")
 #plt.show()
 
 print("--- %s seconds ---" % (time.time() - start_time))
