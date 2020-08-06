@@ -15,7 +15,7 @@
 
 \graphicspath{{images/}}
 
-\rhead{Last Updated: \today}
+\rhead{Last Updated: 06-08-20}
 
 \begin{document}
 \thispagestyle{fancy}
@@ -74,7 +74,16 @@
             \includegraphics[width=0.45\textwidth]{comb2_fix_new.png}
         \end{figure}
     \item Left is approximating $m_{H^+}\sim m_{H^0}$ as above for $B\to\mu\mu$ (can't compare to project directly as didn't use this limit); right is fixing $m_{H^0}=1500\,$GeV
+    \item For the left, we have $m_{H^+}\gtrsim890\,$GeV, $\tan\beta\gtrsim3.4$
     \item For the right, we have $m_{H^+}\gtrsim890\,$GeV, $\tan\beta\lesssim35$; in my project for this, I had $m_{H^+}\gtrsim500\,$GeV and $\tan\beta\lesssim21$
+    \item Interestingly, these new plots are beginning to look more similar to my very early work using $B\to\mu\mu$ in the large $\tan\beta$ limit
+    \item Below are the old plots for comparison to the above
+    \item The constraints on $m_{H^+}$ have not changed at all since this primarily comes from $b\to s\gamma$, but the constraints on $\tan\beta$ have been significantly shifted to the right
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.45\textwidth]{comb2_apx.png}
+            \includegraphics[width=0.45\textwidth]{comb2_fix.png}
+        \end{figure}
 \end{itemize}
 
 \section{New Observables and To Do}
@@ -92,16 +101,16 @@
             \includegraphics[width=0.45\textwidth]{sls_plot.png}
         \end{figure}
     \item The next thing is to look at $R_K$ and $R_{K^{*0}}$ 
-    \item From \href{https://arxiv.org/pdf/1704.05340.pdf}{1704.05340}, the operators needed for the $R_K$s are $C_7,C_7',C_9,C_9',C_{10},C_{10}'$ for both $bs\mu\mu$ and $bsee$
-    \item All these can be got from \href{https://arxiv.org/pdf/1903.10440.pdf}{1903.10440} -- already have the formulae for $C_{10}^{(')}$s from $B\to\mu\mu$ calculations
+    \item From \href{https://arxiv.org/pdf/1704.05340.pdf}{1704.05340}, the operators needed for the $R_K$s are $C_7,C_7',C_9,C_9',C_{10},C_{10}'$ for both $bs\mu\mu$ and $bsee$ -- I think we also need to consider $C_8,C_8'$ so these are also calculated and included in my fits 
+    \item All these can be taken from \href{https://arxiv.org/pdf/1903.10440.pdf}{1903.10440} -- the only new WCs are $C_9,C_9'$ as the others are included in $b\to s\gamma$ and $B\to\mu\mu$
     \item So far, we get essentially no constraint in our parameter space from $R_K$ and $R_{K^{*0}}$:
         \begin{figure}[H]
             \centering
             \includegraphics[width=0.45\textwidth]{rks_plot.png}
         \end{figure}
-    \item There still needs to be more checks in case I've missed something, but so far we see the small region excluded at $1\sigma$ in the left of the plot
+    \item There still needs to be more checks in case I've missed something, but so far we see a small region excluded at $1\sigma$ in the left of the plot and that's it
     \item I want to check in literature for the $R_K$s in 2HDM Type II to see if there's any fits that include these to see what results have been found historically to give some at least a rough idea of what should be expected
-    \item I have looked at the fit for the $R_K$s in \href{https://arxiv.org/pdf/2007.11942.pdf}{2007.11942} and it's not the easiest to compare to since they've presented differently, but it looks like they've found only a small constraint from $R_K$s near what would be along the left axis of our plots, which is roughly similar to where we're beginning to see a constraint here
+    \item I have looked at the fit for the $R_K$s in \href{https://arxiv.org/pdf/2007.11942.pdf}{2007.11942} and it's not the easiest to compare to, but it looks like they've found only a small constraint from $R_K$s near what would be along the left axis of our plots, which is roughly similar to where we're beginning to see a constraint here
     \item I need to do the fits including $B\to\mu\mu$ in the wrong sign limit too and compare to my previous results
 \end{itemize}
 
