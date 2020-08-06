@@ -4,6 +4,7 @@
 \usepackage[a4paper,left=1.5cm,right=1.5cm,top=2cm,bottom=2cm]{geometry}
 \usepackage{float,subcaption,graphicx}
 \usepackage{enumitem,pifont}
+\usepackage{fancyhdr}
 \renewcommand{\labelitemi}{\ding{228}}
 \renewcommand{\labelitemii}{\ding{229}}
 \renewcommand{\labelitemiii}{\ding{225}}
@@ -14,7 +15,10 @@
 
 \graphicspath{{images/}}
 
+\rhead{Last Updated: \today}
+
 \begin{document}
+\thispagestyle{fancy}
 {\Large\bfseries Project Notes}
 \section{Replicating results}
 \begin{itemize}
@@ -27,10 +31,11 @@
             \includegraphics[width=0.45\textwidth]{bcriv_plot.png}
             \includegraphics[width=0.45\textwidth]{comb1_plot.png}
         \end{figure}
-    \item Like Oliver, the main difference seems to be with $b\to s\gamma$ where it fits higher than before -- \textbf{the combined fit yields $m_{H^+}\gtrsim970\,$GeV at $2\sigma$ compared to $m_{H^+}\gtrsim\,$GeV in my previous fits}
+    \item Like Oliver, the main difference seems to be with $b\to s\gamma$ where it fits higher than before -- \textbf{the combined fit yields $m_{H^+}\gtrsim890\,$GeV at $2\sigma$ compared to $m_{H^+}\gtrsim\,500$GeV in my previous fits}
     \item \textit{Note: all the plots here are showing contours for $1,2\sigma$}
-    \item I have modified the SM value in flavio for $b\to s\gamma$ to fit the current result of $(3.40\pm0.17)e^{-4}$ but still got this higher result
-    \item It seems like it could be down to how flavio fits, but we would need to confirm this if we want to leave it as is
+    \item This is using the higher order $b\to s\gamma$ expressions from \href{https://arxiv.org/pdf/1903.10440}{Crivellin 1903.10440}
+    \item I have modified the SM value in flavio for $b\to s\gamma$ to fit the current result of $(3.40\pm0.17)e^{-4}$ 
+    \item It seems like it could be down to how flavio fits, but we would need to confirm this 
     \item I have also included the fit for B mixing from higher-order expressions in \href{https://arxiv.org/pdf/1903.10440}{Crivellin 1903.10440} to show the difference -- the gap we find around $m_{H^+}\sim m_t(m_t)$ is due to divergences in the loop functions for this value
     \item Adding in $B_{s,d}\to\mu\mu$ and $\mathcal{R}(D^{(*)})$ yields similar results to what I had before
         \begin{figure}[H]
@@ -52,21 +57,24 @@
             \lambda_{H^0 H^+ H^-} &= v\cos(\beta-\alpha)\lambda_3 
         \end{align*}
     \item In the alignment limit which I have been using so far for these, $\sin(\beta-\alpha)=1$, so we only have to consider $\lambda_{h^0 H^+ H^-}$ 
+    \item Using the updated values from Y Amhis at ICHEP 2020 and some code updates:
         \begin{figure}[H]
             \centering
-            \includegraphics[width=0.45\textwidth]{bmumu_apx.png}
-            \includegraphics[width=0.45\textwidth]{bmumu_fix.png}
+            \includegraphics[width=0.45\textwidth]{bmumu_apx_new.png}
+            \includegraphics[width=0.45\textwidth]{bmumu_fix_new.png}
         \end{figure}
-    \item The contributions from the trilinear coupling seems to be minimal anyway, varying $\lambda_3$ from $0.01\to2$ doesn't change the results to any noticeable level, so for now I have set $\lambda_3=0.1$, but it's probably better to fit it properly at some point
+    \item These seem to preserve the overall shapes of the plots, but shifts constraints towards higher $\tan\beta$
+    \item Updated global fits incoming to see the change there
+    \item The contributions from the trilinear coupling seems to be minimal anyway, varying $\lambda_3$ from $0.01\to2$ doesn't change the results to any noticeable level, so for now I have set $\lambda_3=0.1$
     \item The coupling only contributes to $C_S$ and $C_P$ operators so far which only impact $B\to\mu\mu$
     \item Checking the combined fit for all these observables to compare to my overall project work (bar the inclusion of James' obliques):
         \begin{figure}[H]
             \centering
-            \includegraphics[width=0.45\textwidth]{comb2_apx.png}
-            \includegraphics[width=0.45\textwidth]{comb2_fix.png}
+            \includegraphics[width=0.45\textwidth]{comb2_apx_new.png}
+            \includegraphics[width=0.45\textwidth]{comb2_fix_new.png}
         \end{figure}
     \item Left is approximating $m_{H^+}\sim m_{H^0}$ as above for $B\to\mu\mu$ (can't compare to project directly as didn't use this limit); right is fixing $m_{H^0}=1500\,$GeV
-    \item For the right, we have $m_{H^+}\gtrsim970\,$GeV and $\tan\beta\lesssim7$; in my project for this, I had $m_{H^+}\gtrsim500\,$GeV and $\tan\beta\lesssim21$
+    \item For the right, we have $m_{H^+}\gtrsim890\,$GeV, $\tan\beta\lesssim35$; in my project for this, I had $m_{H^+}\gtrsim500\,$GeV and $\tan\beta\lesssim21$
 \end{itemize}
 
 \section{New Observables and To Do}
@@ -86,13 +94,14 @@
     \item The next thing is to look at $R_K$ and $R_{K^{*0}}$ 
     \item From \href{https://arxiv.org/pdf/1704.05340.pdf}{1704.05340}, the operators needed for the $R_K$s are $C_7,C_7',C_9,C_9',C_{10},C_{10}'$ for both $bs\mu\mu$ and $bsee$
     \item All these can be got from \href{https://arxiv.org/pdf/1903.10440.pdf}{1903.10440} -- already have the formulae for $C_{10}^{(')}$s from $B\to\mu\mu$ calculations
-    \item For both $m_{H^+}\sim m_{H^0}$ and $m_{H^0}=1500\,$GeV as I looked at $B\to\mu\mu$, we get no constraint in our parameter space from $R_K$ and $R_{K^{*0}}$ (although I still need to check through all the formulae again for mistakes):
+    \item So far, we get essentially no constraint in our parameter space from $R_K$ and $R_{K^{*0}}$:
         \begin{figure}[H]
             \centering
             \includegraphics[width=0.45\textwidth]{rks_plot.png}
         \end{figure}
-    \item I want to check in literature as well for the $R_K$s in 2HDM Type II to see if there's any fits that include these to see what results have been found historically to give some at least a rough idea of what should be expected
-    \item I will also look at fitting $b\to s\gamma$ using the expressions for $C_7,C_8$ in 1903.10440 since $C_7$ is in $R_K$s anyway
+    \item There still needs to be more checks in case I've missed something, but so far we see the small region excluded at $1\sigma$ in the left of the plot
+    \item I want to check in literature for the $R_K$s in 2HDM Type II to see if there's any fits that include these to see what results have been found historically to give some at least a rough idea of what should be expected
+    \item I have looked at the fit for the $R_K$s in \href{https://arxiv.org/pdf/2007.11942.pdf}{2007.11942} and it's not the easiest to compare to since they've presented differently, but it looks like they've found only a small constraint from $R_K$s near what would be along the left axis of our plots, which is roughly similar to where we're beginning to see a constraint here
     \item I need to do the fits including $B\to\mu\mu$ in the wrong sign limit too and compare to my previous results
 \end{itemize}
 

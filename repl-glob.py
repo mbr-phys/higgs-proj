@@ -55,7 +55,7 @@ my_obs = [
     ("<Rmue>(B0->K*ll)", 1.1, 6.0), # [40]
 ]
 
-sigmas = (1,2,3)
+sigmas = (1,2)#,3)
 
 #Fleps = FastLikelihood(name="trees",observables=my_obs[:9]+my_obs[14:38],include_measurements=['Tree Level Leptonics','LFU D Ratios','Tree Level Semileptonics']) 
 #Fleps = FastLikelihood(name="trees",observables=[my_obs[14]],include_measurements=['LFU D Ratios']) 
@@ -68,7 +68,7 @@ sigmas = (1,2,3)
 #    ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
 #
 ##    CSR_b, CSL_b = rh(par['m_u'],par['m_b'],10**tanb,10**mH)
-##    CSR_d, CSL_d = rh(par['m_c'],par['m_s'],10**tanb,10**mH)
+##    CSR_d, CSL_d = rh(par['m_c'],par['m_d'],10**tanb,10**mH)
 ##    CSR_ds, CSL_ds = rh(par['m_c'],par['m_s'],10**tanb,10**mH)
 ##    CSR_k, CSL_k = rh(par['m_u'],par['m_s'],10**tanb,10**mH)
 ##    CSR_p, CSL_p = rh(par['m_u'],par['m_d'],10**tanb,10**mH)
@@ -120,61 +120,60 @@ sigmas = (1,2,3)
 #
 #cmix = fpl.likelihood_contour_data(mix,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
 
-Frad = FastLikelihood(name="rad",observables=[my_obs[9]]),include_measurements=['Radiative Decays'])
-Frad.make_measurement(N=500,threads=4)
-
-def rad(wcs):
-    tanb, mH = wcs # state what the two parameters are going to be on the plot
-
-    par = flavio.default_parameters.get_central_all()
-    ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
-
-    C7, C8 = bsgamma(par,10**tanb,10**mH)
-#    C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],10**tanb,10**mH)
-
-    wc = flavio.WilsonCoefficients()
-    wc.set_initial({ # tell flavio what WCs you're referring to with your variables
-        'C7_bs': C7, 'C8_bs': C8,
-#        'C7p_bs': C7p, 'C8p_bs': C8p,
-        }, scale=4.2, eft='WET', basis='flavio')
-    return Frad.log_likelihood(par,wc)
-
-crad = fpl.likelihood_contour_data(rad,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
-
-#Fmu = FastLikelihood(name="mu",observables=my_obs[-3:],include_measurements=['LFU K Ratios']) 
-##Fmu = FastLikelihood(name="mu",observables=my_obs[12:14],include_measurements=['FCNC Leptonic Decays',]) 
-##Fmu = FastLikelihood(name="mu",observables=my_obs[12:14]+my_obs[-3:],include_measurements=['FCNC Leptonic Decays','LFU K Ratios']) 
-#Fmu.make_measurement(N=500,threads=4)
+#Frad = FastLikelihood(name="rad",observables=[my_obs[9]],include_measurements=['Radiative Decays'])
+#Frad.make_measurement(N=500,threads=4)
 #
-#def mu(wcs):
+#def rad(wcs):
 #    tanb, mH = wcs # state what the two parameters are going to be on the plot
 #
 #    par = flavio.default_parameters.get_central_all()
 #    ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
 #
-#    C10_s, C10p_s, CS_s, CSp_s = bmumu(par,['m_s',1],ckm_els,'m_mu',10**mH,10**tanb,10**mH)
-#    C10_se, C10p_se, CS_se, CSp_se = bmumu(par,['m_s',1],ckm_els,'m_e',10**mH,10**tanb,10**mH)
-#    C9_s, C9p_s = bsll_c9(par,ckm_els,['m_mu','m_e',1],10**tanb,10**mH)
-#    C9_se, C9p_se = bsll_c9(par,ckm_els,['m_e','m_mu',0],10**tanb,10**mH)
-#    C7, C8 = bsgamma(par,10**tanb,10**mH)
-##    C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],10**tanb,10**mH)
-##    C10_d, C10p_d, CS_d, CSp_d = bmumu(par,['m_d',0],ckm_els,'m_mu',10**mH,10**tanb,10**mH)
+##    C7, C8 = bsgamma(par,10**tanb,10**mH)
+#    C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],10**tanb,10**mH)
 #
 #    wc = flavio.WilsonCoefficients()
 #    wc.set_initial({ # tell flavio what WCs you're referring to with your variables
-#            'C7_bs': C7,#'C7p_bs': C7p, 
-#            'C9_bsee': C9_se,'C9p_bsee': C9p_se,
-#            'C9_bsmumu': C9_s,'C9p_bsmumu': C9p_s,
-#            'C10_bsee': C10_se,'C10p_bsee': C10p_se,#'CS_bsee': CS_se,'CSp_bsee': CSp_se,'CP_bsee': CS_se,'CPp_bsee': CSp_se, 
-#            'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,#'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CS_s,'CPp_bsmumu': CSp_s, # Bs->mumu
-##            'C10_bdmumu': C10_d,'C10p_bdmumu': C10p_d,'CS_bdmumu': CS_d,'CSp_bdmumu': CSp_d,'CP_bdmumu': CS_d,'CPp_bdmumu': CSp_d, # B0->mumu
+#        'C7_bs': C7, 'C8_bs': C8,
+#        'C7p_bs': C7p, 'C8p_bs': C8p,
 #        }, scale=4.2, eft='WET', basis='flavio')
-#    return Fmu.log_likelihood(par,wc)
+#    return Frad.log_likelihood(par,wc)
 #
-#cmu = fpl.likelihood_contour_data(mu,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
+#crad = fpl.likelihood_contour_data(rad,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
+
+Fmu = FastLikelihood(name="mu",observables=my_obs[-3:],include_measurements=['LFU K Ratios']) 
+#Fmu = FastLikelihood(name="mu",observables=my_obs[12:14],include_measurements=['FCNC Leptonic Decays',]) 
+##Fmu = FastLikelihood(name="mu",observables=my_obs[12:14]+my_obs[-3:],include_measurements=['FCNC Leptonic Decays','LFU K Ratios']) 
+Fmu.make_measurement(N=500,threads=4)
+
+def mu(wcs):
+    tanb, mH = wcs # state what the two parameters are going to be on the plot
+
+    par = flavio.default_parameters.get_central_all()
+    ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
+
+    C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',0],1500,10**tanb,10**mH)
+    C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],1500,10**tanb,10**mH)
+#    C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],1500,10**tanb,10**mH)
+    C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],10**tanb,10**mH)
+
+    wc = flavio.WilsonCoefficients()
+    wc.set_initial({ # tell flavio what WCs you're referring to with your variables
+            'C7_bs': C7,'C7p_bs': C7p, 
+            'C8_bs': C8,'C8p_bs': C8p, 
+            'C9_bsee': C9_se,'C9p_bsee': C9p_se,
+            'C9_bsmumu': C9_s,'C9p_bsmumu': C9p_s,
+            'C10_bsee': C10_se,'C10p_bsee': C10p_se,'CS_bsee': CS_se,'CSp_bsee': CSp_se,'CP_bsee': CS_se,'CPp_bsee': CSp_se, 
+            'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CS_s,'CPp_bsmumu': CSp_s, # Bs->mumu
+#            'C10_bdmumu': C10_d,'C10p_bdmumu': C10p_d,'CS_bdmumu': CS_d,'CSp_bdmumu': CSp_d,'CP_bdmumu': CS_d,'CPp_bdmumu': CSp_d, # B0->mumu
+        }, scale=4.2, eft='WET', basis='flavio')
+    return Fmu.log_likelihood(par,wc)
+
+cmu = fpl.likelihood_contour_data(mu,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
 
 #FL2 = FastLikelihood(name="likelihood test",observables=my_obs,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios',])
 #FL2 = FastLikelihood(name="likelihood test",observables=my_obs[:16],include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios',])#'Tree Level Semileptonics','LFU K Ratios',])
+##FL2 = FastLikelihood(name="likelihood test",observables=my_obs[:12],include_measurements=['Tree Level Leptonics','Radiative Decays','B Mixing',])
 #FL2.make_measurement(N=500,threads=4)
 #
 #def func(wcs):
@@ -184,18 +183,16 @@ crad = fpl.likelihood_contour_data(rad,-1,2,1,3.5, n_sigma=sigmas, threads=4, st
 #    ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
 #
 #    CSR_b, CSL_b = rh(par['m_u'],par['m_b'],10**tanb,10**mH)
-#    CSR_d, CSL_d = rh(par['m_c'],par['m_s'],10**tanb,10**mH)
+#    CSR_d, CSL_d = rh(par['m_c'],par['m_d'],10**tanb,10**mH)
 #    CSR_ds, CSL_ds = rh(par['m_c'],par['m_s'],10**tanb,10**mH)
 #    CSR_k, CSL_k = rh(par['m_u'],par['m_s'],10**tanb,10**mH)
 #    CSR_p, CSL_p = rh(par['m_u'],par['m_d'],10**tanb,10**mH)
 #    CSL_bc, CSR_bc = rh(par['m_c'],par['m_b'],10**tanb,10**mH)
-#    C7_bs, C8_bs = bsgamma(par,10**tanb,10**mH)
-#    C10_s, C10p_s, CS_s, CSp_s = bmumu(par,['m_s',1],ckm_els,'m_mu',10**mH,10**tanb,10**mH)
-#    C10_d, C10p_d, CS_d, CSp_d = bmumu(par,['m_d',0],ckm_els,'m_mu',10**mH,10**tanb,10**mH)
-##    CVLL_bs, CVRR_bs, CSLL_bs, CSRR_bs, CSLR_bs, CVLR_bs = mixing(par,ckm_els,['m_s',1,'m_d'],10**tanb,10**mH)
-##    CVLL_bd, CVRR_bd, CSLL_bd, CSRR_bd, CSLR_bd, CVLR_bd = mixing(par,ckm_els,['m_d',0,'m_s'],10**tanb,10**mH)
-#    CVLL_bs = mixing2(par,abs(ckm_els[2,1]*np.conj(ckm_els[2,2]))**2,10**tanb,10**mH)
-#    CVLL_bd = mixing2(par,abs(ckm_els[2,0]*np.conj(ckm_els[2,2]))**2,10**tanb,10**mH)
+#    C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],10**tanb,10**mH)
+#    C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],1500,10**tanb,10**mH)
+#    C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],1500,10**tanb,10**mH)
+#    CVLL_bs, CVRR_bs, CSLL_bs, CSRR_bs, CSLR_bs, CVLR_bs = mixing(par,ckm_els,['m_s',1,'m_d'],10**tanb,10**mH)
+#    CVLL_bd, CVRR_bd, CSLL_bd, CSRR_bd, CSLR_bd, CVLR_bd = mixing(par,ckm_els,['m_d',0,'m_s'],10**tanb,10**mH)
 #
 #    wc = flavio.WilsonCoefficients()
 #    wc.set_initial({ # tell flavio what WCs you're referring to with your variables
@@ -215,11 +212,11 @@ crad = fpl.likelihood_contour_data(rad,-1,2,1,3.5, n_sigma=sigmas, threads=4, st
 ##            'CSR_suenue': CSR_k, 'CSL_suenue': CSL_k, 
 #            'CSR_dutaunutau': CSR_p, 'CSL_dutaunutau': CSL_p, 
 #            'CSR_dumunumu': CSR_p, 'CSL_dumunumu': CSL_p, 
-#            'C7_bs': C7_bs,'C8_bs': C8_bs, # B->Xsgamma
+#            'C7_bs': C7,'C8_bs': C8,'C7p_bs': C7p, 'C8p_bs': C8p, # B -> Xsgamma
 #            'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CS_s,'CPp_bsmumu': CSp_s, # Bs->mumu
 #            'C10_bdmumu': C10_d,'C10p_bdmumu': C10p_d,'CS_bdmumu': CS_d,'CSp_bdmumu': CSp_d,'CP_bdmumu': CS_d,'CPp_bdmumu': CSp_d, # B0->mumu
-#            'CVLL_bsbs': CVLL_bs,#'CVRR_bsbs': CVRR_bs,'CSLL_bsbs': CSLL_bs,'CSRR_bsbs': CSRR_bs,'CSLR_bsbs': CSLR_bs,'CVLR_bsbs': CVLR_bs, # DeltaM_s
-#            'CVLL_bdbd': CVLL_bd,#'CVRR_bdbd': CVRR_bd,'CSLL_bdbd': CSLL_bd,'CSRR_bdbd': CSRR_bd,'CSLR_bdbd': CSLR_bd,'CVLR_bdbd': CVLR_bd, # DeltaM_d
+#            'CVLL_bsbs': CVLL_bs,'CVRR_bsbs': CVRR_bs,'CSLL_bsbs': CSLL_bs,'CSRR_bsbs': CSRR_bs,'CSLR_bsbs': CSLR_bs,'CVLR_bsbs': CVLR_bs, # DeltaM_s
+#            'CVLL_bdbd': CVLL_bd,'CVRR_bdbd': CVRR_bd,'CSLL_bdbd': CSLL_bd,'CSRR_bdbd': CSRR_bd,'CSLR_bdbd': CSLR_bd,'CVLR_bdbd': CVLR_bd, # DeltaM_d
 #        }, scale=4.2, eft='WET', basis='flavio')
 #    return FL2.log_likelihood(par,wc)
 #
@@ -229,12 +226,12 @@ crad = fpl.likelihood_contour_data(rad,-1,2,1,3.5, n_sigma=sigmas, threads=4, st
 #   Print Out Values
 #------------------------------
 
-bf,minh,mint,maxt = mHmin(crad)
-print("Best fit value is found for (tanb,mH) =", bf)
-print("Print outs are lists for values at", sigmas, "sigmas")
-print("Minimum value of mH+ is:", minh)
-print("Minimum value of tanb is:", mint)
-print("Maximum value of tanb is:", maxt)
+#bf,minh,mint,maxt = mHmin(cdat)
+#print("Best fit value is found for (tanb,mH) =", bf)
+#print("Print outs are lists for values at", sigmas, "sigmas")
+#print("Minimum value of mH+ is:", minh)
+#print("Minimum value of tanb is:", mint)
+#print("Maximum value of tanb is:", maxt)
 
 #------------------------------
 #   Plotting
@@ -257,30 +254,34 @@ print("Maximum value of tanb is:", maxt)
 ##plt.savefig('bmix_plot.png')
 #plt.savefig('bcriv_plot.png')
 
-plt.figure(figsize=(4,5))
-fpl.contour(**crad,col=3) 
-plt.title(r'$\bar{B}\to X_s\gamma$ Radiative Decay')
-plt.xlabel(r'$\log_{10}[\tan\beta]$') # log10
-plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') #log10
-plt.savefig('bsgamma1_plot.png')
-
 #plt.figure(figsize=(6,5))
-#fpl.contour(**cmu,col=9) 
-##plt.title(r'FCNC Leptonic B Decays ($B_{s,d}\to\mu^+\mu^-$), $m_{H^0}\sim m_{H^+}$')
-#plt.title(r'$R_K$ for $q^2\in[1,6]$ \& $R_{K^{*0}}$ for $q^2\in[0.045,6]$,')# '\n' r'$m_{H^0}=1500\,$GeV')
-##plt.title(r'$b\to sl^+l^-$ transitions ($B_{s,d}\to\mu^+\mu^-$ \& $R_K(q^2\in[1,6]),R_{K^{*0}}(q^2\in[0.045,6])$)')
+#fpl.contour(**crad,col=3) 
+#plt.title(r'$\bar{B}\to X_s\gamma$ Radiative Decay')
 #plt.xlabel(r'$\log_{10}[\tan\beta]$') # log10
 #plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') #log10
-##plt.savefig('bsll_plot.png')
-##plt.savefig('bmumu_plot.png')
-#plt.savefig('rks_plot.png')
+#plt.savefig('bsgamma1_plot.png')
+
+plt.figure(figsize=(6,5))
+fpl.contour(**cmu,col=9) 
+#plt.title(r'FCNC Leptonic B Decays ($B_{s,d}\to\mu^+\mu^-$), $m_{H^0}\sim m_{H^+}$')
+#plt.title(r'FCNC Leptonic B Decays ($B_{s,d}\to\mu^+\mu^-$), $m_{H^0}=1500\,$GeV')
+plt.title(r'$R_K$ for $q^2\in[1,6]$ \& $R_{K^{*0}}$ for $q^2\in[0.045,6]$')
+#plt.title(r'$b\to sl^+l^-$ transitions ($B_{s,d}\to\mu^+\mu^-$ \& $R_K(q^2\in[1,6]),R_{K^{*0}}(q^2\in[0.045,6])$)')
+plt.xlabel(r'$\log_{10}[\tan\beta]$') # log10
+plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') #log10
+#plt.savefig('bsll_plot.png')
+#plt.savefig('bmumu_fix_new.png')
+plt.savefig('rks_plot.png')
 
 #plt.figure(figsize=(6,5))
 #fpl.contour(**cdat,col=4) 
-#plt.title(r'Combined Tree-Level Leptonics, $\Delta M_{d,s}$, $\bar{B}\to X_s\gamma$,' '\n' r'$\mathcal{R}(D^{(*)})$ and $B_{s,d}\to\mu^+\mu^-$ for $m_{H^0}\sim m_{H^+}$')
+##plt.title(r'Combined Tree-Level Leptonics, $\Delta M_{d,s}$, $\bar{B}\to X_s\gamma$,' '\n' r'$\mathcal{R}(D^{(*)})$ and $B_{s,d}\to\mu^+\mu^-$ for $m_{H^0}\sim m_{H^+}$')
+#plt.title(r'Combined Tree-Level Leptonics, $\Delta M_{d,s}$, $\bar{B}\to X_s\gamma$,' '\n' r'$\mathcal{R}(D^{(*)})$ and $B_{s,d}\to\mu^+\mu^-$ for $m_{H^0}=1500\,$GeV')
 #plt.xlabel(r'$\log_{10}[\tan\beta]$') # log10
 #plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') #log10
-#plt.savefig('comb2_apx.png')
+##plt.savefig('comb1_plot.png')
+#plt.savefig('comb2_fix_new.png')
+#plt.savefig('comb2_apx_new.png')
 
 #plt.show()
-# colours: 0 - blue, 1 - orange, 2 - green, 3 - pink, 4 - purple, 5 - brown, 6 - bright pink, 7 - grey, 8 - yellow, 9 - cyan
+# colours : 0 - blue, 1 - orange, 2 - green, 3 - pink, 4 - purple, 5 - brown, 6 - bright pink, 7 - grey, 8 - yellow, 9 - cyan
