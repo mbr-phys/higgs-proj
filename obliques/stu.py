@@ -3,7 +3,7 @@ from fitting import *
 
 # oblique parameter functions 
 
-sigma = 2
+sigma = 1.96
 
 def t(x,y,z):
     t=x+y-z
@@ -161,7 +161,8 @@ def TOb_err(mHp,mA0,mH0,alpha,beta,mW,mW_err,mZ,mZ_err,mh,mh_err,Gf,alphaem):
 
 def fit(args,ms):
     par, err, Sce, Supe, Sloe, Tce, Tupe, Tloe, Uce, Uupe, Uloe = args
-    mHp,mH0, mA0 = ms
+    mHp = 500
+    mH0,mA0 = ms
 
     alpha, beta = 0, np.pi/2
     mW, mW_err, mZ, mZ_err, mh, mh_err = par['m_W'], err['m_W'], par['m_Z'], err['m_Z'], par['m_h'], err['m_h']
@@ -170,7 +171,7 @@ def fit(args,ms):
     Sc, Sup, Slo = SOb_err(mHp,mA0,mH0,alpha,beta,mW,mW_err,mZ,mZ_err,mh,mh_err,Gf,alphaem,wangle,wan_err)
     Tc, Tup, Tlo = TOb_err(mHp,mA0,mH0,alpha,beta,mW,mW_err,mZ,mZ_err,mh,mh_err,Gf,alphaem)
     Uc, Uup, Ulo = 0,0,0 #UOb_err(mHp,mA0,mH0,alpha,beta,mW,mW_err,mZ,mZ_err,mh,mh_err,Gf,alphaem,wangle,wan_err)
-    chi = chisq_simp([Sce,Tce,Uce],[Sc,Tc,Uc],[Supe-Sce,Tupe-Tce,Uupe-Uce],[Sup-Sc,Tup-Tc,0],2)
+    chi = chisq_simp([Sce,Tce,Uce],[Sc,Tc,Uc],[Supe-Sce,Tupe-Tce,Uupe-Uce],[Sup-Sc,Tup-Tc,Uup-Uc],2)
 
     return chi
 

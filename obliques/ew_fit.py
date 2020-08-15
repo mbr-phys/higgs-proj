@@ -19,31 +19,29 @@ from functools import partial
 #    return shared_array
 
 Sce, Tce, Uce = 0.02, 0.06, 0.00
-Supe, Sloe = Sce+2*0.07,Sce-2*0.07
-Tupe, Tloe = Tce+2*0.06,Tce-2*0.06
-Uupe, Uloe = Uce+2*0.09,Uce-2*0.09
+Supe, Sloe = Sce+0.07,Sce-0.07
+Tupe, Tloe = Tce+0.06,Tce-0.06
+Uupe, Uloe = Uce+0.09,Uce-0.09
 
-steps = 50
+steps = 200
 
 par = flavio.default_parameters.get_central_all()
 err = flavio.default_parameters.get_1d_errors_random()
 
 mHp,mH0,mA0 = np.linspace(0.1,1000,steps),np.linspace(0.1,1000,steps),np.linspace(0.1,1000,steps)
-p,h,a = np.meshgrid(mHp,mH0,mA0)
-pha = np.array([p,h,a]).reshape(3,steps**3).T
-#h,a = np.meshgrid(mH0,mA0)
-#ha = np.array([h,a]).reshape(2,steps**2).T
+#p,h,a = np.meshgrid(mHp,mH0,mA0)
+#pha = np.array([p,h,a]).reshape(3,steps**3).T
+h,a = np.meshgrid(mH0,mA0)
+pha = np.array([h,a]).reshape(2,steps**2).T
 
 pool = Pool()
 args = [par,err, Sce, Supe, Sloe, Tce, Tupe, Tloe, Uce, Uupe, Uloe]#, 500]
 fitting = partial(fit,args)
-ms = np.array(pool.map(fitting,pha)).reshape((steps,steps,steps))
+ms = np.array(pool.map(fitting,pha)).reshape((steps,steps))#,steps))
 pool.close()
 pool.join()
 
 mini = np.min(ms)
-print(mini)
-quit()
 mss = np.zeros((steps,steps))
 
 for i in range(steps):
