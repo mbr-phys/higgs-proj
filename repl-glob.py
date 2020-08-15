@@ -141,7 +141,7 @@ sigmas = (1,2)#,3)
 #
 #crad = fpl.likelihood_contour_data(rad,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
 
-Fmu = FastLikelihood(name="mu",observables=my_obs[-3:],include_measurements=['LFU K Ratios']) 
+Fmu = FastLikelihood(name="mu",observables=my_obs[-2:],include_measurements=['LFU K Ratios']) 
 #Fmu = FastLikelihood(name="mu",observables=my_obs[12:14],include_measurements=['FCNC Leptonic Decays',]) 
 ##Fmu = FastLikelihood(name="mu",observables=my_obs[12:14]+my_obs[-3:],include_measurements=['FCNC Leptonic Decays','LFU K Ratios']) 
 Fmu.make_measurement(N=500,threads=4)
@@ -163,8 +163,8 @@ def mu(wcs):
             'C8_bs': C8,'C8p_bs': C8p, 
             'C9_bsee': C9_se,'C9p_bsee': C9p_se,
             'C9_bsmumu': C9_s,'C9p_bsmumu': C9p_s,
-            'C10_bsee': C10_se,'C10p_bsee': C10p_se,'CS_bsee': CS_se,'CSp_bsee': CSp_se,'CP_bsee': CS_se,'CPp_bsee': CSp_se, 
-            'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CS_s,'CPp_bsmumu': CSp_s, # Bs->mumu
+            'C10_bsee': C10_se,'C10p_bsee': C10p_se,
+            'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,#'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CS_s,'CPp_bsmumu': CSp_s, # Bs->mumu
 #            'C10_bdmumu': C10_d,'C10p_bdmumu': C10p_d,'CS_bdmumu': CS_d,'CSp_bdmumu': CSp_d,'CP_bdmumu': CS_d,'CPp_bdmumu': CSp_d, # B0->mumu
         }, scale=4.2, eft='WET', basis='flavio')
     return Fmu.log_likelihood(par,wc)
@@ -265,13 +265,15 @@ plt.figure(figsize=(6,5))
 fpl.contour(**cmu,col=9) 
 #plt.title(r'FCNC Leptonic B Decays ($B_{s,d}\to\mu^+\mu^-$), $m_{H^0}\sim m_{H^+}$')
 #plt.title(r'FCNC Leptonic B Decays ($B_{s,d}\to\mu^+\mu^-$), $m_{H^0}=1500\,$GeV')
-plt.title(r'$R_K$ for $q^2\in[1,6]$ \& $R_{K^{*0}}$ for $q^2\in[0.045,6]$')
+#plt.title(r'$R_K$ for $q^2\in[1,6]$ \& $R_{K^{*0}}$ for $q^2\in[0.045,6]$')
+#plt.title(r'$R_K$ for $q^2\in[1,6]$')
+plt.title(r'$R_{K^{*0}}$ for $q^2\in[0.045,6]$')
 #plt.title(r'$b\to sl^+l^-$ transitions ($B_{s,d}\to\mu^+\mu^-$ \& $R_K(q^2\in[1,6]),R_{K^{*0}}(q^2\in[0.045,6])$)')
 plt.xlabel(r'$\log_{10}[\tan\beta]$') # log10
 plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') #log10
 #plt.savefig('bsll_plot.png')
 #plt.savefig('bmumu_fix_new.png')
-plt.savefig('rks_plot.png')
+plt.savefig('rkst_plot.png')
 
 #plt.figure(figsize=(6,5))
 #fpl.contour(**cdat,col=4) 
