@@ -3,7 +3,7 @@ from fitting import *
 
 # oblique parameter functions 
 
-sigma = 1.96
+sigma = 1
 
 def t(x,y,z):
     t=x+y-z
@@ -171,7 +171,7 @@ def fit(args,ms):
     Sc, Sup, Slo = SOb_err(mHp,mA0,mH0,alpha,beta,mW,mW_err,mZ,mZ_err,mh,mh_err,Gf,alphaem,wangle,wan_err)
     Tc, Tup, Tlo = TOb_err(mHp,mA0,mH0,alpha,beta,mW,mW_err,mZ,mZ_err,mh,mh_err,Gf,alphaem)
     Uc, Uup, Ulo = 0,0,0 #UOb_err(mHp,mA0,mH0,alpha,beta,mW,mW_err,mZ,mZ_err,mh,mh_err,Gf,alphaem,wangle,wan_err)
-    chi = chisq_simp([Sce,Tce,Uce],[Sc,Tc,Uc],[Supe-Sce,Tupe-Tce,Uupe-Uce],[Sup-Sc,Tup-Tc,Uup-Uc],2)
+    chi = chisq_simp([Sce,Tce,Uce],[Sc,Tc,Uc],[Supe-Sce,Tupe-Tce,Uupe-Uce],[Sup-Sc,Tup-Tc,Uup-Uc],1)
 
     return chi
 
