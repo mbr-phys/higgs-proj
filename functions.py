@@ -36,23 +36,6 @@ def mHmin(contour):
 
     return [xbf,ybf], minh_loc, mint_loc, maxt_loc
 
-def bsgamma(par,tanb,mH):
-    '''
-        Find BR[B->Xsgamma] 2HDM contributions to Wilson Coeffs C7 & C8 as fns of mH+ and tanb
-    '''
-    mtmu = get_mt(par,2*par['m_W'])
-
-    xtH = (mtmu/mH)**2
-
-    F1_tH = (xtH**3 - 6*(xtH**2) + 3*xtH + 2 + 6*xtH*np.log(xtH))/(12*((xtH-1)**4))
-    F2_tH = (2*xtH**3 + 3*xtH**2 - 6*xtH + 1 - 6*np.log(xtH)*xtH**2)/(12*((xtH-1)**4))
-    F3_tH = (xtH**2 - 4*xtH + 3 + 2*np.log(xtH))/(2*((xtH-1)**3))
-    F4_tH = (xtH**2 - 1 - 2*xtH*np.log(xtH))/(2*((xtH-1)**3))
-    C_7H = -(xtH/2)*((1/(tanb**2))*((2/3)*F1_tH + F2_tH) + (2/3)*F3_tH + F4_tH)
-    C_8H = -(xtH/2)*(F1_tH/(tanb**2) + F3_tH)
-
-    return C_7H, C_8H
-
 def bsgamma2(par,CKM,mub1,tanb,mH):
     '''
         Finding C7 and C8 2HDM contributions using 1903.10440
@@ -554,25 +537,6 @@ def mixing(par,CKM,mds,tanb,mH):
 
     return CVLL, CVRR, CSLL, CSRR, CSLR, CVLR
 
-def mixing2(par,ckm_els,tanb,mH):
-    '''
-        LO Expressions for 2HDM contributions to DeltaM_q
-    '''
-    mtmu = get_mt(par,par['m_W'])
-    mtmut = get_mt(par,par['m_t'])
-    etat = (get_alpha(par,par['m_W'],nf_out=5)['alpha_s']/get_alpha(par,par['m_b'],nf_out=5)['alpha_s'])**(6/23)
-
-    x_tH1 = (mtmut/mH)**2
-    x_tW1 = (mtmut/par['m_W'])**2
-    x_tH = (mtmu/mH)**2
-    x_tW = (mtmu/par['m_W'])**2
-    S_WH = (x_tH1*x_tW1/(4*tanb**2))*((2*x_tW1-8*x_tH1)*np.log(x_tH1)/((x_tH1-x_tW1)*(1-x_tH1)**2) + 6*x_tW1*np.log(x_tW1)/((x_tH1-x_tW1)*(1-x_tW1)**2) - (8-2*x_tW1)/((1-x_tW1)*(1-x_tH1)))
-    S_HH = (x_tH1*x_tW1/(4*tanb**4))*((1+x_tH1)/((1-x_tH1)**2)+2*x_tH1*np.log(x_tH1)/((1-x_tH1)**3))
-
-    pref = ((1/4)*(par['GF']/np.pi)**2)*(par['m_W']**2)*ckm_els*etat
-
-    return pref*(S_WH + S_HH)
-
 def rh(mu,md,tanb,mH):
     '''
         Function for M->lnu 2HDM WC contribution, based on rH we used from 0907.5135
@@ -585,18 +549,3 @@ def rh(mu,md,tanb,mH):
     csl = md*(tanb/mH)**2
     return csr, csl
 
-#def rat_d(par,m_l,m_u,m_d,tanb,mH):
-#    '''
-#        Function for WCs of semileptonics in 2HDM
-#
-#        I think this is right for the WCs, I've tried to derive it from the Lagrangian given in
-#        https://arxiv.org/pdf/1705.02465.pdf
-#
-#        I don't think we need this actually - the WCs should be the same for tree-level leps and semi-leps so will us rh above
-#    '''
-#    ml, mu, md = par[ml], par[m_u], par[m_d]
-#    Gf, vev = par['GF'], par['vev']
-#    csl = ml*mu/(np.sqrt(2)*Gf*(vev*mH**2))
-#    csr = (ml*md*tanb**2)/(np.sqrt(2)*Gf*(vev*mH**2))
-#
-#    return csl, csr
