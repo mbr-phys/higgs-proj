@@ -138,7 +138,8 @@ def C10(par,mub):
 
     Cten = (a_s/(4*np.pi))*Cgen(0,0,0,C11,C21,C22,a_s/(4*np.pi),kaps)
 
-    return Cten
+    print(Cten)
+    return Cten*(173.1/par['m_t'])**1.53
 
 def Csev(par,mub):
     a_es = get_alpha(par,mub,nf_out=5)
@@ -354,6 +355,8 @@ for i in mubs:
 
 data = np.load(pkg_resources.resource_filename('flavio.physics', 'data/wcsm/wc_sm_dB1_2_55.npy'))
 
+print("Their calc for C10 is",data[9])
+
 data[0] = c1
 data[1] = c2
 data[2] = c3
@@ -368,6 +371,7 @@ data[10] = c3Q
 data[12] = c5Q
 data[14] = cb
 
-np.save("wcs_gam.npy",data)
+
+#np.save("wcs_gam.npy",data)
 #np.save(pkg_resources.resource_filename('flavio.physics', 'data/wcsm/wc_sm_dB1_2_55.npy'),data)
 

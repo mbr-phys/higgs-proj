@@ -238,8 +238,10 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
     zsw = [(mu[0]/mH)**2,(mu[1]/mH)**2,(muw[2]/mH)**2]
     ts = [muw[0]/md[2],muw[1]/md[2],muw[2]/md[2]]
     mul = (4.2/mH)**2
-    Lp = (yh*cba**2 + yH0*sba**2)*(2*el[mls[2],mls[2]])
-    Lm = -1*Lp
+    def Lp(yh,cba,yH0,sba,el):
+        return (yh*cba**2 + yH0*sba**2)*(2*el[mls[2],mls[2]])
+    def Lm(yh,cba,yH0,sba,el):
+        return -1*Lp(yh,cba,yH0,sba,el)
     lam3 = 0.1
     lamh = vev*sba*lam3
     lamH0 = vev*cba*lam3
@@ -348,7 +350,7 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
         c10p = -y*p1/(s2w*Vtb*np.conj(Vts)*0.65**4)
         return c10p
 
-    def cs_1():
+    def cs_1(Lp,Lm,el):
         p1 = 0 
         for k in range(3):
             for n in range(3):
@@ -357,7 +359,7 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
                 p1 += (ed[mss[2],mss[2]]/(s2w*np.conj(Vts)*Vtb*0.65**4))*(sq1+sq2)
         return p1
 
-    def csp_1():
+    def csp_1(Lp,Lm,el):
         p1 = 0 
         for k in range(3):
             for n in range(3):
@@ -366,11 +368,11 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
                 p1 += (1/(s2w*np.conj(Vts)*Vtb*0.65**4))*(sq1+sq2)
         return p1
 
-    def cs_2():
+    def cs_2(Lp,Lm,el):
         p1 = (ed[mss[2],mss[2]]/(s2w*0.65**2))*(zsw[2]*np.log(mul)*Lp/4 + I3(y,zsw[2])*Lp/8 + I2(zsw[2])*el[mls[2],mls[2]]) 
         return p1
 
-    def csp_2():
+    def csp_2(Lp,Lm,el):
         p1 = (ed[2,2]/(s2w*0.65**2))*(zsw[2]*np.log(mul)*Lm/2 - I6(zsw[2])*Lm/2 + I2(zsw[2])*el[mls[2],mls[2]]) 
         return p1
 
@@ -378,10 +380,12 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
     C9p = c9p_1() + c9p_2() + c9p_3() + c9p_4()
     C10 = c10_1() + c10_2()
     C10p = c10p_1() + c10p_2()
-    CS = cs_1() + cs_2()
-    CSP = csp_1() + csp_2()
+    CS = cs_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el) + cs_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el)
+    CSP = csp_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el) + csp_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el)
+    CP = cs_1(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + cs_2(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el)
+    CPP = csp_1(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + csp_2(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el)
 
-    return C9, C9p, C10, C10p, CS, CSP
+    return C9, C9p, C10, C10p, CS, CSP, CP, CPP
 
 def mixing(par,CKM,mds,tanb,mH):
     '''
