@@ -53,6 +53,13 @@ my_obs = [
     ("<Rmue>(B0->K*ll)", 1.1, 6.0), # [40]
 ]
 
+#par = flavio.default_parameters.get_central_all()
+#ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
+#mH0 = np.log10(1500)
+#mH = np.log10(1000)
+#tanb = np.log10(np.tan(np.pi/4))
+#C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],10**mH0,10**tanb,10**mH)
+#quit()
 
 #------------------------------
 #   Leptonic and Semileptonic Tree Levels
@@ -159,7 +166,7 @@ def mu(wcs):
 
     C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',0],10**mH0,10**tanb,10**mH)
     C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],10**mH0,10**tanb,10**mH)
-    C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],10**mH0,10**tanb,10**mH)
+#    C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],10**mH0,10**tanb,10**mH)
     C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],10**tanb,10**mH)
 
     wc = flavio.WilsonCoefficients()
