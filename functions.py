@@ -207,9 +207,10 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
         i = -b*I1(b)
         return i
     def I8(a,b):
-        i = -1/((1-a)*(1-b))
         if a != b:
-            i += (np.log(b)*b**2)/((a-b)*(1-b)**2) + (np.log(a)*a**2)/((b-a)*(1-a)**2)
+            i = -1/((1-a)*(1-b)) + (np.log(b)*b**2)/((a-b)*(1-b)**2) + (np.log(a)*a**2)/((b-a)*(1-a)**2)
+        else:
+            i = (1-(a**2)+2*a*np.log(a))/((a-1)**3)
         return i
     def f5(b):
         i1 = 2*(12*np.log(b)+19)-9*b*(4*np.log(b)+13)
@@ -386,14 +387,14 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
     CP = cs_1(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + cs_2(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el)
     CPP = csp_1(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + csp_2(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el)
 
-    print("C10 Z penguin:",c10_1())
-    print()
-    print("C10 H+- boxes:", c10_2())
-    print()
-    print("C10 prime Z penguin:",c10p_1())
-    print()
-    print("C10 prime H+- boxes:",c10p_2())
-    print()
+#    print("C10 Z penguin:",c10_1())
+#    print()
+#    print("C10 H+- boxes:", c10_2())
+#    print()
+#    print("C10 prime Z penguin:",c10p_1())
+#    print()
+#    print("C10 prime H+- boxes:",c10p_2())
+#    print()
 #    print("C9:",C9)
 #    print()
 #    print("C9 prime:",C9p)
@@ -402,13 +403,13 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
 #    print()
 #    print("C10 prime:",C10p)
 #    print()
-    print("CS HH:",cs_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-    print()
-    print("CS HW:",cs_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-    print()
-    print("CS prime HH:",csp_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-    print()
-    print("CS prime HW:",csp_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+#    print("CS HH:",cs_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+#    print()
+#    print("CS HW:",cs_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+#    print()
+#    print("CS prime HH:",csp_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+#    print()
+#    print("CS prime HW:",csp_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
 #    print()
 #    print("CS:",CS)
 #    print()
@@ -437,30 +438,35 @@ def mixing(par,CKM,mds,tanb,mH):
         i = -1/(b-1) + b*np.log(b)/((b-1)**2) 
         return i
     def I8(a,b):
-        i = -1/((1-a)*(1-b))
         if a != b:
-            i += (np.log(b)*b**2)/((a-b)*(1-b)**2) + (np.log(a)*a**2)/((b-a)*(1-a)**2)
+            i = -1/((1-a)*(1-b)) + (np.log(b)*b**2)/((a-b)*(1-b)**2) + (np.log(a)*a**2)/((b-a)*(1-a)**2)
+        else:
+            i = (1-(a**2)+2*a*np.log(a))/((a-1)**3)
         return i
     def I9(a,b):
-        i = -a*b/((1-a)*(1-b)) 
         if a != b:
-            i += a*b*np.log(b)/((a-b)*(1-b)**2) + a*b*np.log(a)/((b-a)*(1-a)**2)
+            i = -a*b/((1-a)*(1-b)) + a*b*np.log(b)/((a-b)*(1-b)**2) + a*b*np.log(a)/((b-a)*(1-a)**2)
+        else:
+            i = -a*(a**2 -1 - 2*a*np.log(a))/((a-1)**3)
         return i
     def I10(a,b):
-        i = -1/((1-a)*(1-b)) 
         if a != b:
-            i += a*np.log(a)/((b-a)*(1-a)**2) + b*np.log(b)/((a-b)*(1-b)**2)
+            i = -1/((1-a)*(1-b)) + a*np.log(a)/((b-a)*(1-a)**2) + b*np.log(b)/((a-b)*(1-b)**2)
+        else:
+            i = (2-2*a+(1+a)*np.log(a))/((a-1)**3)
         return i
     def I11(a,b,c):
-        i = -3*(a**2)*np.log(a)/((a-1)*(a-b)*(a-c)) 
-        if b != c: 
-            i += b*(4*a-b)*np.log(b)/((b-1)*(a-b)*(b-c)) + c*(4*a-c)*np.log(c)/((c-1)*(a-c)*(c-b))
+        if b != c:
+            i = -3*(a**2)*np.log(a)/((a-1)*(a-b)*(a-c)) + b*(4*a-b)*np.log(b)/((b-1)*(a-b)*(b-c)) + c*(4*a-c)*np.log(c)/((c-1)*(a-c)*(c-b))
+        else:
+            i = -3*(a**2)*np.log(a)/(a-1) + ((c-1)*(4*a**2 - 5*a*c + c**2)-(4*a**2 + c**2 - a*c*(2+3*c))*np.log(c))/((c-1)**2)
+            i = i/((a-c)**2)
         return i
     def I12(a,b):
         if a != b:
             i = a*b*np.log(a)/((1-a)*(a-b)) - a*b*np.log(b)/((1-b)*(a-b)) 
         else:
-            i = 0
+            i = a*(1-a+a*np.log(a))/((a-1)**2)
         return i
 
     y = (mW/mH)**2

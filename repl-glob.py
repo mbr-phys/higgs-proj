@@ -53,15 +53,15 @@ my_obs = [
     ("<Rmue>(B0->K*ll)", 1.1, 6.0), # [40]
 ]
 
-print("For mH0 = 1500 GeV, mH+ = 1000 GeV, b = pi/4, a = -pi/4:")
-print()
-par = flavio.default_parameters.get_central_all()
-ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
-mH0 = np.log10(1500)
-mH = np.log10(1000)
-tanb = np.log10(np.tan(np.pi/4))
-C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],10**mH0,10**tanb,10**mH)
-quit()
+#print("For mH0 = 1500 GeV, mH+ = 1000 GeV, b = pi/4, a = -pi/4:")
+#print()
+#par = flavio.default_parameters.get_central_all()
+#ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
+#mH0 = np.log10(1500)
+#mH = np.log10(1000)
+#tanb = np.log10(np.tan(np.pi/4))
+#C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],10**mH0,10**tanb,10**mH)
+#quit()
 
 #------------------------------
 #   Leptonic and Semileptonic Tree Levels
@@ -221,7 +221,7 @@ def func(wcs):
             'CSR_bumunumu': CSR_b, 'CSL_bumunumu': CSL_b,
 #            'CSR_buenue': CSR_b, 'CSL_buenue': CSL_b, 
             'CSR_dcmunumu': CSR_d, 'CSL_dcmunumu': CSL_d,
-            'CSR_dcenue': CSR_d, 'CSL_dcenue': CSL_d, 
+#            'CSR_dcenue': CSR_d, 'CSL_dcenue': CSL_d, 
             'CSR_sctaunutau': CSR_ds, 'CSL_sctaunutau': CSL_ds,
             'CSR_scmunumu': CSR_ds, 'CSL_scmunumu': CSL_ds,
 #            'CSR_scenue': CSR_ds, 'CSL_scenue': CSL_ds, 
@@ -245,19 +245,19 @@ def func(wcs):
 #cleps = fpl.likelihood_contour_data(leps,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
 #cmix = fpl.likelihood_contour_data(mix,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
 #crad = fpl.likelihood_contour_data(rad,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
-cmu = fpl.likelihood_contour_data(mu,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
-#cdat = fpl.likelihood_contour_data(func,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
+#cmu = fpl.likelihood_contour_data(mu,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
+cdat = fpl.likelihood_contour_data(func,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
 
 #------------------------------
 #   Print Out Values
 #------------------------------
 
-#bf,minh,mint,maxt = mHmin(cdat)
-#print("Best fit value is found for (tanb,mH) =", bf)
-#print("Print outs are lists for values at", sigmas, "sigmas")
-#print("Minimum value of mH+ is:", minh)
-#print("Minimum value of tanb is:", mint)
-#print("Maximum value of tanb is:", maxt)
+bf,minh,mint,maxt = mHmin(cdat)
+print("Best fit value is found for (tanb,mH) =", bf)
+print("Print outs are lists for values at", sigmas, "sigmas")
+print("Minimum value of mH+ is:", minh)
+print("Minimum value of tanb is:", mint)
+print("Maximum value of tanb is:", maxt)
 
 #------------------------------
 #   Plotting
@@ -285,30 +285,31 @@ cmu = fpl.likelihood_contour_data(mu,-1,2,1,3.5, n_sigma=sigmas, threads=4, step
 #plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') 
 #plt.savefig('bsgamma_plot.png')
 
-plt.figure(figsize=(6,5))
-fpl.contour(**cmu,col=9) 
-plt.title(r'FCNC Leptonic B Decays ($B_{s,d}\to\mu^+\mu^-$), $m_{H^0}\sim m_{H^+}$')
+#plt.figure(figsize=(6,5))
+#fpl.contour(**cmu,col=9) 
+#plt.title(r'FCNC Leptonic B Decays ($B_{s,d}\to\mu^+\mu^-$), $m_{H^0}\sim m_{H^+}$')
 #plt.title(r'FCNC Leptonic B Decays ($B_{s,d}\to\mu^+\mu^-$), $m_{H^0}=1500\,$GeV')
 #plt.title(r'$R_K$ for $q^2\in[1,6]$ \& $R_{K^{*0}}$ for $q^2\in[0.045,6]$')
 #plt.title(r'$R_K$ for $q^2\in[1,6]$')
 #plt.title(r'$R_{K^{*0}}$ for $q^2\in[0.045,6]$')
 #plt.title(r'$b\to sl^+l^-$ transitions ($B_{s,d}\to\mu^+\mu^-$ \& $R_K(q^2\in[1,6]),R_{K^{*0}}(q^2\in[0.045,6])$), $m_{H^0}\sim m_{H^+}$')
 #plt.title(r'$b\to sl^+l^-$ transitions ($B_{s,d}\to\mu^+\mu^-$ \& $R_K(q^2\in[1,6]),R_{K^{*0}}(q^2\in[0.045,6])$), $m_{H^0}=1500\,$GeV')
-plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') 
+#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
+#plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') 
 #plt.savefig('bsll_plot.png')
-plt.savefig('bmumu_apx.png')
+#plt.savefig('bmumu_apx.png')
 #plt.savefig('rks_plot.png')
 
-#plt.figure(figsize=(6,5))
-#fpl.contour(**cdat,col=4) 
-#plt.title(r'Combined Tree-Level Leptonics, $\Delta M_{d,s}$, $\bar{B}\to X_s\gamma$,' '\n' r'$\mathcal{R}(D^{(*)})$ and $B_{s,d}\to\mu^+\mu^-$ for $m_{H^0}\sim m_{H^+}$')
+plt.figure(figsize=(6,5))
+fpl.contour(**cdat,col=4) 
+#plt.title(r'Combined Tree-Level Leptonics, $\Delta M_{d,s}$, $\bar{B}\to X_s\gamma$')
+plt.title(r'Combined Tree-Level Leptonics, $\Delta M_{d,s}$, $\bar{B}\to X_s\gamma$,' '\n' r'$\mathcal{R}(D^{(*)})$ and $B_{s,d}\to\mu^+\mu^-$ for $m_{H^0}\sim m_{H^+}$')
 #plt.title(r'Combined Tree-Level Leptonics, $\Delta M_{d,s}$, $\bar{B}\to X_s\gamma$,' '\n' r'$\mathcal{R}(D^{(*)})$ and $B_{s,d}\to\mu^+\mu^-$ for $m_{H^0}=1500\,$GeV')
-#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-#plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$')
+plt.xlabel(r'$\log_{10}[\tan\beta]$') 
+plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$')
 #plt.savefig('comb1_plot.png')
 #plt.savefig('comb2_fix.png')
-#plt.savefig('comb2_apx.png')
+plt.savefig('comb2_apx.png')
 
 #plt.show()
 # colours : 0 - blue, 1 - orange, 2 - green, 3 - pink, 4 - purple, 5 - brown, 6 - bright pink, 7 - grey, 8 - yellow, 9 - cyan
