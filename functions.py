@@ -196,7 +196,7 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
         return i
     def I5(a,b):
         if a == b:
-            i = (b+1+(b-2)*b*np.log(b))/((b-1)**2)
+            i = (b-1+(b-2)*b*np.log(b))/((b-1)**2)
         else:
             i = -1+(a**2)*np.log(a)/((a-1)*(a-b)) - (b**2)*np.log(b)/((b-1)*(a-b))
         return i
@@ -386,10 +386,14 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
     CP = cs_1(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + cs_2(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el)
     CPP = csp_1(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + csp_2(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el)
 
-#    print("C10 Z penguin:",c10_1())
-#    print("C10 H+- boxes:", c10_2())
-#    print("C10 prime Z penguin:",c10p_1())
-#    print("C10 prime H+- boxes:",c10p_2())
+    print("C10 Z penguin:",c10_1())
+    print()
+    print("C10 H+- boxes:", c10_2())
+    print()
+    print("C10 prime Z penguin:",c10p_1())
+    print()
+    print("C10 prime H+- boxes:",c10p_2())
+    print()
 #    print("C9:",C9)
 #    print()
 #    print("C9 prime:",C9p)
@@ -398,17 +402,23 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
 #    print()
 #    print("C10 prime:",C10p)
 #    print()
-#    print("CS HH:",cs_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+    print("CS HH:",cs_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+    print()
+    print("CS HW:",cs_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+    print()
+    print("CS prime HH:",csp_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+    print()
+    print("CS prime HW:",csp_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
 #    print()
-#    print("CS HW:",cs_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+#    print("CS:",CS)
 #    print()
-#    print("CS prime HH:",csp_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-#    print()
-#    print("CS prime HW:",csp_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+#    print("CS prime:",CSP)
 #    print()
 #    print("CP:",CP)
 #    print()
 #    print("CP prime:",CPP)
+#    print("I4(z3,z3):",I4(zs[2],zs[2]))
+#    print("I5(z3,z3):",I5(zs[2],zs[2]))
 
     return C9, C9p, C10, C10p, CS, CSP, CP, CPP
 
