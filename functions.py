@@ -265,9 +265,6 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
             for n in range(3):
                 p1 += np.conj(CKM[k,mss[2]])*eu[k,2]*eu[n,2]*CKM[n,2]
         c10 = (I1(zs[2])-1)/(2*np.conj(Vts)*Vtb*e**2)
-#        print("pref330:",c10)
-#        print("C10 CKM*ep:",p1)
-#        print("C10 pref330*CKM*ep:",c10*p1)
         return c10*p1
 
     def c9p_1():
@@ -284,9 +281,6 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
             for n in range(3):
                 p1 += ed[k,mss[2]]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,2]
         c10p = -1*(I1(zs[2])-1)/(2*np.conj(Vts)*Vtb*e**2)
-#        print("C10' CKM*ep:",p1)
-#        print("C10' pref330*CKM*ep:",c10p*p1)
-#        quit()
         return c10p*p1
 
     def c9_2():
@@ -418,21 +412,15 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
     CP = cs_1(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + cs_2(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + cs_3(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el)
     CPP = csp_1(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + csp_2(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + csp_3(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el)
 
-#    print(c10_1())
-#    print(c10_2())
-#    print(c10p_1())
-#    print(c10p_2())
-#    print()
-
     if mls[2] == 1:
         print("CS HH:",cs_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el) + cs_3(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
         print()
-#        print("CS HW:",cs_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-#        print()
+        print("CS HW:",cs_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+        print()
         print("CS prime HH:",csp_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el) + csp_3(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-#        print()
-#        print("CS prime HW:",csp_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-#        print()
+        print()
+        print("CS prime HW:",csp_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+        print()
 #        print("CS:",CS)
 #        print()
 #        print("CS prime:",CSP)
