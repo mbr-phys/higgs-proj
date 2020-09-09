@@ -264,8 +264,8 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
         for k in range(3):
             for n in range(3):
                 p1 += np.conj(CKM[k,mss[2]])*eu[k,2]*eu[n,2]*CKM[n,2]
-        c10 = (I1(zs[2])-1)/(2*np.conj(Vts)*Vtb*e**2)
-        return c10*p1
+        c10 = p1*(I1(zs[2])-1)/(2*np.conj(Vts)*Vtb*e**2)
+        return c10
 
     def c9p_1():
         p1 = 0
@@ -280,8 +280,8 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
         for k in range(3):
             for n in range(3):
                 p1 += ed[k,mss[2]]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,2]
-        c10p = -1*(I1(zs[2])-1)/(2*np.conj(Vts)*Vtb*e**2)
-        return c10p*p1
+        c10p = -1*p1*(I1(zs[2])-1)/(2*np.conj(Vts)*Vtb*e**2)
+        return c10p
 
     def c9_2():
         p1 = 0 
@@ -367,9 +367,10 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
 
     def csp_1(Lp,Lm,el):
         sq1,sq2,sq3 = 0,0,0
+        q = 0
         for k in range(3):
             for n in range(3):
-                sq1 += y*Lm*(-2*I1(zs[2])*ts[2]*(zs[2]-1)*((ed[2,2]**2)*np.conj(CKM[k,mss[2]])*eu[k,2]*CKM[2,2] - (ed[mss[2],mss[2]]**2)*np.conj(CKM[2,mss[2]])*eu[n,2]*CKM[n,2]) + 2*np.log(mul)*(-ed[2,2]*np.conj(CKM[k,mss[2]])*eu[k,2]*CKM[2,2] + ((ed[2,2]**2)*np.conj(CKM[k,mss[2]])*eu[k,2]*CKM[2,2] - (ed[mss[2],mss[2]]**2)*np.conj(CKM[2,mss[2]])*eu[n,2]*CKM[n,2])*ts[2]) + ed[2,2]*(I7(zs[2])*(ed[mss[2],mss[2]]**2)*np.conj(CKM[2,mss[2]])*Vtb + 2*I5(zs[2],zs[2])*np.conj(CKM[k,mss[2]])*eu[k,2]*eu[2,2]*Vtb))
+                sq1 += y*Lm*(-2*I1(zs[2])*ts[2]*(zs[2]-1)*((ed[2,2]**2)*np.conj(CKM[k,mss[2]])*eu[k,2]*CKM[2,2] - (ed[mss[2],mss[2]]**2)*np.conj(CKM[2,mss[2]])*eu[n,2]*CKM[n,2]) + 2*np.log(mul)*(-ed[2,2]*np.conj(CKM[k,mss[2]])*eu[k,2]*eu[2,2]*CKM[2,2] + ((ed[2,2]**2)*np.conj(CKM[k,mss[2]])*eu[k,2]*CKM[2,2] - (ed[mss[2],mss[2]]**2)*np.conj(CKM[2,mss[2]])*eu[n,2]*CKM[n,2])*ts[2]) + ed[2,2]*(I7(zs[2])*(ed[mss[2],mss[2]]**2)*np.conj(CKM[2,mss[2]])*Vtb + 2*I5(zs[2],zs[2])*np.conj(CKM[k,mss[2]])*eu[k,2]*eu[2,2]*Vtb))
                 sq2 += -2*I4(zs[2],zs[2])*ed[2,2]*np.conj(CKM[k,mss[2]])*eu[k,2]*eu[2,2]*Vtb*Lp*y 
                 sq3 += ed[2,2]*np.conj(CKM[k,mss[2]])*eu[k,2]*Vtb*np.sqrt(y*zs[2])*(el[mls[2],mls[2]]*2)*(2*(1-I1(zs[2]))*cba*0.652*sba*(yh-yH0) + I1(zs[2])*np.sqrt(y)*(cba*yh*lamh/mH - sba*yH0*lamH0/mH))
         p1 = (1/(s2w*np.conj(Vts)*Vtb*0.652**4))*(sq1+sq2-sq3)
@@ -413,17 +414,22 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
     CPP = csp_1(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + csp_2(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + csp_3(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el)
 
     if mls[2] == 1:
-        print("CS HH:",cs_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el) + cs_3(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-        print()
-        print("CS HW:",cs_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-        print()
-        print("CS prime HH:",csp_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el) + csp_3(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-        print()
-        print("CS prime HW:",csp_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-        print()
-#        print("CS:",CS)
+#        print("CS HH:",cs_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el) + cs_3(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
 #        print()
-#        print("CS prime:",CSP)
+#        print("CS HW:",cs_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+#        print()
+#        print("CS prime HH:",csp_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el) + csp_3(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+#        print()
+#        print("CS prime HW:",csp_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+#        print()
+        print("CS:",CS)
+        print()
+        print("CS prime:",CSP)
+        print()
+        print("CP:",CP)
+        print()
+        print("CP prime:",CPP)
+        print()
 
     return C9, C9p, C10, C10p, CS, CSP, CP, CPP
 
@@ -562,7 +568,10 @@ def mixing(par,CKM,mds,tanb,mH):
             ci += v2[i]*v3[i]*eu[i]*np.sqrt(zs[i])*I11(y,zs[2],zs[i])
         a = v2[0]*v3[0]*eu[0]*np.sqrt(zs[0])*ai
         b = v2[1]*v3[1]*eu[1]*np.sqrt(zs[1])*bi
-        c = v2[2]*v3[2]*eu[2]*np.sqrt(zs[2])*ci
+        c = v2[2]*v3[2]*eu[2]*np.sqrt(zs[2])#*ci
+        print(v2[i]*v3[i]*eu[i]*np.sqrt(zs[i]))
+        print(I11(y,zs[2],zs[i]))
+        quit()
         return pref*(a+b+c) 
 
     def c4_2():
@@ -583,6 +592,13 @@ def mixing(par,CKM,mds,tanb,mH):
     CSRR = c2p()
     CSLR = c4_1() + c4_2()
     CVLR = 2*c5()
+
+    print("CVLL:",CVLL)
+    print("CVRR:",CVRR)
+    print("CSLL:",CSLL)
+    print("CSRR:",CSRR)
+    print("CSLR:",CSLR)
+    print("CVLR:",CVLR)
 
     return CVLL, CVRR, CSLL, CSRR, CSLR, CVLR
 

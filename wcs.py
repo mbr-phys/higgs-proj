@@ -3,6 +3,7 @@ import numpy as np
 import pkg_resources
 from flavio.physics.running.running import get_alpha, get_mt
 from scipy.integrate import quad
+import scipy
 
 def Cgen(C00,C10,C20,C11,C21,C22,ats,kap):
     i = C00 + ats*C10 + C20*ats**2 + ats*kap*C11 + C21*kap*ats**2 + C22*(kap*ats)**2
@@ -139,7 +140,7 @@ def C10(par,mub):
     Cten = (a_s/(4*np.pi))*Cgen(0,0,0,C11,C21,C22,a_s/(4*np.pi),kaps)
 
     print(Cten)
-    return Cten*(173.1/par['m_t'])**1.53
+    return Cten
 
 def Csev(par,mub):
     a_es = get_alpha(par,mub,nf_out=5)
@@ -371,6 +372,10 @@ data[10] = c3Q
 data[12] = c5Q
 data[14] = cb
 
+scales = (2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5)
+wcsm = scipy.interpolate.interp1d(scales,data,fill_value='extrapolate')
+wcsm_mub = wcsm(4.18)
+print(wcsm_mub[9])
 
 #np.save("wcs_gam.npy",data)
 #np.save(pkg_resources.resource_filename('flavio.physics', 'data/wcsm/wc_sm_dB1_2_55.npy'),data)
