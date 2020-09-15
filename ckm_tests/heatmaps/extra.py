@@ -44,126 +44,129 @@ def errors1(args,th):
 
     return np.sqrt(a1 + a2 + a3)
 
-def vp(ckm_els,heatmap,i,j):
-    Vub, Vcd, Vcs, Vus, Vud, Vcb = ckm_els[0,2], ckm_els[1,0], ckm_els[1,1], ckm_els[0,1], ckm_els[0,0], ckm_els[1,2]
-    Vubp = heatmap['mB'][i,j]*Vub
-    Vcdp = heatmap['mD'][i,j]*Vcd
-    Vcsp = heatmap['mDs'][i,j]*Vcs
-    Vusp = heatmap['mK'][i,j]*Vus
-    Vudp = heatmap['mpi'][i,j]*Vud
+def vp(ckm_els,par,heatmap,i,j):
+    Vub, Vus, Vcb = ckm_els[0,2], ckm_els[0,1], ckm_els[1,2]
+    
+    Vubp = heatmap['Vub'][i,j]*Vub
+    Vusp = heatmap['Vus'][i,j]*Vus
     Vcbp = heatmap['Vcb'][i,j]*Vcb
-    #row1 = abs(Vudp)**2 + abs(Vusp)**2 + abs(Vubp)**2
-    #row2 = abs(Vcdp)**2 + abs(Vcsp)**2 + abs(Vcb)**2 
-    row1 = Vudp**2 + Vusp**2 + Vubp**2
-    row2 = Vcdp**2 + Vcsp**2 + Vcbp**2 
+    
+    par['Vub'] = Vubp
+    par['Vus'] = Vusp
+    par['Vcb'] = Vcbp
 
-    return row1, row2
+    CKMs = get_ckm(par)
+    r1,r2,r3 = 0,0,0
+    for i in range(3):
+        r1 += abs(CKMs[0,i])**2
+        r2 += abs(CKMs[1,i])**2
+        r3 += abs(CKMs[2,i])**2
+    
+    return r1, r2, r3
 
-def errors2(ckm_els,ckm_errs,heatmap,errmap,i,j):
-    central = vp(ckm_els,heatmap,i,j)
+def errors2(ckm_els,ckm_errs,par,err,heatmap,errmap,i,j):
+    central = vp(ckm_els,par,heatmap,i,j)
 
-    at1,at2 = 0,0
-    for x in range(2):
+    at1,at2,at3 = 0,0,0
+    for x in range(3):
         for y in range(3):
             c_errs = np.zeros((3,3))
             c_errs[x,y] = ckm_errs[x,y]
-            ce = vp(ckm_els+c_errs,heatmap,i,j)
+            ce = vp(ckm_els+c_errs,par,heatmap,i,j)
             at1 += abs(ce[0]-central[0])**2
             at2 += abs(ce[1]-central[1])**2
+            at3 += abs(ce[2]-central[2])**2
+            
+    parl = 1*par
+    parl['delta'] = par['delta']+err['delta']
+    ced = vp(ckm_els,parl,heatmap,i,j)
+    at1 += abs(ced[0]-central[0])**2
+    at2 += abs(ced[1]-central[1])**2
+    at3 += abs(ced[2]-central[2])**2
 
     heatmap1 = {}
-    heatmap1['mB'] = heatmap['mB']+errmap['mB']
-    heatmap1['mD'] = 1*heatmap['mD']
-    heatmap1['mDs'] = 1*heatmap['mDs']
-    heatmap1['mK'] = 1*heatmap['mK']
-    heatmap1['mpi'] = 1*heatmap['mpi']
+    heatmap1['Vub'] = heatmap['Vub']+errmap['Vub']
+    heatmap1['Vus'] = 1*heatmap['Vus']
     heatmap1['Vcb'] = 1*heatmap['Vcb']
-    ce1 = vp(ckm_els,heatmap1,i,j)
+    ce1 = vp(ckm_els,par,heatmap1,i,j)
     at1 += abs(ce1[0]-central[0])**2
     at2 += abs(ce1[1]-central[1])**2
-
-    heatmap2 = {}
-    heatmap2['mB'] = 1*heatmap['mB']
-    heatmap2['mD'] = heatmap['mD']+errmap['mD']
-    heatmap2['mDs'] = 1*heatmap['mDs']
-    heatmap2['mK'] = 1*heatmap['mK']
-    heatmap2['mpi'] = 1*heatmap['mpi']
-    heatmap2['Vcb'] = 1*heatmap['Vcb']
-    ce2 = vp(ckm_els,heatmap2,i,j)
-    at1 += abs(ce2[0]-central[0])**2
-    at2 += abs(ce2[1]-central[1])**2
-
-    heatmap3 = {}
-    heatmap3['mB'] = 1*heatmap['mB']
-    heatmap3['mD'] = 1*heatmap['mD']
-    heatmap3['mDs'] = heatmap['mDs']+errmap['mDs']
-    heatmap3['mK'] = 1*heatmap['mK']
-    heatmap3['mpi'] = 1*heatmap['mpi']
-    heatmap3['Vcb'] = 1*heatmap['Vcb']
-    ce3 = vp(ckm_els,heatmap3,i,j)
-    at1 += abs(ce3[0]-central[0])**2
-    at2 += abs(ce3[1]-central[1])**2
+    at3 += abs(ce1[2]-central[2])**2
 
     heatmap4 = {}
-    heatmap4['mB'] = 1*heatmap['mB']
-    heatmap4['mD'] = 1*heatmap['mD']
-    heatmap4['mDs'] = 1*heatmap['mDs']
-    heatmap4['mK'] = heatmap['mK']+errmap['mK']
-    heatmap4['mpi'] = 1*heatmap['mpi']
+    heatmap4['Vub'] = 1*heatmap['Vub']
+    heatmap4['Vus'] = heatmap['Vus']+errmap['Vus']
     heatmap4['Vcb'] = 1*heatmap['Vcb']
-    ce4 = vp(ckm_els,heatmap4,i,j)
+    ce4 = vp(ckm_els,par,heatmap4,i,j)
     at1 += abs(ce4[0]-central[0])**2
     at2 += abs(ce4[1]-central[1])**2
-
-    heatmap5 = {}
-    heatmap5['mB'] = 1*heatmap['mB']
-    heatmap5['mD'] = 1*heatmap['mD']
-    heatmap5['mDs'] = 1*heatmap['mDs']
-    heatmap5['mK'] = 1*heatmap['mK']
-    heatmap5['mpi'] = heatmap['mpi']+errmap['mpi']
-    heatmap5['Vcb'] = 1*heatmap['Vcb']
-    ce5 = vp(ckm_els,heatmap5,i,j)
-    at1 += abs(ce5[0]-central[0])**2
-    at2 += abs(ce5[1]-central[1])**2
+    at3 += abs(ce4[2]-central[2])**2
 
     heatmap6 = {}
-    heatmap6['mB'] = 1*heatmap['mB']
-    heatmap6['mD'] = 1*heatmap['mD']
-    heatmap6['mDs'] = 1*heatmap['mDs']
-    heatmap6['mK'] = 1*heatmap['mK']
-    heatmap6['mpi'] = 1*heatmap['mpi']
+    heatmap6['Vub'] = 1*heatmap['Vub']
+    heatmap6['Vus'] = 1*heatmap['Vus']
     heatmap6['Vcb'] = 1*heatmap['Vcb']+errmap['Vcb']
-    ce5 = vp(ckm_els,heatmap6,i,j)
+    ce5 = vp(ckm_els,par,heatmap6,i,j)
     at1 += abs(ce5[0]-central[0])**2
     at2 += abs(ce5[1]-central[1])**2
+    at3 += abs(ce5[2]-central[2])**2
 
-    a1, a2 = np.sqrt(at1), np.sqrt(at2)
+    a1, a2, a3 = np.sqrt(at1), np.sqrt(at2), np.sqrt(at3)
 
-    return 2*a1, 2*a2
+    return 2*a1, 2*a2, 2*a3
 
 def testing(args,ijs):
-    ckm_els,ckm_errs,heatmap,errmap = args
+    ckm_els,ckm_errs,par,err,heatmap,errmap = args
     j,i = ijs
-    r1, r2 = vp(ckm_els,heatmap,i,j)
-    re1, re2 = errors2(ckm_els,ckm_errs,heatmap,errmap,i,j)
-    if r1 < 1 and r2 < 1:
-        return 1
-    elif (r1 + re1) < 1 and r2 < 1:
-        return 1
-    elif (r1 - re1) < 1 and r2 < 1:
-        return 1
-    elif r1 < 1 and (r2 + re2) < 1:
-        return 1
-    elif r1 < 1 and (r2 - re2) < 1:
-        return 1
-    elif (r1 + re1) < 1 and (r2 + re2) < 1:
-        return 1
-    elif (r1 + re1) < 1 and (r2 - re2) < 1:
-        return 1
-    elif (r1 - re1) < 1 and (r2 + re2) < 1:
-        return 1
-    elif (r1 - re1) < 1 and (r2 - re2) < 1:
-        return 1
-    else: 
-        return 0
-
+    r1, r2, r3 = vp(ckm_els,par,heatmap,i,j)
+    re1, re2, re3 = errors2(ckm_els,ckm_errs,par,err,heatmap,errmap,i,j)
+    rs1 = [r1,r1+re1,r1-re1]
+    rs2 = [r2,r2+re2,r2-re2]
+    rs3 = [r3,r3+re3,r3-re3]
+    for i in rs1:
+        for j in rs2:
+            for k in rs3:
+                if i < 1 and j < 1 and k < 1:
+                    return 1
+    return 0
+#    if r1 < 1 and r2 < 1 and r3 < 1:
+#        return 1
+#    elif (r1 + re1) < 1 and r2 < 1 and r3 < 1:
+#        return 1
+#    elif (r1 - re1) < 1 and r2 < 1 and r3 < 1:
+#        return 1
+#    elif r1 < 1 and (r2 + re2) < 1 and r3 < 1:
+#        return 1
+#    elif r1 < 1 and (r2 - re2) < 1 and r3 < 1:
+#        return 1
+#    elif r1 < 1 and r2 < 1 and (r3 + re3) < 1:
+#        return 1
+#    elif r1 < 1 and r2 < 1 and (r3 - re3) < 1:
+#        return 1
+#    elif (r1 + re1) < 1 and (r2 + re2) < 1 and r3 < 1:
+#        return 1
+#    elif (r1 + re1) < 1 and (r2 - re2) < 1 and r3 < 1:
+#        return 1
+#    elif (r1 - re1) < 1 and (r2 + re2) < 1 and r3 < 1:
+#        return 1
+#    elif (r1 - re1) < 1 and (r2 - re2) < 1 and r3 < 1:
+#        return 1
+#    elif r1 < 1 and (r2 + re2) < 1 and (r3 + re3) < 1:
+#        return 1
+#    elif r1 < 1 and (r2 - re2) < 1 and (r3 + re3) < 1:
+#        return 1
+#    elif r1 < 1 and (r2 + re2) < 1 and (r3 - re3) < 1:
+#        return 1
+#    elif r1 < 1 and (r2 - re2) < 1 and (r3 - re3) < 1:
+#        return 1
+#    elif (r1 + re1) < 1 and r2 < 1 and (r3 + re3) < 1:
+#        return 1
+#    elif (r1 - re1) < 1 and r2 < 1 and (r3 + re3) < 1:
+#        return 1
+#    elif (r1 + re1) < 1 and r2 < 1 and (r3 - re3) < 1:
+#        return 1
+#    elif (r1 - re1) < 1 and r2 < 1 and (r3 - re3) < 1:
+#        return 1
+#    else: 
+#        return 0
+#

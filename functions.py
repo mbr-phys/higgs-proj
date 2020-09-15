@@ -413,7 +413,7 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
     CP = cs_1(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + cs_2(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + cs_3(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el)
     CPP = csp_1(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + csp_2(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + csp_3(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el)
 
-    if mls[2] == 1:
+#    if mls[2] == 1:
 #        print("CS HH:",cs_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el) + cs_3(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
 #        print()
 #        print("CS HW:",cs_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
@@ -422,14 +422,14 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
 #        print()
 #        print("CS prime HW:",csp_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
 #        print()
-        print("CS:",CS)
-        print()
-        print("CS prime:",CSP)
-        print()
-        print("CP:",CP)
-        print()
-        print("CP prime:",CPP)
-        print()
+#        print("CS:",CS)
+#        print()
+#        print("CS prime:",CSP)
+#        print()
+#        print("CP:",CP)
+#        print()
+#        print("CP prime:",CPP)
+#        print()
 
     return C9, C9p, C10, C10p, CS, CSP, CP, CPP
 
@@ -569,9 +569,6 @@ def mixing(par,CKM,mds,tanb,mH):
         a = v2[0]*v3[0]*eu[0]*np.sqrt(zs[0])*ai
         b = v2[1]*v3[1]*eu[1]*np.sqrt(zs[1])*bi
         c = v2[2]*v3[2]*eu[2]*np.sqrt(zs[2])#*ci
-        print(v2[i]*v3[i]*eu[i]*np.sqrt(zs[i]))
-        print(I11(y,zs[2],zs[i]))
-        quit()
         return pref*(a+b+c) 
 
     def c4_2():
@@ -593,12 +590,12 @@ def mixing(par,CKM,mds,tanb,mH):
     CSLR = c4_1() + c4_2()
     CVLR = 2*c5()
 
-    print("CVLL:",CVLL)
-    print("CVRR:",CVRR)
-    print("CSLL:",CSLL)
-    print("CSRR:",CSRR)
-    print("CSLR:",CSLR)
-    print("CVLR:",CVLR)
+#    print("CVLL:",CVLL)
+#    print("CVRR:",CVRR)
+#    print("CSLL:",CSLL)
+#    print("CSRR:",CSRR)
+#    print("CSLR:",CSLR)
+#    print("CVLR:",CVLR)
 
     return CVLL, CVRR, CSLL, CSRR, CSLR, CVLR
 
