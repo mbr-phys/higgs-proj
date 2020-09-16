@@ -77,7 +77,10 @@ def errors2(ckm_els,ckm_errs,par,err,heatmap,errmap,i,j):
             at2 += abs(ce[1]-central[1])**2
             at3 += abs(ce[2]-central[2])**2
             
-    parl = 1*par
+    parl = {}
+    parl['Vcb'] = 1*par['Vcb']
+    parl['Vub'] = 1*par['Vub']
+    parl['Vus'] = 1*par['Vus']
     parl['delta'] = par['delta']+err['delta']
     ced = vp(ckm_els,parl,heatmap,i,j)
     at1 += abs(ced[0]-central[0])**2

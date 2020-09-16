@@ -18,10 +18,10 @@ def shared_zeros(n1,n2):
     return shared_array
 
 def vij_mult(args,ths):
-    par, err, my_obs, steps, d, u = args
+    par, err, my_obs, steps, d, u, arr = args
     tanb, mH = ths
-    tb, ah = np.linspace(-1,2,steps), np.linspace(1,3.5,steps)
-    i, j  = np.where(tb==tanb)[0][0], np.where(ah==mH)[0][0]
+#    tb, ah = np.linspace(-1,2,steps), np.linspace(1,3.5,steps)
+#    i, j  = np.where(tb==tanb)[0][0], np.where(ah==mH)[0][0]
     smp, npp, mod = [],[],[]
     smpe, nppe, mode = [],[],[]
     Vij = abs(par['V'+u+d])**2
@@ -30,21 +30,24 @@ def vij_mult(args,ths):
     wc_np.set_initial({'CSR_'+d+u+'taunutau': CSR_ij, 'CSL_'+d+u+'taunutau': CSL_ij,'CSR_'+d+u+'munumu': CSR_ij,'CSL_'+d+u+'munumu': CSL_ij,'CSR_'+d+u+'enue': CSR_ij,'CSL_'+d+u+'enue': CSL_ij,},scale=4.2,eft='WET',basis='flavio')
     for k in range(len(my_obs)):
         sm_pred = flavio.sm_prediction(my_obs[k])
-        sm_err = flavio.sm_uncertainty(my_obs[k])
         np_pred = flavio.np_prediction(my_obs[k],wc_obj=wc_np)
-        np_err = flavio.np_uncertainty(my_obs[k],wc_obj=wc_np)
         smp.append(sm_pred/Vij)
         npp.append(np_pred/Vij)
-        mod.append(smp[k]/npp[k])
-        smpe.append(np.sqrt((sm_err/sm_pred)**2 + (err['V'+u+d]/Vij)**2)*smp[k])
-        nppe.append(np.sqrt((np_err/np_pred)**2 + (err['V'+u+d]/Vij)**2)*npp[k])
-        mode.append(np.sqrt((smpe[k]/smp[k])**2 + (nppe[k]/npp[k])**2)*mod[k])
-    #mods = np.average(mod)
-    #modse = np.average(mode)
-    array_vs[j,i] = np.average(mod)
-    array_es[j,i] = np.average(mode)
+        mod.append(np.sqrt(smp[k]/npp[k]))
+        if arr == 2:
+            sm_err = flavio.sm_uncertainty(my_obs[k])
+            np_err = flavio.np_uncertainty(my_obs[k],wc_obj=wc_np)
+            smpe.append(np.sqrt((sm_err/sm_pred)**2 + (err['V'+u+d]/Vij)**2)*smp[k])
+            nppe.append(np.sqrt((np_err/np_pred)**2 + (err['V'+u+d]/Vij)**2)*npp[k])
+            mode.append(np.sqrt((smpe[k]/(2*smp[k]))**2 + (nppe[k]/(2*npp[k]))**2)*mod[k])
+    if arr == 1:
+        return np.average(mod)
+    else:
+        return np.average(mode)
+    #array_vs[j,i] = np.average(mod)
+    #array_es[j,i] = np.average(mode)
 
-steps = 100
+steps = 60
 
 tanb,mH = np.linspace(-1,2,steps), np.linspace(1,3.5,steps)
 t, h = np.meshgrid(tanb,mH)
@@ -54,7 +57,7 @@ eyes, jays = np.arange(0,steps,1),np.arange(0,steps,1)
 es, js = np.meshgrid(eyes,jays)
 ej = np.array([es,js]).reshape(2,steps**2).T
 
-my_obs = [['BR(B+->taunu)','BR(B+->munu)','BR(B0->pilnu)','BR(B0->rholnu)'],['BR(K+->munu)','BR(KL-<pienu)','BR(KL->pimunu)','BR(KS->pienu)','BR(KS->pimunu)'],['Rtaul(B->Dlnu)', 'Rtaul(B->D*lnu)', 'BR(B0->Dlnu)', 'BR(B+->Dlnu)', 'BR(B0->D*lnu)', 'BR(B+->D*lnu)']]
+my_obs = [['BR(B+->taunu)','BR(B+->munu)','BR(B0->pilnu)','BR(B0->rholnu)'],['BR(K+->munu)','BR(KL->pienu)','BR(KL->pimunu)','BR(KS->pienu)','BR(KS->pimunu)'],['Rtaul(B->Dlnu)', 'Rtaul(B->D*lnu)', 'BR(B0->Dlnu)', 'BR(B+->Dlnu)', 'BR(B0->D*lnu)', 'BR(B+->D*lnu)']]
 
 par = flavio.default_parameters.get_central_all()
 err = flavio.default_parameters.get_1d_errors_random()
@@ -92,25 +95,30 @@ errmap = {}
 #        #        plt.savefig(fig_name)
 #        #        plt.show()
 
-for i in range(us):
-    args = [par,err,my_obs[i],steps,ds[i],us[i]]
-    #arge = [par,err,my_obs,2,steps]
+for i in range(len(us)):
+    args = [par,err,my_obs[i],steps,ds[i],us[i],1]
+    arge = [par,err,my_obs[i],steps,ds[i],us[i],2]
     multy_vs = partial(vij_mult,args)
-    #multy_es = partial(vij_mult,arge)
+    multy_es = partial(vij_mult,arge)
 
-    array_vs = shared_zeros(steps,steps)
-    array_es = shared_zeros(steps,steps)
+#    heatmap_v = shared_zeros(steps,steps)
+#    heatmap_e = shared_zeros(steps,steps)
 
     pool2 = Pool(processes=4)
-    #heatmap_v = np.array(
-    pool2.map(multy_vs,th)#).reshape((steps,steps))
-    #heatmap_e = np.array(
-    #pool2.map(multy_es,th)#).reshape((steps,steps))
+    heatmap_v = np.array(pool2.map(multy_vs,th)).reshape((steps,steps))
+    heatmap_e = np.array(pool2.map(multy_es,th)).reshape((steps,steps))
     pool2.close()
     pool2.join()
 
-    heatmap['V'+us[i]+ds[i]] = array_vs # heatmap_v
-    errmap['V'+us[i]+ds[i]] = array_es # heatmap_e
+    heatmap['V'+us[i]+ds[i]] = heatmap_v
+    errmap['V'+us[i]+ds[i]] = heatmap_e
+    
+    fig = plt.figure()
+    s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+} (\text{GeV})]$")
+    im = s.imshow(heatmap_v,extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower')
+    fig.colorbar(im)
+    plt.title("Heatmap of Modification Factor for V"+us[i]+ds[i])
+    plt.savefig("v"+us[i]+ds[i]+"_heatmap.png")
 
 pool3 = Pool()
 argus = [ckm_els,ckm_errs,par,err,heatmap,errmap]
@@ -120,9 +128,9 @@ pool3.close()
 pool3.join()
 
 fig = plt.figure()
-s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+}]$")
+s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+} (\text{GeV})]$")
 im = s.imshow(units,extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower',cmap='gray')
-plt.title("Modification Regions Allowed By Unitarity \n of full CKM Matrix")# \n using CKM first two rows, inc Vcb")
+plt.title("Modification Regions Allowed By Unitarity \n of full CKM Matrix")
 plt.savefig("ckm_full_mat.png")
 #plt.show()
 

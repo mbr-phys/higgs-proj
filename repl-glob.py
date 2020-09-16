@@ -55,18 +55,18 @@ my_obs = [
 
 #print("For mH0 = 1500 GeV, mH+ = 1000 GeV, b = pi/4, a = -pi/4:")
 #print()
-#par = flavio.default_parameters.get_central_all()
-#ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
-#mH0 = 100
-#mH = 100
-#tanb = np.tan(np.pi/4)
+par = flavio.default_parameters.get_central_all()
+ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
+mH0 = 1500
+mH = 1000
+tanb = np.tan(np.pi/4)
 ##C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],tanb,mH)
-#C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],mH0,tanb,mH)
+C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],mH0,tanb,mH)
 #wc = flavio.WilsonCoefficients()
 #wc.set_initial({ # tell flavio what WCs you're referring to with your variables
 #        'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CP_s,'CPp_bsmumu': CPp_s, # Bs->mumu
 #    }, scale=4.2, eft='WET', basis='flavio')
-##C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',0],mH0,tanb,mH)
+C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',1],mH0,tanb,mH)
 ##print("C7:",C7)
 ##print()
 ##print("C7':",C7p)
@@ -83,18 +83,18 @@ my_obs = [
 ##print()
 ##print("C9' mu:",C9p_s)
 ##print()
-##print("C10 e:",C10_se)
-##print()
-##print("C10' e:",C10p_se)
-##print()
-#print("C10 mu:",C10_s)
-#print()
-#print("C10' mu:",C10p_s)
+print("C10 e:",C10_se)
+print()
+print("C10' e:",C10p_se)
+print()
+print("C10 mu:",C10_s)
+print()
+print("C10' mu:",C10p_s)
 #print()
 ##print("SM:",flavio.sm_prediction('BR(Bs->mumu)'))
 #print("2HDM BR:",flavio.np_prediction('BR(Bs->mumu)',wc))
 #print("2HDM BR error:",flavio.np_uncertainty('BR(Bs->mumu)',wc))
-#quit()
+quit()
 
 #------------------------------
 #   Leptonic and Semileptonic Tree Levels
