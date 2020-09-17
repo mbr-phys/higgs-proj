@@ -56,13 +56,16 @@ def vp(ckm_els,par,heatmap,i,j):
     par['Vcb'] = Vcbp
 
     CKMs = get_ckm(par)
+    CKMt = np.conj(CKMs.T)
+    unit = CKMt*CKMs
     r1,r2,r3 = 0,0,0
     for i in range(3):
-        r1 += abs(CKMs[0,i])**2
-        r2 += abs(CKMs[1,i])**2
-        r3 += abs(CKMs[2,i])**2
-    
+        r1 += unit[0,i]
+        r2 += unit[1,i]
+        r3 += unit[2,i]
+   
     return r1, r2, r3
+#    return unit
 
 def errors2(ckm_els,ckm_errs,par,err,heatmap,errmap,i,j):
     central = vp(ckm_els,par,heatmap,i,j)
@@ -115,12 +118,19 @@ def errors2(ckm_els,ckm_errs,par,err,heatmap,errmap,i,j):
     at3 += abs(ce5[2]-central[2])**2
 
     a1, a2, a3 = np.sqrt(at1), np.sqrt(at2), np.sqrt(at3)
+#    a1 = np.sqrt(at1)
 
     return 2*a1, 2*a2, 2*a3
 
 def testing(args,ijs):
     ckm_els,ckm_errs,par,err,heatmap,errmap = args
     j,i = ijs
+#    r1 = vp(ckm_els,par,heatmap,i,j)
+#    re1 = errors2(ckm_els,ckm_errs,par,err,heatmap,errmap,i,j)
+#    if r1 < 1 or (r1-re1) < 1 or (r1+re1) < 1:
+#        return 1
+#    else:
+#        return 0
     r1, r2, r3 = vp(ckm_els,par,heatmap,i,j)
     re1, re2, re3 = errors2(ckm_els,ckm_errs,par,err,heatmap,errmap,i,j)
     rs1 = [r1,r1+re1,r1-re1]
@@ -132,44 +142,3 @@ def testing(args,ijs):
                 if i < 1 and j < 1 and k < 1:
                     return 1
     return 0
-#    if r1 < 1 and r2 < 1 and r3 < 1:
-#        return 1
-#    elif (r1 + re1) < 1 and r2 < 1 and r3 < 1:
-#        return 1
-#    elif (r1 - re1) < 1 and r2 < 1 and r3 < 1:
-#        return 1
-#    elif r1 < 1 and (r2 + re2) < 1 and r3 < 1:
-#        return 1
-#    elif r1 < 1 and (r2 - re2) < 1 and r3 < 1:
-#        return 1
-#    elif r1 < 1 and r2 < 1 and (r3 + re3) < 1:
-#        return 1
-#    elif r1 < 1 and r2 < 1 and (r3 - re3) < 1:
-#        return 1
-#    elif (r1 + re1) < 1 and (r2 + re2) < 1 and r3 < 1:
-#        return 1
-#    elif (r1 + re1) < 1 and (r2 - re2) < 1 and r3 < 1:
-#        return 1
-#    elif (r1 - re1) < 1 and (r2 + re2) < 1 and r3 < 1:
-#        return 1
-#    elif (r1 - re1) < 1 and (r2 - re2) < 1 and r3 < 1:
-#        return 1
-#    elif r1 < 1 and (r2 + re2) < 1 and (r3 + re3) < 1:
-#        return 1
-#    elif r1 < 1 and (r2 - re2) < 1 and (r3 + re3) < 1:
-#        return 1
-#    elif r1 < 1 and (r2 + re2) < 1 and (r3 - re3) < 1:
-#        return 1
-#    elif r1 < 1 and (r2 - re2) < 1 and (r3 - re3) < 1:
-#        return 1
-#    elif (r1 + re1) < 1 and r2 < 1 and (r3 + re3) < 1:
-#        return 1
-#    elif (r1 - re1) < 1 and r2 < 1 and (r3 + re3) < 1:
-#        return 1
-#    elif (r1 + re1) < 1 and r2 < 1 and (r3 - re3) < 1:
-#        return 1
-#    elif (r1 - re1) < 1 and r2 < 1 and (r3 - re3) < 1:
-#        return 1
-#    else: 
-#        return 0
-#

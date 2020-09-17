@@ -113,12 +113,12 @@ for i in range(len(us)):
     heatmap['V'+us[i]+ds[i]] = heatmap_v
     errmap['V'+us[i]+ds[i]] = heatmap_e
     
-    fig = plt.figure()
-    s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+} (\text{GeV})]$")
-    im = s.imshow(heatmap_v,extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower')
-    fig.colorbar(im)
-    plt.title("Heatmap of Modification Factor for V"+us[i]+ds[i])
-    plt.savefig("v"+us[i]+ds[i]+"_heatmap.png")
+#    fig = plt.figure()
+#    s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+} (\text{GeV})]$")
+#    im = s.imshow(heatmap_v,extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower')
+#    fig.colorbar(im)
+#    plt.title("Heatmap of Modification Factor for V"+us[i]+ds[i])
+#    plt.savefig("v"+us[i]+ds[i]+"_heatmap.png")
 
 pool3 = Pool()
 argus = [ckm_els,ckm_errs,par,err,heatmap,errmap]
