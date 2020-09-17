@@ -263,8 +263,10 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
         p1 = 0
         for k in range(3):
             for n in range(3):
-                p1 += np.conj(CKM[k,1])*eu[k,2]*eu[n,2]*CKM[n,2]
-        c10 = p1*(I1(zs[2])-1)/(2*np.conj(Vts)*Vtb*e**2)
+                #p1 += np.conj(CKM[k,1])*eu[k,2]*eu[n,2]*CKM[n,2]
+                p1 += eu[k,2]*eu[n,2]
+        #c10 = p1*(I1(zs[2])-1)/(2*np.conj(Vts)*Vtb*e**2)
+        c10 = p1*(I1(zs[2])-1)/(2*e**2)
         return c10
 
     def c9p_1():
@@ -279,8 +281,10 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
         p1 = 0
         for k in range(3):
             for n in range(3):
-                p1 += ed[k,1]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,2]
-        c10p = -1*p1*(I1(zs[2])-1)/(2*np.conj(Vts)*Vtb*e**2)
+                #p1 += ed[k,1]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,2]
+                p1 += ed[k,1]*ed[n,2]
+        #c10p = -1*p1*(I1(zs[2])-1)/(2*np.conj(Vts)*Vtb*e**2)
+        c10p = -1*p1*(I1(zs[2])-1)/(2*e**2)
         return c10p
 
     def c9_2():

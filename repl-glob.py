@@ -55,46 +55,46 @@ my_obs = [
 
 #print("For mH0 = 1500 GeV, mH+ = 1000 GeV, b = pi/4, a = -pi/4:")
 #print()
-par = flavio.default_parameters.get_central_all()
-ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
-mH0 = 1500
-mH = 1000
-tanb = np.tan(np.pi/4)
-##C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],tanb,mH)
-C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],mH0,tanb,mH)
+#par = flavio.default_parameters.get_central_all()
+#ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
+#mH0 = 1500
+#mH = 500
+#tanb = 0.2#np.tan(np.pi/4)
+#C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],tanb,mH)
+#C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],mH0,tanb,mH)
 #wc = flavio.WilsonCoefficients()
 #wc.set_initial({ # tell flavio what WCs you're referring to with your variables
 #        'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CP_s,'CPp_bsmumu': CPp_s, # Bs->mumu
 #    }, scale=4.2, eft='WET', basis='flavio')
-C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',1],mH0,tanb,mH)
-##print("C7:",C7)
-##print()
-##print("C7':",C7p)
-##print()
-##print("C8:",C8)
-##print()
-##print("C8':",C8p)
-##print()
-##print("C9 e:",C9_se)
-##print()
-##print("C9' e:",C9p_se)
-##print()
-##print("C9 mu:",C9_s)
-##print()
-##print("C9' mu:",C9p_s)
-##print()
-print("C10 e:",C10_se)
-print()
-print("C10' e:",C10p_se)
-print()
-print("C10 mu:",C10_s)
-print()
-print("C10' mu:",C10p_s)
+#C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',1],mH0,tanb,mH)
+#print("C7:",C7)
 #print()
-##print("SM:",flavio.sm_prediction('BR(Bs->mumu)'))
+#print("C7':",C7p)
+#print()
+#print("C8:",C8)
+#print()
+#print("C8':",C8p)
+#print()
+#print("C9 e:",C9_se)
+#print()
+#print("C9' e:",C9p_se)
+#print()
+#print("C9 mu:",C9_s)
+#print()
+#print("C9' mu:",C9p_s)
+#print()
+#print("C10 e:",C10_se)
+#print()
+#print("C10' e:",C10p_se)
+#print()
+#print("C10 mu:",C10_s)
+#print()
+#print("C10' mu:",C10p_s)
+#print()
+#print("SM:",flavio.sm_prediction('BR(Bs->mumu)'))
 #print("2HDM BR:",flavio.np_prediction('BR(Bs->mumu)',wc))
 #print("2HDM BR error:",flavio.np_uncertainty('BR(Bs->mumu)',wc))
-quit()
+#quit()
 
 #------------------------------
 #   Leptonic and Semileptonic Tree Levels
@@ -186,20 +186,20 @@ def rad(wcs):
 #   B(s/d) -> mumu + R(K) & R(K*)
 #------------------------------
 
-Fmu = FastLikelihood(name="mu",observables=my_obs[-2:],include_measurements=['LFU K Ratios']) 
+Fmu = FastLikelihood(name="mu",observables=my_obs[-3:],include_measurements=['LFU K Ratios']) 
 #Fmu = FastLikelihood(name="mu",observables=my_obs[12:14],include_measurements=['FCNC Leptonic Decays',]) 
 #Fmu = FastLikelihood(name="mu",observables=my_obs[12:14]+my_obs[-3:],include_measurements=['FCNC Leptonic Decays','LFU K Ratios']) 
 Fmu.make_measurement(N=500,threads=4)
 
 def mu(wcs):
     tanb, mH = wcs # state what the two parameters are going to be on the plot
-#    mH0 = mH
-    mH0 = np.log10(1500)
+    mH0 = mH
+#    mH0 = np.log10(1500)
 
     par = flavio.default_parameters.get_central_all()
     ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
 
-    C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',0],10**mH0,10**tanb,10**mH)
+    C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',1],10**mH0,10**tanb,10**mH)
     C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],10**mH0,10**tanb,10**mH)
 #    C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],10**mH0,10**tanb,10**mH)
     C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],10**tanb,10**mH)
@@ -211,7 +211,7 @@ def mu(wcs):
            'C9_bsee': C9_se,'C9p_bsee': C9p_se,
            'C9_bsmumu': C9_s,'C9p_bsmumu': C9p_s,
            'C10_bsee': C10_se,'C10p_bsee': C10p_se,
-            'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,#'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CP_s,'CPp_bsmumu': CPp_s, # Bs->mumu
+           'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,#'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CP_s,'CPp_bsmumu': CPp_s, # Bs->mumu
 #            'C10_bdmumu': C10_d,'C10p_bdmumu': C10p_d,'CS_bdmumu': CS_d,'CSp_bdmumu': CSp_d,'CP_bdmumu': CP_d,'CPp_bdmumu': CPp_d, # B0->mumu
         }, scale=4.2, eft='WET', basis='flavio')
     return Fmu.log_likelihood(par,wc)
@@ -278,7 +278,7 @@ def func(wcs):
 #cleps = fpl.likelihood_contour_data(leps,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
 #cmix = fpl.likelihood_contour_data(mix,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
 #crad = fpl.likelihood_contour_data(rad,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
-cmu = fpl.likelihood_contour_data(mu,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
+cmu = fpl.likelihood_contour_data(mu,-1,2,0,3.5, n_sigma=sigmas, threads=4, steps=60) 
 #cdat = fpl.likelihood_contour_data(func,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
 
 #------------------------------
