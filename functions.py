@@ -572,7 +572,7 @@ def mixing(par,CKM,mds,tanb,mH):
             ci += v2[i]*v3[i]*eu[i]*np.sqrt(zs[i])*I11(y,zs[2],zs[i])
         a = v2[0]*v3[0]*eu[0]*np.sqrt(zs[0])*ai
         b = v2[1]*v3[1]*eu[1]*np.sqrt(zs[1])*bi
-        c = v2[2]*v3[2]*eu[2]*np.sqrt(zs[2])#*ci
+        c = v2[2]*v3[2]*eu[2]*np.sqrt(zs[2])*ci
         return pref*(a+b+c) 
 
     def c4_2():

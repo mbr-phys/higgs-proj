@@ -2,11 +2,15 @@
 
 import flavio
 from flavio.statistics.likelihood import FastLikelihood
-from flavio.classes import Parameter
+from flavio.physics.bdecays.formfactors import b_v, b_p
+from flavio.classes import Parameter, AuxiliaryQuantity, Implementation
+from flavio.config import config
 import flavio.plots as fpl
 import matplotlib.pyplot as plt
 import numpy as np
 from functions import *
+
+#### parameter setting
 
 # should add these to flavio's yml doc at some point, but this will do for now
 pars = flavio.default_parameters
@@ -36,10 +40,35 @@ pars.set_constraint('bag_Bs_4','1.031 +- 0.035')
 pars.set_constraint('bag_Bs_5','0.959 +- 0.031')
 pars.set_constraint('eta_tt_Bs','0.537856') # Alex, private correspondence
 
+#### defining Bs->Ds(*)lnu
+
+def ff_function(function, process, **kwargs):
+    return lambda wc_obj, par_dict, q2: function(process, q2, par_dict, **kwargs)
+
+config['implementation']['Bs->Ds* form factor'] = 'Bs->Ds* CLN' 
+bsds = AuxiliaryQuantity('Bs->Ds* form factor') 
+bsdsi = Implementation(name='Bs->Ds* CLN',quantity='Bs->Ds* form factor',function=ff_function(b_v.cln.ff,'Bs->Ds*',scale=config['renormalization scale']['bvll']))
+bsdsi.set_description("CLN parameterization")
+#print(flavio.sm_prediction('BR(Bs->Ds*munu)')*1e2)
+#print(flavio.sm_uncertainty('BR(Bs->Ds*munu)')*1e2)
+
+config['implementation']['Bs->Ds form factor'] = 'Bs->Ds CLN'
+bsd = AuxiliaryQuantity('Bs->Ds form factor')
+bsdi = Implementation(name='Bs->Ds CLN',quantity='Bs->Ds form factor',function=ff_function(b_p.cln.ff,'Bs->Ds',scale=config['renormalization scale']['bpll']))
+bsdsi.set_description("CLN parameterization")
+#print(flavio.sm_prediction('BR(Bs->Dsmunu)')*1e2)
+#print(flavio.sm_uncertainty('BR(Bs->Dsmunu)')*1e2)
+
+#print(flavio.functions.get_dependent_parameters_sm('BR(Bs->Dsmunu)'))   
+
+#### fitting stuff
+
 flavio.measurements.read_file('world_avgs.yml') # read in the world averages we want to use
 
-flavio.config['renormalization scale']['bxgamma'] = 1.74
+config['renormalization scale']['bxgamma'] = 1.74
+
 sigmas = (1,2)
+#sigmas = (3,4)
 
 my_obs = [
     'BR(B+->taunu)', 'BR(B+->munu)', 'BR(D+->munu)', 'BR(Ds->munu)', 'BR(Ds->taunu)', 'BR(tau->Knu)', 'BR(K+->munu)', 'BR(tau->pinu)', 'Gamma(pi+->munu)', # [:9]
@@ -53,54 +82,16 @@ my_obs = [
     ("<Rmue>(B0->K*ll)", 1.1, 6.0), # [40]
 ]
 
-#print("For mH0 = 1500 GeV, mH+ = 1000 GeV, b = pi/4, a = -pi/4:")
-#print()
-#par = flavio.default_parameters.get_central_all()
-#ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
-#mH0 = 1500
-#mH = 500
-#tanb = 0.2#np.tan(np.pi/4)
-#C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],tanb,mH)
-#C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],mH0,tanb,mH)
-#wc = flavio.WilsonCoefficients()
-#wc.set_initial({ # tell flavio what WCs you're referring to with your variables
-#        'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CP_s,'CPp_bsmumu': CPp_s, # Bs->mumu
-#    }, scale=4.2, eft='WET', basis='flavio')
-#C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',1],mH0,tanb,mH)
-#print("C7:",C7)
-#print()
-#print("C7':",C7p)
-#print()
-#print("C8:",C8)
-#print()
-#print("C8':",C8p)
-#print()
-#print("C9 e:",C9_se)
-#print()
-#print("C9' e:",C9p_se)
-#print()
-#print("C9 mu:",C9_s)
-#print()
-#print("C9' mu:",C9p_s)
-#print()
-#print("C10 e:",C10_se)
-#print()
-#print("C10' e:",C10p_se)
-#print()
-#print("C10 mu:",C10_s)
-#print()
-#print("C10' mu:",C10p_s)
-#print()
-#print("SM:",flavio.sm_prediction('BR(Bs->mumu)'))
-#print("2HDM BR:",flavio.np_prediction('BR(Bs->mumu)',wc))
-#print("2HDM BR error:",flavio.np_uncertainty('BR(Bs->mumu)',wc))
-#quit()
+obs2 = [
+    'BR(Bs->Dsmunu)','BR(Bs->Ds*munu)',
+]
 
 #------------------------------
 #   Leptonic and Semileptonic Tree Levels
 #------------------------------
 
-Fleps = FastLikelihood(name="trees",observables=my_obs[:9]+my_obs[14:38],include_measurements=['Tree Level Leptonics','LFU D Ratios','Tree Level Semileptonics']) 
+#Fleps = FastLikelihood(name="trees",observables=my_obs[:9]+my_obs[14:38],include_measurements=['Tree Level Leptonics','LFU D Ratios','Tree Level Semileptonics']) 
+Fleps = FastLikelihood(name="trees",observables=obs2,include_measurements=['Tree Level Semileptonics']) 
 Fleps.make_measurement(N=500,threads=4)
 
 def leps(wcs):
@@ -109,31 +100,31 @@ def leps(wcs):
     par = flavio.default_parameters.get_central_all()
     ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
 
-    CSR_b, CSL_b = rh(par['m_u'],par['m_b'],10**tanb,10**mH)
-    CSR_d, CSL_d = rh(par['m_c'],par['m_d'],10**tanb,10**mH)
-    CSR_ds, CSL_ds = rh(par['m_c'],par['m_s'],10**tanb,10**mH)
-    CSR_k, CSL_k = rh(par['m_u'],par['m_s'],10**tanb,10**mH)
-    CSR_p, CSL_p = rh(par['m_u'],par['m_d'],10**tanb,10**mH)
+#    CSR_b, CSL_b = rh(par['m_u'],par['m_b'],10**tanb,10**mH)
+#    CSR_d, CSL_d = rh(par['m_c'],par['m_d'],10**tanb,10**mH)
+#    CSR_ds, CSL_ds = rh(par['m_c'],par['m_s'],10**tanb,10**mH)
+#    CSR_k, CSL_k = rh(par['m_u'],par['m_s'],10**tanb,10**mH)
+#    CSR_p, CSL_p = rh(par['m_u'],par['m_d'],10**tanb,10**mH)
     CSL_bc, CSR_bc = rh(par['m_c'],par['m_b'],10**tanb,10**mH)
 
     wc = flavio.WilsonCoefficients()
     wc.set_initial({ # tell flavio what WCs you're referring to with your variables
-            'CSR_bctaunutau': CSR_bc, 'CSL_bctaunutau': CSL_bc,
+#            'CSR_bctaunutau': CSR_bc, 'CSL_bctaunutau': CSL_bc,
             'CSR_bcmunumu': CSR_bc, 'CSL_bcmunumu': CSL_bc,
-            'CSR_bcenue': CSR_bc, 'CSL_bcenue': CSL_bc, 
-            'CSR_butaunutau': CSR_b, 'CSL_butaunutau': CSL_b,
-            'CSR_bumunumu': CSR_b, 'CSL_bumunumu': CSL_b,
-            'CSR_buenue': CSR_b, 'CSL_buenue': CSL_b, 
-            'CSR_dcmunumu': CSR_d, 'CSL_dcmunumu': CSL_d,
-            'CSR_dcenue': CSR_d, 'CSL_dcenue': CSL_d, 
-            'CSR_sctaunutau': CSR_ds, 'CSL_sctaunutau': CSL_ds,
-            'CSR_scmunumu': CSR_ds, 'CSL_scmunumu': CSL_ds,
-            'CSR_scenue': CSR_ds, 'CSL_scenue': CSL_ds, 
-            'CSR_sutaunutau': CSR_k, 'CSL_sutaunutau': CSL_k, 
-            'CSR_sumunumu': CSR_k, 'CSL_sumunumu': CSL_k, 
-            'CSR_suenue': CSR_k, 'CSL_suenue': CSL_k, 
-            'CSR_dutaunutau': CSR_p, 'CSL_dutaunutau': CSL_p, 
-            'CSR_dumunumu': CSR_p, 'CSL_dumunumu': CSL_p, 
+#            'CSR_bcenue': CSR_bc, 'CSL_bcenue': CSL_bc, 
+#            'CSR_butaunutau': CSR_b, 'CSL_butaunutau': CSL_b,
+#            'CSR_bumunumu': CSR_b, 'CSL_bumunumu': CSL_b,
+#            'CSR_buenue': CSR_b, 'CSL_buenue': CSL_b, 
+#            'CSR_dcmunumu': CSR_d, 'CSL_dcmunumu': CSL_d,
+#            'CSR_dcenue': CSR_d, 'CSL_dcenue': CSL_d, 
+#            'CSR_sctaunutau': CSR_ds, 'CSL_sctaunutau': CSL_ds,
+#            'CSR_scmunumu': CSR_ds, 'CSL_scmunumu': CSL_ds,
+#            'CSR_scenue': CSR_ds, 'CSL_scenue': CSL_ds, 
+#            'CSR_sutaunutau': CSR_k, 'CSL_sutaunutau': CSL_k, 
+#            'CSR_sumunumu': CSR_k, 'CSL_sumunumu': CSL_k, 
+#            'CSR_suenue': CSR_k, 'CSL_suenue': CSL_k, 
+#            'CSR_dutaunutau': CSR_p, 'CSL_dutaunutau': CSL_p, 
+#            'CSR_dumunumu': CSR_p, 'CSL_dumunumu': CSL_p, 
         }, scale=4.2, eft='WET', basis='flavio')
     return Fleps.log_likelihood(par,wc)
 
@@ -186,7 +177,7 @@ def rad(wcs):
 #   B(s/d) -> mumu + R(K) & R(K*)
 #------------------------------
 
-Fmu = FastLikelihood(name="mu",observables=my_obs[-3:],include_measurements=['LFU K Ratios']) 
+Fmu = FastLikelihood(name="mu",observables=my_obs[-2:],include_measurements=['LFU K Ratios']) 
 #Fmu = FastLikelihood(name="mu",observables=my_obs[12:14],include_measurements=['FCNC Leptonic Decays',]) 
 #Fmu = FastLikelihood(name="mu",observables=my_obs[12:14]+my_obs[-3:],include_measurements=['FCNC Leptonic Decays','LFU K Ratios']) 
 Fmu.make_measurement(N=500,threads=4)
@@ -275,10 +266,10 @@ def func(wcs):
 #   Get Contour Data
 #------------------------------
 
-#cleps = fpl.likelihood_contour_data(leps,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
+cleps = fpl.likelihood_contour_data(leps,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
 #cmix = fpl.likelihood_contour_data(mix,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
 #crad = fpl.likelihood_contour_data(rad,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
-cmu = fpl.likelihood_contour_data(mu,-1,2,0,3.5, n_sigma=sigmas, threads=4, steps=60) 
+#cmu = fpl.likelihood_contour_data(mu,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
 #cdat = fpl.likelihood_contour_data(func,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
 
 #------------------------------
@@ -296,13 +287,14 @@ cmu = fpl.likelihood_contour_data(mu,-1,2,0,3.5, n_sigma=sigmas, threads=4, step
 #   Plotting
 #------------------------------
 
-#plt.figure(figsize=(6,5))
-#fpl.contour(**cleps,col=2) 
-##plt.title('Tree Level Leptonic and Semileptonics and Hadronic Tau Decays')
-#plt.title(r'$\mathcal{R}(D)$ Individual Fit')
-#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-#plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') 
-#plt.savefig('leps_plot.png')
+plt.figure(figsize=(6,5))
+fpl.contour(**cleps,col=2) 
+#plt.title('Tree Level Leptonic and Semileptonics and Hadronic Tau Decays')
+plt.title(r'$B_s\to D_s^{(*)}\mu\nu_\mu$ Fit')
+plt.xlabel(r'$\log_{10}[\tan\beta]$') 
+plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') 
+plt.savefig('leps_plot.png')
+quit()
 
 #plt.figure(figsize=(6,5))
 #fpl.contour(**cmix,col=0) 
@@ -318,8 +310,17 @@ cmu = fpl.likelihood_contour_data(mu,-1,2,0,3.5, n_sigma=sigmas, threads=4, step
 #plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') 
 #plt.savefig('bsgamma_plot.png')
 
+# (2.4,4.2,-1,1)
+z_min1 = -5.182818890948422
+# (1,3,0,3.5)
+z_min2 = -2.1479938777001504
+# (-1,2.5,0,3.5)
+z_min3 = 1.6111964187252177
+# (-1,2,0,3.5)
+z_min4 = 3.5229317450326256
+
 plt.figure(figsize=(6,5))
-fpl.contour(**cmu,col=9) 
+fpl.contour(**cmu,col=9)#,z_min=z_min1) 
 #plt.title(r'FCNC Leptonic B Decays ($B_{s,d}\to\mu^+\mu^-$), $m_{H^0}\sim m_{H^+}$')
 #plt.title(r'FCNC Leptonic B Decays ($B_{s,d}\to\mu^+\mu^-$), $m_{H^0}=1500\,$GeV')
 plt.title(r'$R_K$ for $q^2\in[1,6]$ \& $R_{K^{*0}}$ for $q^2\in[0.045,6]$')

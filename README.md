@@ -21,18 +21,18 @@ _Research extension from [4th Year project](https://github.com/mbr-phys/cpviolat
 - [x] Add `R(D)`, `R(D*)`
 - [x] Look into resolving Bsgamma SM value - _modified in flavio's files to make it possible, still much higher fits than previously though_
 - [x] Add tree level semileptonics to fit - _same WCs as other tree levels so pretty simple_
-- [x] `RK` and `RK*` need added, uses same WCs as `Bsmumu` so simple enough - _essentially no constraint from these, why?_
+- [x] `RK` and `RK*` need added, uses same WCs as `Bsmumu` so simple enough 
 - [x] C7,8 contributions from Crivellin to `RK`, `RK*`, and `bsgamma` 
 - [x] Conclude from heatmap results for CKM modification - _might come back to this, but happy with conclusions that modification is negligible, see ckm_notes.tex_
 - [ ] Fit in wrong sign limit
 - [ ] Is there a reason `R(D)` and `R(D*)` are fitting simultaneously fine? They historically do not
 - [ ] Does the likelihood function change if observables are correlated or not?
-- [ ] Finish adding to `world_avgs.yml`
+- [x] Finish adding to `world_avgs.yml`
 
 ## General Project Stuff
 
-- [ ] Sort out WC language for observables not yet added
-- [ ] Sort out obliques - do we need to add WCs to the basis?
+- [x] Sort out WC language for observables not yet added
+- [ ] Sort out obliques - do we need to add WCs to the basis? _looks like easier just keeping these separte_
 - [ ] What do we do about extra parameters in fit when coming to SM4 etc?
-- [ ] Higgs signal strengths
+- [x] Higgs signal strengths _Oliver and James sorted these_
 - [ ] Is it better to use `Likelihood` instead of `FastLikelihood`?
