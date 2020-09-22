@@ -1,5 +1,7 @@
 import time
 start_time = time.time()
+import datetime
+print(datetime.datetime.now())
 import os
 import numpy as np
 import flavio
@@ -9,6 +11,36 @@ import multiprocessing as mp
 from multiprocessing import Pool
 import ctypes
 from functools import partial
+
+par = flavio.default_parameters.get_central_all()
+err = flavio.default_parameters.get_1d_errors_random()
+ckm_els, ckm_errs = ckm_err(get_ckm_alex,par,err)
+#mH = 3.5
+#tanb = 1
+#fac = 0.89
+#par['Vub'] = par['Vub']*fac#rh([par['m_u'],par['m_b'],par['m_tau']],[tanb,mH])
+#par['Vus'] = par['Vus']*fac#*rh([par['m_u'],par['m_s'],par['m_mu']],[tanb,mH])
+#par['Vcb'] = par['Vcb']*fac#*rh([par['m_c'],par['m_b'],par['m_tau']],[tanb,mH])
+#print(par['Vub'],par['Vus'],par['Vcb'])
+ckm_test = get_ckm(par)
+unit = ckm_test*np.conj(ckm_test.T)
+#print(unit)
+#print(abs(unit[0,0] + unit[0,1] + unit[0,2]))
+r1_lim = 1 - abs(unit[0,0] + unit[0,1] + unit[0,2])
+#print(abs(unit[1,0] + unit[1,1] + unit[1,2]))
+r2_lim = 1 - abs(unit[1,0] + unit[1,1] + unit[1,2])
+#print(abs(unit[2,0] + unit[2,1] + unit[2,2]))
+r3_lim = 1 - abs(unit[2,0] + unit[2,1] + unit[2,2])
+
+#heatmap = {'Vub':np.array([[0.9,0.99],[0.9,0.99]]),'Vus':np.array([[0.9,0.99],[0.9,0.99]]),'Vcb':np.array([[0.9,0.99],[0.99,0.99]])}
+#heatmap = {'Vub':np.array([[0.1,0.1],[0.1,0.1]]),'Vus':np.array([[0.1,0.1],[0.1,0.1]]),'Vcb':np.array([[0.5,0.5],[0.5,0.5]])}
+#errmap = {'Vub':np.array([[0,0],[0,0]]),'Vus':np.array([[0,0],[0,0]]),'Vcb':np.array([[0,0],[0,0]])}
+#
+#argus = [ckm_els,ckm_errs,par,err,heatmap,errmap,r1_lim,r2_lim,r3_lim]
+#answer = testing(argus,(0,0))
+#print(answer)
+#
+#quit()
 
 def shared_zeros(n1,n2):
     ''' create a 2D numpy array which can be then changed in different threads '''
@@ -59,10 +91,8 @@ ej = np.array([es,js]).reshape(2,steps**2).T
 
 my_obs = [['BR(B+->taunu)','BR(B+->munu)','BR(B0->pilnu)','BR(B0->rholnu)'],['BR(K+->munu)','BR(KL->pienu)','BR(KL->pimunu)','BR(KS->pienu)','BR(KS->pimunu)'],['Rtaul(B->Dlnu)', 'Rtaul(B->D*lnu)', 'BR(B0->Dlnu)', 'BR(B+->Dlnu)', 'BR(B0->D*lnu)', 'BR(B+->D*lnu)']]
 
-par = flavio.default_parameters.get_central_all()
-err = flavio.default_parameters.get_1d_errors_random()
+#par = flavio.default_parameters.get_central_all()
 #ckm_els = flavio.physics.ckm.get_ckm(par)
-ckm_els, ckm_errs = ckm_err(par,err)
 us = ['u','u','c']
 ds = ['b','s','b']
 mms = ['m_B+','m_D+','m_Ds','m_K+','m_pi+']
@@ -115,13 +145,15 @@ for i in range(len(us)):
     
 #    fig = plt.figure()
 #    s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+} (\text{GeV})]$")
-#    im = s.imshow(heatmap_v,extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower')
+#    im = s.imshow(heatmap_v,extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower',vmin=0,vmax=1)
 #    fig.colorbar(im)
 #    plt.title("Heatmap of Modification Factor for V"+us[i]+ds[i])
-#    plt.savefig("v"+us[i]+ds[i]+"_heatmap.png")
+#    plt.savefig("v"+us[i]+ds[i]+"_heatmap2.png")
+
+#print(datetime.datetime.now())
 
 pool3 = Pool()
-argus = [ckm_els,ckm_errs,par,err,heatmap,errmap]
+argus = [ckm_els,ckm_errs,par,err,heatmap,errmap,r1_lim,r2_lim,r3_lim]
 testy = partial(testing,argus)
 units = np.array(pool3.map(testy,ej)).reshape((steps,steps))
 pool3.close()
@@ -135,3 +167,4 @@ plt.savefig("ckm_full_mat.png")
 #plt.show()
 
 print("--- %s seconds ---" % (time.time() - start_time))
+print(datetime.datetime.now())
