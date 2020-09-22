@@ -17,13 +17,13 @@ _Research extension from [4th Year project](https://github.com/mbr-phys/cpviolat
 
 - [x] sorted leptonics 
 - [x] Add LO B Mixing 
-- [x] Add general B mixing from Crivellin - problematic near mH+ ~ mt(mt) in loop functions 
+- [x] Add general B mixing from Crivellin 
 - [x] Add `R(D)`, `R(D*)`
-- [x] Look into resolving Bsgamma SM value - _modified in flavio's files to make it possible, still much higher fits than previously though_
+- [x] Look into resolving Bsgamma SM value - _modified in flavio's files to make it possible, still much higher fits than previously though -- agrees with new results from Steinhauser_ 
 - [x] Add tree level semileptonics to fit - _same WCs as other tree levels so pretty simple_
 - [x] `RK` and `RK*` need added, uses same WCs as `Bsmumu` so simple enough 
 - [x] C7,8 contributions from Crivellin to `RK`, `RK*`, and `bsgamma` 
-- [x] Conclude from heatmap results for CKM modification - _might come back to this, but happy with conclusions that modification is negligible, see ckm_notes.tex_
+- [x] Conclude from heatmap results for CKM modification 
 - [ ] Fit in wrong sign limit
 - [ ] Is there a reason `R(D)` and `R(D*)` are fitting simultaneously fine? They historically do not
 - [ ] Does the likelihood function change if observables are correlated or not?
@@ -34,5 +34,5 @@ _Research extension from [4th Year project](https://github.com/mbr-phys/cpviolat
 - [x] Sort out WC language for observables not yet added
 - [ ] Sort out obliques - do we need to add WCs to the basis? _looks like easier just keeping these separte_
 - [ ] What do we do about extra parameters in fit when coming to SM4 etc?
-- [x] Higgs signal strengths _Oliver and James sorted these_
+- [x] Higgs signal strengths - _Oliver and James sorted these_
 - [ ] Is it better to use `Likelihood` instead of `FastLikelihood`?
