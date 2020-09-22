@@ -11,6 +11,7 @@ _Research extension from [4th Year project](https://github.com/mbr-phys/cpviolat
 - [Crivellin 1903 for bsll WC stuff](https://arxiv.org/pdf/1903.10440.pdf)
 - [Similar research being done in GAMBIT](https://arxiv.org/pdf/2007.11942.pdf)
 - [New values for B(s/d) -> mu mu](https://indico.cern.ch/event/868940/contributions/3905706/)
+- [New theory result for bsgamma](https://indico.cern.ch/event/838862/contributions/3609646/attachments/2052613/3440869/steinhauser_fpcp20.pdf)
 - will add more in time if needed
 
 ## To Do
