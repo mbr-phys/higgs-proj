@@ -90,8 +90,9 @@ obs2 = [
 #   Leptonic and Semileptonic Tree Levels
 #------------------------------
 
-#Fleps = FastLikelihood(name="trees",observables=my_obs[:9]+my_obs[14:38],include_measurements=['Tree Level Leptonics','LFU D Ratios','Tree Level Semileptonics']) 
-Fleps = FastLikelihood(name="trees",observables=obs2,include_measurements=['Tree Level Semileptonics']) 
+Fleps = FastLikelihood(name="trees",observables=my_obs[:9]+my_obs[14:38]+obs2,include_measurements=['Tree Level Leptonics','LFU D Ratios','Tree Level Semileptonics']) 
+#Fleps = FastLikelihood(name="trees",observables=[my_obs[15]],include_measurements=['LFU D Ratios']) 
+#Fleps = FastLikelihood(name="trees",observables=obs2,include_measurements=['Tree Level Semileptonics']) 
 Fleps.make_measurement(N=500,threads=4)
 
 def leps(wcs):
@@ -100,31 +101,31 @@ def leps(wcs):
     par = flavio.default_parameters.get_central_all()
     ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
 
-#    CSR_b, CSL_b = rh(par['m_u'],par['m_b'],10**tanb,10**mH)
-#    CSR_d, CSL_d = rh(par['m_c'],par['m_d'],10**tanb,10**mH)
-#    CSR_ds, CSL_ds = rh(par['m_c'],par['m_s'],10**tanb,10**mH)
-#    CSR_k, CSL_k = rh(par['m_u'],par['m_s'],10**tanb,10**mH)
-#    CSR_p, CSL_p = rh(par['m_u'],par['m_d'],10**tanb,10**mH)
+    CSR_b, CSL_b = rh(par['m_u'],par['m_b'],10**tanb,10**mH)
+    CSR_d, CSL_d = rh(par['m_c'],par['m_d'],10**tanb,10**mH)
+    CSR_ds, CSL_ds = rh(par['m_c'],par['m_s'],10**tanb,10**mH)
+    CSR_k, CSL_k = rh(par['m_u'],par['m_s'],10**tanb,10**mH)
+    CSR_p, CSL_p = rh(par['m_u'],par['m_d'],10**tanb,10**mH)
     CSL_bc, CSR_bc = rh(par['m_c'],par['m_b'],10**tanb,10**mH)
 
     wc = flavio.WilsonCoefficients()
     wc.set_initial({ # tell flavio what WCs you're referring to with your variables
-#            'CSR_bctaunutau': CSR_bc, 'CSL_bctaunutau': CSL_bc,
+            'CSR_bctaunutau': CSR_bc, 'CSL_bctaunutau': CSL_bc,
             'CSR_bcmunumu': CSR_bc, 'CSL_bcmunumu': CSL_bc,
-#            'CSR_bcenue': CSR_bc, 'CSL_bcenue': CSL_bc, 
-#            'CSR_butaunutau': CSR_b, 'CSL_butaunutau': CSL_b,
-#            'CSR_bumunumu': CSR_b, 'CSL_bumunumu': CSL_b,
-#            'CSR_buenue': CSR_b, 'CSL_buenue': CSL_b, 
-#            'CSR_dcmunumu': CSR_d, 'CSL_dcmunumu': CSL_d,
-#            'CSR_dcenue': CSR_d, 'CSL_dcenue': CSL_d, 
-#            'CSR_sctaunutau': CSR_ds, 'CSL_sctaunutau': CSL_ds,
-#            'CSR_scmunumu': CSR_ds, 'CSL_scmunumu': CSL_ds,
-#            'CSR_scenue': CSR_ds, 'CSL_scenue': CSL_ds, 
-#            'CSR_sutaunutau': CSR_k, 'CSL_sutaunutau': CSL_k, 
-#            'CSR_sumunumu': CSR_k, 'CSL_sumunumu': CSL_k, 
-#            'CSR_suenue': CSR_k, 'CSL_suenue': CSL_k, 
-#            'CSR_dutaunutau': CSR_p, 'CSL_dutaunutau': CSL_p, 
-#            'CSR_dumunumu': CSR_p, 'CSL_dumunumu': CSL_p, 
+            'CSR_bcenue': CSR_bc, 'CSL_bcenue': CSL_bc, 
+            'CSR_butaunutau': CSR_b, 'CSL_butaunutau': CSL_b,
+            'CSR_bumunumu': CSR_b, 'CSL_bumunumu': CSL_b,
+            'CSR_buenue': CSR_b, 'CSL_buenue': CSL_b, 
+            'CSR_dcmunumu': CSR_d, 'CSL_dcmunumu': CSL_d,
+            'CSR_dcenue': CSR_d, 'CSL_dcenue': CSL_d, 
+            'CSR_sctaunutau': CSR_ds, 'CSL_sctaunutau': CSL_ds,
+            'CSR_scmunumu': CSR_ds, 'CSL_scmunumu': CSL_ds,
+            'CSR_scenue': CSR_ds, 'CSL_scenue': CSL_ds, 
+            'CSR_sutaunutau': CSR_k, 'CSL_sutaunutau': CSL_k, 
+            'CSR_sumunumu': CSR_k, 'CSL_sumunumu': CSL_k, 
+            'CSR_suenue': CSR_k, 'CSL_suenue': CSL_k, 
+            'CSR_dutaunutau': CSR_p, 'CSL_dutaunutau': CSL_p, 
+            'CSR_dumunumu': CSR_p, 'CSL_dumunumu': CSL_p, 
         }, scale=4.2, eft='WET', basis='flavio')
     return Fleps.log_likelihood(par,wc)
 
@@ -266,9 +267,9 @@ def func(wcs):
 #   Get Contour Data
 #------------------------------
 
-cleps = fpl.likelihood_contour_data(leps,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
+#cleps = fpl.likelihood_contour_data(leps,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
 #cmix = fpl.likelihood_contour_data(mix,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
-#crad = fpl.likelihood_contour_data(rad,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
+crad = fpl.likelihood_contour_data(rad,-1,2,2.5,3.5, n_sigma=sigmas, threads=4, steps=60) 
 #cmu = fpl.likelihood_contour_data(mu,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
 #cdat = fpl.likelihood_contour_data(func,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
 
@@ -276,25 +277,25 @@ cleps = fpl.likelihood_contour_data(leps,-1,2,1,3.5, n_sigma=sigmas, threads=4, 
 #   Print Out Values
 #------------------------------
 
-#bf,minh,mint,maxt = mHmin(cdat)
-#print("Best fit value is found for (tanb,mH) =", bf)
-#print("Print outs are lists for values at", sigmas, "sigmas")
-#print("Minimum value of mH+ is:", minh)
-#print("Minimum value of tanb is:", mint)
-#print("Maximum value of tanb is:", maxt)
+bf,minh,mint,maxt = mHmin(crad)
+print("Best fit value is found for (tanb,mH) =", bf)
+print("Print outs are lists for values at", sigmas, "sigmas")
+print("Minimum value of mH+ is:", minh)
+print("Minimum value of tanb is:", mint)
+print("Maximum value of tanb is:", maxt)
 
 #------------------------------
 #   Plotting
 #------------------------------
 
-plt.figure(figsize=(6,5))
-fpl.contour(**cleps,col=2) 
-#plt.title('Tree Level Leptonic and Semileptonics and Hadronic Tau Decays')
-plt.title(r'$B_s\to D_s^{(*)}\mu\nu_\mu$ Fit')
-plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') 
-plt.savefig('leps_plot.png')
-quit()
+#plt.figure(figsize=(6,5))
+#fpl.contour(**cleps,col=2) 
+#plt.title('Tree-Level Leptonic and Semileptonic Meson Decays and Hadronic Tau Decays')
+##plt.title(r'$B_s\to D_s^{(*)}\mu\nu_\mu$ Fit')
+##plt.title(r'$\mathcal{R}(D^*)$ Individual Fit')
+#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
+#plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') 
+#plt.savefig('qqlnu_plot.png')
 
 #plt.figure(figsize=(6,5))
 #fpl.contour(**cmix,col=0) 
@@ -303,12 +304,13 @@ quit()
 #plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') 
 #plt.savefig('bmix_plot.png')
 
-#plt.figure(figsize=(6,5))
-#fpl.contour(**crad,col=3) 
-#plt.title(r'$\bar{B}\to X_s\gamma$ Radiative Decay')
-#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-#plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') 
-#plt.savefig('bsgamma_plot.png')
+plt.figure(figsize=(12,4))
+fpl.contour(**crad,col=3) 
+plt.title(r'$\bar{B}\to X_s\gamma$ Radiative Decay')
+plt.xlabel(r'$\log_{10}[\tan\beta]$') 
+plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') 
+plt.yticks(np.arange(2.5,3.6,0.25))
+plt.savefig('bsgamma_plot2.png')
 
 # (2.4,4.2,-1,1)
 z_min1 = -5.182818890948422
@@ -319,20 +321,20 @@ z_min3 = 1.6111964187252177
 # (-1,2,0,3.5)
 z_min4 = 3.5229317450326256
 
-plt.figure(figsize=(6,5))
-fpl.contour(**cmu,col=9)#,z_min=z_min1) 
+#plt.figure(figsize=(6,5))
+#fpl.contour(**cmu,col=9)#,z_min=z_min1) 
 #plt.title(r'FCNC Leptonic B Decays ($B_{s,d}\to\mu^+\mu^-$), $m_{H^0}\sim m_{H^+}$')
 #plt.title(r'FCNC Leptonic B Decays ($B_{s,d}\to\mu^+\mu^-$), $m_{H^0}=1500\,$GeV')
-plt.title(r'$R_K$ for $q^2\in[1,6]$ \& $R_{K^{*0}}$ for $q^2\in[0.045,6]$')
+#plt.title(r'$R_K$ for $q^2\in[1,6]$ \& $R_{K^{*0}}$ for $q^2\in[0.045,6]$')
 #plt.title(r'$R_K$ for $q^2\in[1,6]$')
 #plt.title(r'$R_{K^{*0}}$ for $q^2\in[0.045,6]$')
 #plt.title(r'$b\to sl^+l^-$ transitions ($B_{s,d}\to\mu^+\mu^-$ \& $R_K(q^2\in[1,6]),R_{K^{*0}}(q^2\in[0.045,6])$), $m_{H^0}\sim m_{H^+}$')
 #plt.title(r'$b\to sl^+l^-$ transitions ($B_{s,d}\to\mu^+\mu^-$ \& $R_K(q^2\in[1,6]),R_{K^{*0}}(q^2\in[0.045,6])$), $m_{H^0}=1500\,$GeV')
-plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') 
+#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
+#plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') 
 #plt.savefig('bsll_plot.png')
 #plt.savefig('bmumu_fix.png')
-plt.savefig('rks_plot.png')
+#plt.savefig('rks_plot.png')
 
 #plt.figure(figsize=(6,5))
 #fpl.contour(**cdat,col=4) 
