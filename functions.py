@@ -21,7 +21,7 @@ def mHmin(contour):
     minh_loc, mint_loc, maxt_loc = [],[],[]
     for i in levels:
         minh, mint, maxt = 100,100,-2
-        x_loc, y_loc = np.where(z<i)
+        x_loc, y_loc = np.where(z<(i+np.min(z)))
         for j in range(len(x_loc)):
             k = (x_loc[j],y_loc[j])
             if y[k] < minh:
@@ -34,7 +34,7 @@ def mHmin(contour):
         mint_loc.append(10**mint)
         maxt_loc.append(10**maxt)
 
-    return [xbf,ybf], minh_loc, mint_loc, maxt_loc
+    return [xbf,ybf], minh_loc, mint_loc, maxt_loc, np.min(z)
 
 def bsgamma2(par,CKM,mub1,tanb,mH):
     '''
@@ -223,6 +223,7 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
     cob = 1/tanb
     b = np.arctan(tanb)
     a = b - np.pi/2 # alignment limit
+#    a = b - np.arccos(0.05) # alignment limit
     #cba,sba = np.sin(2*b),-np.sin(2*b) # wrong sign limit
     cba,sba = np.cos(b-a),np.sin(b-a) # alignment limit
 
@@ -614,4 +615,113 @@ def rh(mu,md,tanb,mH):
     csr = mu/(mH**2)
     csl = md*(tanb/mH)**2
     return csr, csl
+
+def chi2_func(tanb, mH, mH0, obs):
+    '''
+        Finding chisq value cause there's some extra factor going on in flavio's
+    '''
+
+    par = flavio.default_parameters.get_central_all()
+    ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
+
+    CSR_b, CSL_b = rh(par['m_u'],par['m_b'],tanb,mH)
+    CSR_d, CSL_d = rh(par['m_c'],par['m_d'],tanb,mH)
+    CSR_ds, CSL_ds = rh(par['m_c'],par['m_s'],tanb,mH)
+    CSR_k, CSL_k = rh(par['m_u'],par['m_s'],tanb,mH)
+    CSR_p, CSL_p = rh(par['m_u'],par['m_d'],tanb,mH)
+    CSL_bc, CSR_bc = rh(par['m_c'],par['m_b'],tanb,mH)
+    C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],tanb,mH)
+    C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',1],mH0,tanb,mH)
+    C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],mH0,tanb,mH)
+    C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],mH0,tanb,mH)
+    CVLL_bs, CVRR_bs, CSLL_bs, CSRR_bs, CSLR_bs, CVLR_bs = mixing(par,ckm_els,['m_s',1,'m_d'],tanb,mH)
+    CVLL_bd, CVRR_bd, CSLL_bd, CSRR_bd, CSLR_bd, CVLR_bd = mixing(par,ckm_els,['m_d',0,'m_s'],tanb,mH)
+
+    wc = flavio.WilsonCoefficients()
+    wc.set_initial({ # tell flavio what WCs you're referring to with your variables
+            'CSR_bctaunutau': CSR_bc, 'CSL_bctaunutau': CSL_bc,
+            'CSR_bcmunumu': CSR_bc, 'CSL_bcmunumu': CSL_bc,
+            'CSR_bcenue': CSR_bc, 'CSL_bcenue': CSL_bc, 
+            'CSR_butaunutau': CSR_b, 'CSL_butaunutau': CSL_b,
+            'CSR_bumunumu': CSR_b, 'CSL_bumunumu': CSL_b,
+            'CSR_buenue': CSR_b, 'CSL_buenue': CSL_b, 
+            'CSR_dcmunumu': CSR_d, 'CSL_dcmunumu': CSL_d,
+            'CSR_dcenue': CSR_d, 'CSL_dcenue': CSL_d, 
+            'CSR_sctaunutau': CSR_ds, 'CSL_sctaunutau': CSL_ds,
+            'CSR_scmunumu': CSR_ds, 'CSL_scmunumu': CSL_ds,
+            'CSR_scenue': CSR_ds, 'CSL_scenue': CSL_ds, 
+            'CSR_sutaunutau': CSR_k, 'CSL_sutaunutau': CSL_k, 
+            'CSR_sumunumu': CSR_k, 'CSL_sumunumu': CSL_k, 
+            'CSR_suenue': CSR_k, 'CSL_suenue': CSL_k, 
+            'CSR_dutaunutau': CSR_p, 'CSL_dutaunutau': CSL_p, 
+            'CSR_dumunumu': CSR_p, 'CSL_dumunumu': CSL_p, 
+            'C7_bs': C7,'C7p_bs': C7p, 
+            'C8_bs': C8,'C8p_bs': C8p, 
+            'C9_bsee': C9_se,'C9p_bsee': C9p_se,
+            'C9_bsmumu': C9_s,'C9p_bsmumu': C9p_s,
+            'C10_bsee': C10_se,'C10p_bsee': C10p_se,
+            'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CP_s,'CPp_bsmumu': CPp_s, # Bs->mumu
+            'C10_bdmumu': C10_d,'C10p_bdmumu': C10p_d,'CS_bdmumu': CS_d,'CSp_bdmumu': CSp_d,'CP_bdmumu': CP_d,'CPp_bdmumu': CPp_d, # B0->mumu
+            'CVLL_bsbs': CVLL_bs,'CVRR_bsbs': CVRR_bs,'CSLL_bsbs': CSLL_bs,'CSRR_bsbs': CSRR_bs,'CSLR_bsbs': CSLR_bs,'CVLR_bsbs': CVLR_bs, # DeltaM_s
+            'CVLL_bdbd': CVLL_bd,'CVRR_bdbd': CVRR_bd,'CSLL_bdbd': CSLL_bd,'CSRR_bdbd': CSRR_bd,'CSLR_bdbd': CSLR_bd,'CVLR_bdbd': CVLR_bd, # DeltaM_d
+        }, scale=4.2, eft='WET', basis='flavio')
+    chisq = 0
+    for i in obs:
+        if type(i) == str:
+            npp = flavio.np_prediction(i,wc_obj=wc) 
+            npe = flavio.np_uncertainty(i,wc_obj=wc) 
+        elif type(i) == tuple:
+            ob, q1, q2 = i
+            npp = flavio.np_prediction(ob,wc_obj=wc,q2min=q1,q2max=q2)
+            npe = flavio.np_uncertainty(ob,wc_obj=wc,q2min=q1,q2max=q2)
+        exp = flavio.combine_measurements(i,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios'])
+        expc = exp.central_value
+        expr = exp.error_right
+        expl = exp.error_left
+        expp = ((expc+expr)+(expc-expl))/2
+        expe = (expc+expr)-expp
+        sig = np.sqrt(npe**2 + expe**2)
+        chisq += ((npp-expp)/sig)**2
+
+    return chisq
+
+def a_mu(par,ml,tanb,mH0,mA0,mH):
+    '''
+        Anomalous magnetic moment of the muon
+    '''
+    emu = -tanb*par[ml]/par['vev']
+    e = np.sqrt(4*np.pi*get_alpha_e(par,1.0))
+    b = np.arctan(tanb)
+    a = b - np.pi/2
+    cba, sba = np.cos(b-a),np.sin(b-a)
+    
+    def cr_1():
+        cr = e*(par[ml]**3)*(tanb**2)/(192*(np.pi*par['vev']*mH)**2)
+        return cr
+
+    def cr_2():
+        def gamHh():
+            gam = cba*par[ml]/par['vev'] - sba*emu
+            return gam
+        def gamh0():
+            gam = sba*par[ml]/par['vev'] + cba*emu
+            return gam
+        def gamA0():
+            gam = 1j*emu
+            return gam
+        def eqn(gam,meh):
+            eq = -2*e*par[ml]*(abs(gam())**2)/(192*(np.pi*meh)**2) 
+            eq += e*par[ml]*(gam()**2)*(3+2*np.log((par[ml]/meh)**2))/(64*(np.pi*meh)**2)
+            return eq
+
+        cr = eqn(gamHh,mH0) + eqn(gamh0,par['m_h']) + eqn(gamA0,mA0)
+
+        return cr
+
+    pref = e*par[ml]*par['GF']/(4*np.sqrt(2)*np.pi**2)
+    csev = (cr_1()+cr_2())/pref
+    return csev
+
+        
+
 

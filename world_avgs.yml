@@ -1,5 +1,10 @@
 # This file has all the world averages for observables
 
+Anomalous Magnetic Moments:
+  experiment: PDG 2020
+  values:
+    a_mu: (11659209.1 ± 5.4 ± 3.3) e-10
+
 Tree Level Leptonics:
   experiment: PDG 2020 
   values:
