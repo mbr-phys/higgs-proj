@@ -604,7 +604,7 @@ def mixing(par,CKM,mds,tanb,mH):
 
     return CVLL, CVRR, CSLL, CSRR, CSLR, CVLR
 
-def rh(mu,md,tanb,mH):
+def rh(mu,md,ml,tanb,mH):
     '''
         Function for M->lnu 2HDM WC contribution, based on rH we used from 0907.5135
 
@@ -612,8 +612,8 @@ def rh(mu,md,tanb,mH):
 
         Used https://github.com/flav-io/flavio/blob/master/flavio/physics/bdecays/blnu.py - line 22 - to figure this out
     '''
-    csr = mu/(mH**2)
-    csl = md*(tanb/mH)**2
+    csr = mu*ml/(mH**2)
+    csl = md*ml*(tanb/mH)**2
     return csr, csl
 
 def chi2_func(tanb, mH, mH0, obs):
