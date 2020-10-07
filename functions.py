@@ -1,6 +1,7 @@
 #!/bin/env python3
 
 import flavio
+from flavio.classes import Parameter
 from flavio.physics.running.running import get_mt, get_alpha_e
 import matplotlib.pyplot as plt
 import numpy as np
@@ -616,7 +617,7 @@ def rh(mu,md,ml,tanb,mH):
     csl = md*ml*(tanb/mH)**2
     return csr, csl
 
-def chi2_func(tanb, mH, mH0, obs):
+def chi2_func(tanb, mH, mH0, mA0, obs):
     '''
         Finding chisq value cause there's some extra factor going on in flavio's
     '''
@@ -624,12 +625,23 @@ def chi2_func(tanb, mH, mH0, obs):
     par = flavio.default_parameters.get_central_all()
     ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
 
-    CSR_b, CSL_b = rh(par['m_u'],par['m_b'],tanb,mH)
-    CSR_d, CSL_d = rh(par['m_c'],par['m_d'],tanb,mH)
-    CSR_ds, CSL_ds = rh(par['m_c'],par['m_s'],tanb,mH)
-    CSR_k, CSL_k = rh(par['m_u'],par['m_s'],tanb,mH)
-    CSR_p, CSL_p = rh(par['m_u'],par['m_d'],tanb,mH)
-    CSL_bc, CSR_bc = rh(par['m_c'],par['m_b'],tanb,mH)
+    csev = a_mu(par,'m_mu',tanb,mH0,mA0,mH)
+    CSR_b_t, CSL_b_t = rh(par['m_u'],par['m_b'],par['m_tau'],tanb,mH)
+    CSR_b_m, CSL_b_m = rh(par['m_u'],par['m_b'],par['m_mu'],tanb,mH)
+    CSR_b_e, CSL_b_e = rh(par['m_u'],par['m_b'],par['m_e'],tanb,mH)
+    CSR_d_m, CSL_d_m = rh(par['m_c'],par['m_d'],par['m_mu'],tanb,mH)
+    CSR_d_e, CSL_d_e = rh(par['m_c'],par['m_d'],par['m_e'],tanb,mH)
+    CSR_ds_t, CSL_ds_t = rh(par['m_c'],par['m_s'],par['m_tau'],tanb,mH)
+    CSR_ds_m, CSL_ds_m = rh(par['m_c'],par['m_s'],par['m_mu'],tanb,mH)
+    CSR_ds_e, CSL_ds_e = rh(par['m_c'],par['m_s'],par['m_e'],tanb,mH)
+    CSR_k_t, CSL_k_t = rh(par['m_u'],par['m_s'],par['m_tau'],tanb,mH)
+    CSR_k_m, CSL_k_m = rh(par['m_u'],par['m_s'],par['m_mu'],tanb,mH)
+    CSR_k_e, CSL_k_e = rh(par['m_u'],par['m_s'],par['m_e'],tanb,mH)
+    CSR_p_t, CSL_p_t = rh(par['m_u'],par['m_d'],par['m_tau'],tanb,mH)
+    CSR_p_m, CSL_p_m = rh(par['m_u'],par['m_d'],par['m_mu'],tanb,mH)
+    CSR_bc_t, CSL_bc_t = rh(par['m_c'],par['m_b'],par['m_tau'],tanb,mH)
+    CSR_bc_m, CSL_bc_m = rh(par['m_c'],par['m_b'],par['m_mu'],tanb,mH)
+    CSR_bc_e, CSL_bc_e = rh(par['m_c'],par['m_b'],par['m_e'],tanb,mH)
     C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],tanb,mH)
     C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',1],mH0,tanb,mH)
     C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],mH0,tanb,mH)
@@ -639,22 +651,23 @@ def chi2_func(tanb, mH, mH0, obs):
 
     wc = flavio.WilsonCoefficients()
     wc.set_initial({ # tell flavio what WCs you're referring to with your variables
-            'CSR_bctaunutau': CSR_bc, 'CSL_bctaunutau': CSL_bc,
-            'CSR_bcmunumu': CSR_bc, 'CSL_bcmunumu': CSL_bc,
-            'CSR_bcenue': CSR_bc, 'CSL_bcenue': CSL_bc, 
-            'CSR_butaunutau': CSR_b, 'CSL_butaunutau': CSL_b,
-            'CSR_bumunumu': CSR_b, 'CSL_bumunumu': CSL_b,
-            'CSR_buenue': CSR_b, 'CSL_buenue': CSL_b, 
-            'CSR_dcmunumu': CSR_d, 'CSL_dcmunumu': CSL_d,
-            'CSR_dcenue': CSR_d, 'CSL_dcenue': CSL_d, 
-            'CSR_sctaunutau': CSR_ds, 'CSL_sctaunutau': CSL_ds,
-            'CSR_scmunumu': CSR_ds, 'CSL_scmunumu': CSL_ds,
-            'CSR_scenue': CSR_ds, 'CSL_scenue': CSL_ds, 
-            'CSR_sutaunutau': CSR_k, 'CSL_sutaunutau': CSL_k, 
-            'CSR_sumunumu': CSR_k, 'CSL_sumunumu': CSL_k, 
-            'CSR_suenue': CSR_k, 'CSL_suenue': CSL_k, 
-            'CSR_dutaunutau': CSR_p, 'CSL_dutaunutau': CSL_p, 
-            'CSR_dumunumu': CSR_p, 'CSL_dumunumu': CSL_p, 
+            'C7_mumu': csev,
+            'CSR_bctaunutau': CSR_bc_t, 'CSL_bctaunutau': CSL_bc_t,
+            'CSR_bcmunumu': CSR_bc_m, 'CSL_bcmunumu': CSL_bc_m,
+            'CSR_bcenue': CSR_bc_e, 'CSL_bcenue': CSL_bc_e,
+            'CSR_butaunutau': CSR_b_t, 'CSL_butaunutau': CSL_b_t,
+            'CSR_bumunumu': CSR_b_m, 'CSL_bumunumu': CSL_b_m,
+            'CSR_buenue': CSR_b_e, 'CSL_buenue': CSL_b_e,
+            'CSR_dcmunumu': CSR_d_m, 'CSL_dcmunumu': CSL_d_m,
+            'CSR_dcenue': CSR_d_e, 'CSL_dcenue': CSL_d_e,
+            'CSR_sctaunutau': CSR_ds_t, 'CSL_sctaunutau': CSL_ds_t,
+            'CSR_scmunumu': CSR_ds_m, 'CSL_scmunumu': CSL_ds_m,
+            'CSR_scenue': CSR_ds_e, 'CSL_scenue': CSL_ds_e,
+            'CSR_sutaunutau': CSR_k_t, 'CSL_sutaunutau': CSL_k_t,
+            'CSR_sumunumu': CSR_k_m, 'CSL_sumunumu': CSL_k_m,
+            'CSR_suenue': CSR_k_e, 'CSL_suenue': CSL_k_e,
+            'CSR_dutaunutau': CSR_p_t, 'CSL_dutaunutau': CSL_p_t,
+            'CSR_dumunumu': CSR_p_m, 'CSL_dumunumu': CSL_p_m,
             'C7_bs': C7,'C7p_bs': C7p, 
             'C8_bs': C8,'C8p_bs': C8p, 
             'C9_bsee': C9_se,'C9p_bsee': C9p_se,
@@ -674,7 +687,7 @@ def chi2_func(tanb, mH, mH0, obs):
             ob, q1, q2 = i
             npp = flavio.np_prediction(ob,wc_obj=wc,q2min=q1,q2max=q2)
             npe = flavio.np_uncertainty(ob,wc_obj=wc,q2min=q1,q2max=q2)
-        exp = flavio.combine_measurements(i,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios'])
+        exp = flavio.combine_measurements(i,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios','Anomalous Magnetic Moments',])
         expc = exp.central_value
         expr = exp.error_right
         expl = exp.error_left
@@ -691,8 +704,10 @@ def a_mu(par,ml,tanb,mH0,mA0,mH):
     '''
     emu = -tanb*par[ml]/par['vev']
     e = np.sqrt(4*np.pi*get_alpha_e(par,1.0))
+#    e = np.sqrt(4*np.pi*get_alpha_e(par,4.2))
     b = np.arctan(tanb)
-    a = b - np.pi/2
+#    a = b - np.pi/2
+    a = b - np.arccos(0.05)
     cba, sba = np.cos(b-a),np.sin(b-a)
     
     def cr_1():
@@ -722,6 +737,32 @@ def a_mu(par,ml,tanb,mH0,mA0,mH):
     csev = (cr_1()+cr_2())/pref
     return csev
 
-        
-
-
+#if __name__ == "__main__":
+#    pars = flavio.default_parameters
+#    vev = Parameter('vev')
+#    vev.tex = r"$v$" 
+#    vev.description = "Vacuum Expectation Value of the SM Higgs"
+#    pars.set_constraint('vev','246') 
+#    par = flavio.default_parameters.get_central_all()
+#
+#    csev = a_mu(par,'m_mu',1,10000,10000,10000,1.0)
+#    wc = flavio.WilsonCoefficients()
+#    wc.set_initial({'C7_mumu': csev,}, scale=1.0, eft='WET-3', basis='flavio')
+#    print(flavio.np_prediction('a_mu',wc_obj=wc)*1e10)
+#
+#    csev1 = a_mu(par,'m_mu',1,10000,10000,10000,4.2)
+#    wc = flavio.WilsonCoefficients()
+#    wc.set_initial({'C7_mumu': csev1,}, scale=4.2, eft='WET', basis='flavio')
+#    print(flavio.np_prediction('a_mu',wc_obj=wc)*1e10)
+#
+#    csev2 = a_mu(par,'m_mu',1,10000,10000,10000,4.2)
+#    wc = flavio.WilsonCoefficients()
+#    wc.set_initial({'C7_mumu': csev1,}, scale=1.0, eft='WET-3', basis='flavio')
+#    print(flavio.np_prediction('a_mu',wc_obj=wc)*1e10)
+#
+#    csev3 = a_mu(par,'m_mu',1,10000,10000,10000,1.0)
+#    wc = flavio.WilsonCoefficients()
+#    wc.set_initial({'C7_mumu': csev1,}, scale=4.2, eft='WET', basis='flavio')
+#    print(flavio.np_prediction('a_mu',wc_obj=wc)*1e10)
+#
+#

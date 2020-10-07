@@ -84,7 +84,7 @@ obs2 = ['BR(Bs->Dsmunu)','BR(Bs->Ds*munu)',]
 
 #Fleps = FastLikelihood(name="trees",observables=my_obs[:9]+my_obs[14:38]+obs2,include_measurements=['Tree Level Leptonics','LFU D Ratios','Tree Level Semileptonics']) 
 #Fleps = FastLikelihood(name="trees",observables=my_obs[14:38]+obs2,include_measurements=['LFU D Ratios','Tree Level Semileptonics']) 
-Fleps = FastLikelihood(name="trees",observables=my_obs[14:16],include_measurements=['LFU D Ratios',]) 
+#Fleps = FastLikelihood(name="trees",observables=my_obs[14:16],include_measurements=['LFU D Ratios',]) 
 #Fleps = FastLikelihood(name="trees",observables=[my_obs[14]],include_measurements=['LFU D Ratios',]) 
 #Fleps = FastLikelihood(name="trees",observables=[my_obs[15]],include_measurements=['LFU D Ratios',]) 
 #Fmix = FastLikelihood(name="mix",observables=my_obs[10:12],include_measurements=['B Mixing',]) 
@@ -93,18 +93,18 @@ Fleps = FastLikelihood(name="trees",observables=my_obs[14:16],include_measuremen
 #Fmu = FastLikelihood(name="mu",observables=my_obs[-3:],include_measurements=['LFU K Ratios']) 
 #Fmu = FastLikelihood(name="mu",observables=my_obs[12:14],include_measurements=['FCNC Leptonic Decays',]) 
 #------------------------------
-#obs_list = my_obs+obs2
-#FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios',])
-#FL2 = FastLikelihood(name="glob",observables=my_obs[:-3]+obs2,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics',])
+obs_list = my_obs+obs2+['a_mu']
+FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios','Anomalous Magnetic Moments',])
+#FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','Anomalous Magnetic Moments',])
 #------------------------------
 #Fmuon = FastLikelihood(name="muons",observables=['a_mu'],include_measurements=['Anomalous Magnetic Moments'])
 #Fmuon.make_measurement(N=500,threads=4)
 
-Fleps.make_measurement(N=500,threads=4)
+#Fleps.make_measurement(N=500,threads=4)
 #Fmix.make_measurement(N=500,threads=4)
 #Frad.make_measurement(N=500,threads=4)
 #Fmu.make_measurement(N=500,threads=4)
-#FL2.make_measurement(N=500,threads=4)
+FL2.make_measurement(N=500,threads=4)
 
 #------------------------------
 #   Leptonic and Semileptonic Tree Levels
@@ -116,19 +116,19 @@ def leps(wcs):
     par = flavio.default_parameters.get_central_all()
     ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
 
-#    CSR_b_t, CSL_b_t = rh(par['m_u'],par['m_b'],par['m_tau'],10**tanb,10**mH)
-#    CSR_b_m, CSL_b_m = rh(par['m_u'],par['m_b'],par['m_mu'],10**tanb,10**mH)
-#    CSR_b_e, CSL_b_e = rh(par['m_u'],par['m_b'],par['m_e'],10**tanb,10**mH)
-#    CSR_d_m, CSL_d_m = rh(par['m_c'],par['m_d'],par['m_mu'],10**tanb,10**mH)
-#    CSR_d_e, CSL_d_e = rh(par['m_c'],par['m_d'],par['m_e'],10**tanb,10**mH)
-#    CSR_ds_t, CSL_ds_t = rh(par['m_c'],par['m_s'],par['m_tau'],10**tanb,10**mH)
-#    CSR_ds_m, CSL_ds_m = rh(par['m_c'],par['m_s'],par['m_mu'],10**tanb,10**mH)
-#    CSR_ds_e, CSL_ds_e = rh(par['m_c'],par['m_s'],par['m_e'],10**tanb,10**mH)
-#    CSR_k_t, CSL_k_t = rh(par['m_u'],par['m_s'],par['m_tau'],10**tanb,10**mH)
-#    CSR_k_m, CSL_k_m = rh(par['m_u'],par['m_s'],par['m_mu'],10**tanb,10**mH)
-#    CSR_k_e, CSL_k_e = rh(par['m_u'],par['m_s'],par['m_e'],10**tanb,10**mH)
-#    CSR_p_t, CSL_p_t = rh(par['m_u'],par['m_d'],par['m_tau'],10**tanb,10**mH)
-#    CSR_p_m, CSL_p_m = rh(par['m_u'],par['m_d'],par['m_mu'],10**tanb,10**mH)
+    CSR_b_t, CSL_b_t = rh(par['m_u'],par['m_b'],par['m_tau'],10**tanb,10**mH)
+    CSR_b_m, CSL_b_m = rh(par['m_u'],par['m_b'],par['m_mu'],10**tanb,10**mH)
+    CSR_b_e, CSL_b_e = rh(par['m_u'],par['m_b'],par['m_e'],10**tanb,10**mH)
+    CSR_d_m, CSL_d_m = rh(par['m_c'],par['m_d'],par['m_mu'],10**tanb,10**mH)
+    CSR_d_e, CSL_d_e = rh(par['m_c'],par['m_d'],par['m_e'],10**tanb,10**mH)
+    CSR_ds_t, CSL_ds_t = rh(par['m_c'],par['m_s'],par['m_tau'],10**tanb,10**mH)
+    CSR_ds_m, CSL_ds_m = rh(par['m_c'],par['m_s'],par['m_mu'],10**tanb,10**mH)
+    CSR_ds_e, CSL_ds_e = rh(par['m_c'],par['m_s'],par['m_e'],10**tanb,10**mH)
+    CSR_k_t, CSL_k_t = rh(par['m_u'],par['m_s'],par['m_tau'],10**tanb,10**mH)
+    CSR_k_m, CSL_k_m = rh(par['m_u'],par['m_s'],par['m_mu'],10**tanb,10**mH)
+    CSR_k_e, CSL_k_e = rh(par['m_u'],par['m_s'],par['m_e'],10**tanb,10**mH)
+    CSR_p_t, CSL_p_t = rh(par['m_u'],par['m_d'],par['m_tau'],10**tanb,10**mH)
+    CSR_p_m, CSL_p_m = rh(par['m_u'],par['m_d'],par['m_mu'],10**tanb,10**mH)
     CSR_bc_t, CSL_bc_t = rh(par['m_c'],par['m_b'],par['m_tau'],10**tanb,10**mH)
     CSR_bc_m, CSL_bc_m = rh(par['m_c'],par['m_b'],par['m_mu'],10**tanb,10**mH)
     CSR_bc_e, CSL_bc_e = rh(par['m_c'],par['m_b'],par['m_e'],10**tanb,10**mH)
@@ -138,19 +138,19 @@ def leps(wcs):
             'CSR_bctaunutau': CSR_bc_t, 'CSL_bctaunutau': CSL_bc_t,
             'CSR_bcmunumu': CSR_bc_m, 'CSL_bcmunumu': CSL_bc_m,
             'CSR_bcenue': CSR_bc_e, 'CSL_bcenue': CSL_bc_e, 
-#            'CSR_butaunutau': CSR_b_t, 'CSL_butaunutau': CSL_b_t,
-#            'CSR_bumunumu': CSR_b_m, 'CSL_bumunumu': CSL_b_m,
-#            'CSR_buenue': CSR_b_e, 'CSL_buenue': CSL_b_e, 
-#            'CSR_dcmunumu': CSR_d_m, 'CSL_dcmunumu': CSL_d_m,
-#            'CSR_dcenue': CSR_d_e, 'CSL_dcenue': CSL_d_e, 
-#            'CSR_sctaunutau': CSR_ds_t, 'CSL_sctaunutau': CSL_ds_t,
-#            'CSR_scmunumu': CSR_ds_m, 'CSL_scmunumu': CSL_ds_m,
-#            'CSR_scenue': CSR_ds_e, 'CSL_scenue': CSL_ds_e, 
-#            'CSR_sutaunutau': CSR_k_t, 'CSL_sutaunutau': CSL_k_t, 
-#            'CSR_sumunumu': CSR_k_m, 'CSL_sumunumu': CSL_k_m, 
-#            'CSR_suenue': CSR_k_e, 'CSL_suenue': CSL_k_e, 
-#            'CSR_dutaunutau': CSR_p_t, 'CSL_dutaunutau': CSL_p_t, 
-#            'CSR_dumunumu': CSR_p_m, 'CSL_dumunumu': CSL_p_m, 
+            'CSR_butaunutau': CSR_b_t, 'CSL_butaunutau': CSL_b_t,
+            'CSR_bumunumu': CSR_b_m, 'CSL_bumunumu': CSL_b_m,
+            'CSR_buenue': CSR_b_e, 'CSL_buenue': CSL_b_e, 
+            'CSR_dcmunumu': CSR_d_m, 'CSL_dcmunumu': CSL_d_m,
+            'CSR_dcenue': CSR_d_e, 'CSL_dcenue': CSL_d_e, 
+            'CSR_sctaunutau': CSR_ds_t, 'CSL_sctaunutau': CSL_ds_t,
+            'CSR_scmunumu': CSR_ds_m, 'CSL_scmunumu': CSL_ds_m,
+            'CSR_scenue': CSR_ds_e, 'CSL_scenue': CSL_ds_e, 
+            'CSR_sutaunutau': CSR_k_t, 'CSL_sutaunutau': CSL_k_t, 
+            'CSR_sumunumu': CSR_k_m, 'CSL_sumunumu': CSL_k_m, 
+            'CSR_suenue': CSR_k_e, 'CSL_suenue': CSL_k_e, 
+            'CSR_dutaunutau': CSR_p_t, 'CSL_dutaunutau': CSL_p_t, 
+            'CSR_dumunumu': CSR_p_m, 'CSL_dumunumu': CSL_p_m, 
         }, scale=4.2, eft='WET', basis='flavio')
     return Fleps.log_likelihood(par,wc)
 
@@ -229,9 +229,9 @@ def mu(wcs):
 def muon(wcs):
     tanb,mH = wcs
     
-#    mH0,mA0 = mH, mH
+    mH0,mA0 = mH, mH
 #    mH0,mA0 = np.log10(1500), mH
-    mH0,mA0 = mH, np.log10(1500)
+#    mH0,mA0 = mH, np.log10(1500)
 
     par = flavio.default_parameters.get_central_all()
 
@@ -247,12 +247,15 @@ def muon(wcs):
 
 def func(wcs):
     tanb, mH = wcs # state what the two parameters are going to be on the plot
-#    mH0 = mH
-    mH0 = np.log10(1500)
+
+#    mH0,mA0 = mH, mH
+    mH0,mA0 = mH, np.log10(1500)
+#    mH0,mA0 = np.log10(1500), mH
 
     par = flavio.default_parameters.get_central_all()
     ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
 
+    csev = a_mu(par,'m_mu',10**tanb,10**mH0,10**mA0,10**mH)
     CSR_b_t, CSL_b_t = rh(par['m_u'],par['m_b'],par['m_tau'],10**tanb,10**mH)
     CSR_b_m, CSL_b_m = rh(par['m_u'],par['m_b'],par['m_mu'],10**tanb,10**mH)
     CSR_b_e, CSL_b_e = rh(par['m_u'],par['m_b'],par['m_e'],10**tanb,10**mH)
@@ -278,6 +281,7 @@ def func(wcs):
 
     wc = flavio.WilsonCoefficients()
     wc.set_initial({ # tell flavio what WCs you're referring to with your variables
+            'C7_mumu': csev,
             'CSR_bctaunutau': CSR_bc_t, 'CSL_bctaunutau': CSL_bc_t,
             'CSR_bcmunumu': CSR_bc_m, 'CSL_bcmunumu': CSL_bc_m,
             'CSR_bcenue': CSR_bc_e, 'CSL_bcenue': CSL_bc_e, 
@@ -313,63 +317,64 @@ def func(wcs):
 sigmas = (1,2)
 #sigmas = (3,4)
 
+#cmuon = fpl.likelihood_contour_data(muon,0,3,1,4, n_sigma=sigmas, threads=4, steps=100) 
 #cmuon = fpl.likelihood_contour_data(muon,0,4,-1,4, n_sigma=sigmas, threads=4, steps=100) 
-#cmuon = fpl.likelihood_contour_data(muon,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=100) 
-cleps = fpl.likelihood_contour_data(leps,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
+#cleps = fpl.likelihood_contour_data(leps,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
 #cmix = fpl.likelihood_contour_data(mix,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
 #crad = fpl.likelihood_contour_data(rad,-1,2,2.5,3.5, n_sigma=sigmas, threads=4, steps=60) 
 #cmu = fpl.likelihood_contour_data(mu,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=60) 
-#cdat = fpl.likelihood_contour_data(func,-1,2,1,3.5, n_sigma=sigmas, threads=4, steps=60) 
+cdat = fpl.likelihood_contour_data(func,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=60) 
 
 #------------------------------
 #   Print Out Values
 #------------------------------
 
-#bf,minh,mint,maxt,minz = mHmin(cmu)
-#print("Best fit value is found for (tanb,mH) =", bf)
-#print("Print outs are lists for values at", sigmas, "sigmas")
-#print("Minimum value of mH+ is:", minh)
-#print("Minimum value of tanb is:", mint)
-#print("Maximum value of tanb is:", maxt)
+bf,minh,mint,maxt,minz = mHmin(cdat)
+print("Best fit value is found for (tanb,mH) =", bf)
+print("Print outs are lists for values at", sigmas, "sigmas")
+print("Minimum value of mH+ is:", minh)
+print("Minimum value of tanb is:", mint)
+print("Maximum value of tanb is:", maxt)
 
 #------------------------------
 #   p-values
 #------------------------------
 
-#chi2 = chi2_func(bf[0],bf[1],bf[1],obs_list) # mH0 = mH+
-#chi2 = chi2_func(bf[0],bf[1],1500,obs_list) # mH0 = 1500 GeV
-#degs = len(obs_list)-2
-#pval = pvalue(chi2,degs)
-#print("chi2tilde_min is:",minz)
-#print("chi2_min is:",chi2)
-#print("chi2_nu is:",chi2/degs)
-#print("2log(L(theta)) = ",chi2-minz)
-#print("p-value at chi2_min point with dof =",degs," is",pval*100,"%")
+#chi2 = chi2_func(bf[0],bf[1],bf[1],bf[1],obs_list) # mH0 = mH+ = mA0
+chi2 = chi2_func(bf[0],bf[1],bf[1],1500,obs_list) # mA0 = 1500 GeV, mH0 = mH+
+#chi2 = chi2_func(bf[0],bf[1],1500,bf[1],obs_list) # mH0 = 1500 GeV, mA0 = mH+
+degs = len(obs_list)-2
+pval = pvalue(chi2,degs)
+print("chi2tilde_min is:",minz)
+print("chi2_min is:",chi2)
+print("chi2_nu is:",chi2/degs)
+print("2log(L(theta)) = ",chi2-minz)
+print("p-value at chi2_min point with dof =",degs," is",pval*100,"%")
+quit()
 
 #------------------------------
 #   Plotting
 #------------------------------
 
 #plt.figure(figsize=(6,5))
-#fpl.contour(**cmuon,col=0) 
-##plt.title(r'Anomalous magnetic moment of the muon, $a_\mu$'+'\n'+'for $m_{A^0}\sim m_{H^+}$ and $m_{H^0} = 1500\,$GeV')
-#plt.title(r'Anomalous magnetic moment of the muon, $a_\mu$'+'\n'+'for $m_{H^0}\sim m_{H^+}$ and $m_{A^0} = 1500\,$GeV')
+#fpl.contour(**cmuon,col=6) 
+#plt.title(r'Anomalous magnetic moment of the muon, $a_\mu$'+'\n'+'for $m_{A^0}\sim m_{H^+}$ and $m_{H^0} = 1500\,$GeV')
+##plt.title(r'Anomalous magnetic moment of the muon, $a_\mu$'+'\n'+'for $m_{H^0}\sim m_{H^+}$ and $m_{A^0} = 1500\,$GeV')
 ##plt.title(r'Anomalous magnetic moment of the muon, $a_\mu$'+'\n'+'for $m_{H^0},m_{A^0}\sim m_{H^+}$')
-#plt.axhline(y=np.log10(1220),color='black',linestyle='--')
-#plt.axhline(y=np.log10(1660),color='black',linestyle='--')
+#plt.axhline(y=np.log10(866),color='black',linestyle='--') # Asim = 866, Hsim = 1220
+#plt.axhline(y=np.log10(1660),color='black',linestyle='--') # Asim = 1660, Hsim = 1660
 #plt.xlabel(r'$\log_{10}[\tan\beta]$') 
 #plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') 
-#plt.savefig('muon_plot.png')
+#plt.savefig('muon_Asim.png')
 
-plt.figure(figsize=(6,5))
-fpl.contour(**cleps,col=2) 
-#plt.title('Tree-Level Leptonic and Semileptonic Meson Decays and Hadronic Tau Decays')
-#plt.title('Tree-Level Semileptonic Meson Decays')
-plt.title(r'$\mathcal{R}(D)$ and $\mathcal{R}(D^*)$')
-plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') 
-plt.savefig('rd_both.png')
-quit()
+#plt.figure(figsize=(6,5))
+#fpl.contour(**cleps,col=2) 
+##plt.title('Tree-Level Leptonic and Semileptonic Meson Decays and Hadronic Tau Decays')
+##plt.title('Tree-Level Semileptonic Meson Decays')
+#plt.title(r'$\mathcal{R}(D)$ and $\mathcal{R}(D^*)$')
+#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
+#plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') 
+#plt.savefig('rd_both.png')
 
 #plt.figure(figsize=(6,5))
 #fpl.contour(**cmix,col=0,interpolation_factor=1.1,interpolation_order=1) 
@@ -395,38 +400,38 @@ z_min3 = 1.6111964187252177
 # (-1,2,0,3.5)
 z_min4 = 3.5229317450326256
 
-plt.figure(figsize=(6,5))
-fpl.contour(**cmu,col=9)#,z_min=z_min1) 
-#plt.title(r'FCNC Leptonic B Decays ($B_{s,d}\to\mu^+\mu^-$), $m_{H^0}\sim m_{H^+}$'+'\n'+r'$\cos(\beta-\alpha)=0.05$')
-plt.title(r'FCNC Leptonic B Decays ($B_{s,d}\to\mu^+\mu^-$), $m_{H^0}=1500\,$GeV'+'\n'+r'$\cos(\beta-\alpha)=0$')
-#plt.title(r'$R_K$ for $q^2\in[1,6]$ \& $R_{K^{*0}}$ for $q^2\in[0.045,6]$')
-#plt.title(r'$R_K$ for $q^2\in[1,6]$')
-#plt.title(r'$R_{K^{*0}}$ for $q^2\in[0.045,6]$')
-#plt.title(r'$b\to sl^+l^-$ transitions ($B_{s,d}\to\mu^+\mu^-$ \& $R_K(q^2\in[1,6]),R_{K^{*0}}(q^2\in[0.045,6])$), $m_{H^0}\sim m_{H^+}$')
-#plt.title(r'$b\to sl^+l^-$ transitions ($B_{s,d}\to\mu^+\mu^-$ \& $R_K(q^2\in[1,6]),R_{K^{*0}}(q^2\in[0.045,6])$), $m_{H^0}=1500\,$GeV')
-plt.axhline(y=np.log10(866),color='black',linestyle='--')
-plt.axhline(y=np.log10(1658),color='black',linestyle='--')
-plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') 
-#plt.savefig('bsll_plot.png')
-plt.savefig('bmumu_fix_cba02.png')
-#plt.savefig('rks_plot.png')
-quit()
+#plt.figure(figsize=(6,5))
+#fpl.contour(**cmu,col=9)#,z_min=z_min1) 
+##plt.title(r'FCNC Leptonic B Decays ($B_{s,d}\to\mu^+\mu^-$), $m_{H^0}\sim m_{H^+}$'+'\n'+r'$\cos(\beta-\alpha)=0.05$')
+#plt.title(r'FCNC Leptonic B Decays ($B_{s,d}\to\mu^+\mu^-$), $m_{H^0}=1500\,$GeV'+'\n'+r'$\cos(\beta-\alpha)=0$')
+##plt.title(r'$R_K$ for $q^2\in[1,6]$ \& $R_{K^{*0}}$ for $q^2\in[0.045,6]$')
+##plt.title(r'$R_K$ for $q^2\in[1,6]$')
+##plt.title(r'$R_{K^{*0}}$ for $q^2\in[0.045,6]$')
+##plt.title(r'$b\to sl^+l^-$ transitions ($B_{s,d}\to\mu^+\mu^-$ \& $R_K(q^2\in[1,6]),R_{K^{*0}}(q^2\in[0.045,6])$), $m_{H^0}\sim m_{H^+}$')
+##plt.title(r'$b\to sl^+l^-$ transitions ($B_{s,d}\to\mu^+\mu^-$ \& $R_K(q^2\in[1,6]),R_{K^{*0}}(q^2\in[0.045,6])$), $m_{H^0}=1500\,$GeV')
+#plt.axhline(y=np.log10(866),color='black',linestyle='--')
+#plt.axhline(y=np.log10(1658),color='black',linestyle='--')
+#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
+#plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$') 
+##plt.savefig('bsll_plot.png')
+#plt.savefig('bmumu_fix_cba02.png')
+##plt.savefig('rks_plot.png')
+#quit()
 
 plt.figure(figsize=(6,5))
 fpl.contour(**cdat,col=4) 
 #plt.title(r'Combined Tree-Level Leptonics, $\Delta M_{d,s}$, $\bar{B}\to X_s\gamma$')
-#plt.title(r'Combined Fit of All Observables for $m_{H^0}\sim m_{H^+}$')
-#plt.title(r'Combined Fit of All Observables for $m_{H^0}=1500\,$GeV')
-#plt.title(r'Combined Fit of All Observables excl. $R_{K^{(*0)}}$ for $m_{H^0}\sim m_{H^+}$')
-plt.title(r'Combined Fit of All Observables excl. $R_{K^{(*0)}}$ for $m_{H^0}=1500\,$GeV')
+plt.title(r'Combined Fit of All Observables for $m_{H^0},m_{A^0}\sim m_{H^+}$')
+#plt.title(r'Combined Fit of All Observables for '+'\n'+r'$m_{H^0}\sim m_{H^+},\; m_{A^0}=1500\,$GeV')
+#plt.title(r'Combined Fit of All Observables for '+'\n'+r'$m_{A^0}\sim m_{H^+},\; m_{H^0}=1500\,$GeV')
 plt.xlabel(r'$\log_{10}[\tan\beta]$') 
 plt.ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$')
+#plt.axhline(y=np.log10(866),color='black',linestyle='--') # Asim = 866, Hsim = 1220
+#plt.axhline(y=np.log10(1660),color='black',linestyle='--') # Asim = 1660, Hsim = 1660
 #plt.savefig('comb1_plot.png')
-#plt.savefig('comb2_apx_rk.png')
-#plt.savefig('comb2_fix_rk.png')
-#plt.savefig('comb2_apx.png')
-plt.savefig('comb2_fix.png')
+plt.savefig('comb2_allsim.png')
+#plt.savefig('comb2_Hsim.png')
+#plt.savefig('comb2_Asim.png')
 
 #plt.show()
 # colours : 0 - blue, 1 - orange, 2 - green, 3 - pink, 4 - purple, 5 - brown, 6 - bright pink, 7 - grey, 8 - yellow, 9 - cyan
