@@ -52,9 +52,9 @@ def ckm_err(t_ckm,par,err):
 
     return abs(centrals), np.sqrt(a1 + a2 + a3 + a4)
 
-def vcb(mu,md,tanb,mH):
-    csr = mu/(mH**2)
-    csl = md*(tanb/mH)**2
+def vcb(mu,md,ml,tanb,mH):
+    csr = mu*ml/(mH**2)
+    csl = md*ml*(tanb/mH)**2
     return csr, csl
 
 def rh(args,th):
@@ -161,6 +161,12 @@ def errors2(ckm_els,ckm_errs,par,err,heatmap,errmap,i,j):
 def testing(args,ijs):
     ckm_els,ckm_errs,par,err,heatmap,errmap,r1_lim,r2_lim,r3_lim = args
     j,i = ijs
+#    heatmap['Vub'] = 10**heatmap['Vub']
+#    heatmap['Vus'] = 10**heatmap['Vus']
+#    heatmap['Vcb'] = 10**heatmap['Vcb']
+#    errmap['Vub'] = 10**errmap['Vub']
+#    errmap['Vus'] = 10**errmap['Vus']
+#    errmap['Vcb'] = 10**errmap['Vcb']
 #    r1 = vp(ckm_els,par,heatmap,i,j)
 #    re1 = errors2(ckm_els,ckm_errs,par,err,heatmap,errmap,i,j)
 #    if r1 < 1 or (r1-re1) < 1 or (r1+re1) < 1:
@@ -170,7 +176,10 @@ def testing(args,ijs):
     r1, r2, r3, ckms = vp(ckm_els,par,heatmap,i,j)
     re1, re2, re3, c_err = errors2(ckm_els,ckm_errs,par,err,heatmap,errmap,i,j)
     ckms = abs(ckms)
-    fac = np.average([ckms[0,2]/ckm_els[0,2],ckms[1,2]/ckm_els[1,2],ckms[0,1]/ckm_els[0,1]])
+    fac = np.min([ckms[0,2]/ckm_els[0,2],ckms[1,2]/ckm_els[1,2],ckms[0,1]/ckm_els[0,1]])
+    fac2 = np.max([ckms[0,2]/ckm_els[0,2],ckms[1,2]/ckm_els[1,2],ckms[0,1]/ckm_els[0,1]])
+    if fac2 > 1.0:
+        fac = np.min([fac,2-fac2])
     rs1 = [r1,r1+re1,r1-re1]
     rs2 = [r2,r2+re2,r2-re2]
     rs3 = [r3,r3+re3,r3-re3]

@@ -57,9 +57,11 @@ def vij_mult(args,ths):
     smp, npp, mod = [],[],[]
     smpe, nppe, mode = [],[],[]
     Vij = abs(par['V'+u+d])**2
-    CSL_ij, CSR_ij = vcb(par['m_'+u],par['m_'+d],10**tanb,10**mH)
+    CSR_ijt, CSL_ijt = vcb(par['m_'+u],par['m_'+d],par['m_tau'],10**tanb,10**mH)
+    CSR_ijm, CSL_ijm = vcb(par['m_'+u],par['m_'+d],par['m_mu'],10**tanb,10**mH)
+    CSR_ije, CSL_ije = vcb(par['m_'+u],par['m_'+d],par['m_e'],10**tanb,10**mH)
     wc_np = flavio.WilsonCoefficients()
-    wc_np.set_initial({'CSR_'+d+u+'taunutau': CSR_ij, 'CSL_'+d+u+'taunutau': CSL_ij,'CSR_'+d+u+'munumu': CSR_ij,'CSL_'+d+u+'munumu': CSL_ij,'CSR_'+d+u+'enue': CSR_ij,'CSL_'+d+u+'enue': CSL_ij,},scale=4.2,eft='WET',basis='flavio')
+    wc_np.set_initial({'CSR_'+d+u+'taunutau': CSR_ijt, 'CSL_'+d+u+'taunutau': CSL_ijt,'CSR_'+d+u+'munumu': CSR_ijm,'CSL_'+d+u+'munumu': CSL_ijm,'CSR_'+d+u+'enue': CSR_ije,'CSL_'+d+u+'enue': CSL_ije,},scale=4.2,eft='WET',basis='flavio')
     for k in range(len(my_obs)):
         sm_pred = flavio.sm_prediction(my_obs[k])
         np_pred = flavio.np_prediction(my_obs[k],wc_obj=wc_np)
@@ -79,7 +81,7 @@ def vij_mult(args,ths):
     #array_vs[j,i] = np.average(mod)
     #array_es[j,i] = np.average(mode)
 
-steps = 60
+steps = 120
 
 tanb,mH = np.linspace(-1,2,steps), np.linspace(1,3.5,steps)
 t, h = np.meshgrid(tanb,mH)
@@ -136,34 +138,43 @@ for i in range(len(us)):
 
     pool2 = Pool(processes=4)
     heatmap_v = np.array(pool2.map(multy_vs,th)).reshape((steps,steps))
-    heatmap_e = np.array(pool2.map(multy_es,th)).reshape((steps,steps))
     pool2.close()
     pool2.join()
+
+    pool3 = Pool(processes=4)
+    heatmap_e = np.array(pool3.map(multy_es,th)).reshape((steps,steps))
+    pool3.close()
+    pool3.join()
 
     heatmap['V'+us[i]+ds[i]] = heatmap_v
     errmap['V'+us[i]+ds[i]] = heatmap_e
     
+#    vm = 0
+#    if np.min(np.log10(heatmap_v)) < 0:
+#        vm = np.min(np.log10(heatmap_v))
+#
 #    fig = plt.figure()
 #    s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+} (\text{GeV})]$")
-#    im = s.imshow(heatmap_v,extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower',vmin=0,vmax=1)
+#    im = s.imshow(np.log10(heatmap_v),extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower',vmin=vm)#,vmax=1)
 #    fig.colorbar(im)
 #    plt.title("Heatmap of Modification Factor for V"+us[i]+ds[i])
-#    plt.savefig("v"+us[i]+ds[i]+"_heatmap2.png")
+#    plt.savefig("v"+us[i]+ds[i]+"_heatmap3.png")
 
-#print(datetime.datetime.now())
+    print("V"+us[i]+ds[i]+" done")
+    print(datetime.datetime.now())
 
-pool3 = Pool()
 argus = [ckm_els,ckm_errs,par,err,heatmap,errmap,r1_lim,r2_lim,r3_lim]
 testy = partial(testing,argus)
-units = np.array(pool3.map(testy,ej)).reshape((steps,steps))
-pool3.close()
-pool3.join()
+pool4 = Pool()
+units = np.array(pool4.map(testy,ej)).reshape((steps,steps))
+pool4.close()
+pool4.join()
 
 fig = plt.figure()
 s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+} (\text{GeV})]$")
 im = s.imshow(units,extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower',cmap='gray')
 plt.title("Modification Regions Allowed By Unitarity \n of full CKM Matrix")
-plt.savefig("ckm_full_mat.png")
+plt.savefig("ckm_full_mat4.png")
 #plt.show()
 
 print("--- %s seconds ---" % (time.time() - start_time))
