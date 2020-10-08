@@ -50,36 +50,25 @@ def leps(wcs):
             'CSR_bctaunutau': CSR_bc, 'CSL_bctaunutau': CSL_bc,
         }, scale=4.2, eft='WET', basis='flavio')
     pred = flavio.np_prediction('BR(Bc->taunu)',wc_obj=wc)
-#    err = flavio.np_uncertainty('BR(Bc->taunu)',wc_obj=wc)
-#    pred += err
-    sm = flavio.sm_prediction('BR(Bc->taunu)')
-    return pred/sm #*100 #,err*100
+    err = flavio.np_uncertainty('BR(Bc->taunu)',wc_obj=wc)
+#    pred -= err
+#    sm = flavio.sm_prediction('BR(Bc->taunu)')
+    return pred*100,err*100
 
-#par = flavio.default_parameters.get_central_all()
-#err = flavio.default_parameters.get_1d_errors_random()
-#print("f_Bc:",par['f_Bc'],"+/-",err['f_Bc'])
-#print("tau_Bc:",par['tau_Bc']/1.519e12,"+/-",err['tau_Bc']/1.519e12)
-#print("SM prediction is:",flavio.sm_prediction('BR(Bc->taunu)')*100,"+/-",flavio.sm_uncertainty('BR(Bc->taunu)')*100)
-#one = leps((np.log10(2),np.log10(980)))
-#print("For tanb = 2 and mH+ = 980:",one[0],"+/-",one[1])
-#two = leps((np.log10(8),np.log10(1500)))
-#print("For tanb = 8 and mH+ = 1500:",two[0],"+/-",two[1])
-#three = leps((np.log10(2),np.log10(3200)))
-#print("For tanb = 2 and mH+ = 3200:",three[0],"+/-",three[1])
-#four = leps((np.log10(0.5),np.log10(3200)))
-#print("For tanb = 0.5 and mH+ = 3200:",four[0],"+/-",four[1])
-#quit()
-
-def test(wcs):
-    t, m = wcs
-    tanb = 10**t
-    mH = 10**m
-
-    par = flavio.default_parameters.get_central_all()
-
-    rh = ((par['m_c']-par['m_b']*tanb**2)/(par['m_c']+par['m_b']))*(par['m_Bc']/mH)**2
-
-    return (1+rh)**2
+par = flavio.default_parameters.get_central_all()
+err = flavio.default_parameters.get_1d_errors_random()
+print("f_Bc:",par['f_Bc'],"+/-",err['f_Bc'])
+print("tau_Bc:",par['tau_Bc']/1.519e12,"+/-",err['tau_Bc']/1.519e12)
+print("SM prediction is:",flavio.sm_prediction('BR(Bc->taunu)')*100,"+/-",flavio.sm_uncertainty('BR(Bc->taunu)')*100)
+one = leps((np.log10(2),np.log10(980)))
+print("For tanb = 2 and mH+ = 980:",one[0],"+/-",one[1])
+two = leps((np.log10(8),np.log10(1500)))
+print("For tanb = 8 and mH+ = 1500:",two[0],"+/-",two[1])
+three = leps((np.log10(2),np.log10(3200)))
+print("For tanb = 2 and mH+ = 3200:",three[0],"+/-",three[1])
+four = leps((np.log10(0.5),np.log10(3200)))
+print("For tanb = 0.5 and mH+ = 3200:",four[0],"+/-",four[1])
+quit()
 
 steps = 60
 tanb, mH = np.linspace(-1,1,steps),np.linspace(2.5,3.5,steps)
@@ -95,18 +84,29 @@ pool.join()
 #   Plotting
 #------------------------------
 
-#fig = plt.figure()
-#s = fig.add_subplot(1,1,1,xlabel=r'$\log_{10}[\tan\beta]$',ylabel=r'$\log_{10}[m_{H^+} (\text{GeV})]$')
-#im = s.imshow(pred,extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower')
-#fig.colorbar(im)
-#plt.title(r'$\mathcal{B}r[B_c\to\tau\nu_\tau]\times10^{-2}$ Upper Bound')# \frac{\text{2HDM}}{\text{SM}}$')#, for $f_{B_c} = 434\pm15\,$MeV')
-#plt.savefig('bctaunu_up.png')
+fig = plt.figure()
+s = fig.add_subplot(1,1,1,xlabel=r'$\log_{10}[\tan\beta]$',ylabel=r'$\log_{10}[m_{H^+} (\text{GeV})]$')
+im = s.imshow(pred,extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower')
+fig.colorbar(im)
+plt.title(r'$\mathcal{B}r[B_c\to\tau\nu_\tau]\times10^{-2}$ Central Value')# \frac{\text{2HDM}}{\text{SM}}$')#, for $f_{B_c} = 434\pm15\,$MeV')
+plt.savefig('bctaunu.png')
 #plt.show()
 
-fig = plt.figure()
-ax = plt.axes(projection='3d')
-ax.plot_surface(t,h,pred)
-ax.set_xlabel(r'$\log_{10}[\tan\beta]$')
-ax.set_ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$')
-ax.set_zlabel(r'$\mathcal{B}r[B_c\to\tau\nu_\tau]$ 2HDM/SM')
-plt.show()
+#fig = plt.figure()
+#ax = plt.axes(projection='3d')
+#ax.plot_surface(t,h,pred)
+#ax.set_xlabel(r'$\log_{10}[\tan\beta]$')
+#ax.set_ylabel(r'$\log_{10}[m_{H^+} (\text{GeV})]$')
+#ax.set_zlabel(r'$\mathcal{B}r[B_c\to\tau\nu_\tau]$ 2HDM/SM')
+#plt.show()
+
+#def test(wcs):
+#    t, m = wcs
+#    tanb = 10**t
+#    mH = 10**m
+#
+#    par = flavio.default_parameters.get_central_all()
+#
+#    rh = ((par['m_c']-par['m_b']*tanb**2)/(par['m_c']+par['m_b']))*(par['m_Bc']/mH)**2
+#
+#    return (1+rh)**2
