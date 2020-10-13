@@ -224,7 +224,7 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
     cob = 1/tanb
     b = np.arctan(tanb)
     a = b - np.pi/2 # alignment limit
-#    a = b - np.arccos(0.05) # alignment limit
+#    a = b - np.arccos(0.05) 
     #cba,sba = np.sin(2*b),-np.sin(2*b) # wrong sign limit
     cba,sba = np.cos(b-a),np.sin(b-a) # alignment limit
 
@@ -703,11 +703,11 @@ def a_mu(par,ml,tanb,mH0,mA0,mH):
         Anomalous magnetic moment of the muon
     '''
     emu = -tanb*par[ml]/par['vev']
-    e = np.sqrt(4*np.pi*get_alpha_e(par,1.0))
-#    e = np.sqrt(4*np.pi*get_alpha_e(par,4.2))
+#    e = np.sqrt(4*np.pi*get_alpha_e(par,1.0))
+    e = np.sqrt(4*np.pi*get_alpha_e(par,4.2))
     b = np.arctan(tanb)
-#    a = b - np.pi/2
-    a = b - np.arccos(0.05)
+    a = b - np.pi/2
+#    a = b - np.arccos(0.05)
     cba, sba = np.cos(b-a),np.sin(b-a)
     
     def cr_1():
@@ -729,7 +729,7 @@ def a_mu(par,ml,tanb,mH0,mA0,mH):
             eq += e*par[ml]*(gam()**2)*(3+2*np.log((par[ml]/meh)**2))/(64*(np.pi*meh)**2)
             return eq
 
-        cr = eqn(gamHh,mH0) + eqn(gamh0,par['m_h']) + eqn(gamA0,mA0)
+        cr = eqn(gamHh,mH0) + eqn(gamA0,mA0) #+ eqn(gamh0,par['m_h']) 
 
         return cr
 
