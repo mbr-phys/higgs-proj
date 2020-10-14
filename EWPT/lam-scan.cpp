@@ -30,7 +30,7 @@ int main()
     const string best_fit = "best_fit.dat";
 //    const string out_name = "results.out";
     const double hSM = 125.1;
-    const double vev = 246;
+    const double vev = 246.21965079413735;
 
     //reading from BSMPT example for extra values -- update values to more recent?
     double type,La1,La2,La3,La4,La5,m12sq,tbeta,mH,mhs,mA,mHc,alp,m11sq,m22sq;
@@ -55,10 +55,11 @@ int main()
 //    cout << "Input mH+, mH0, mA0, beta: " << endl;
 //    cin >> mHp >> mH0 >> mA0 >> b;
     const double b = atan(tanb);
-    const double a = b - M_PI/2; //alignment limit
+    const double align = b - M_PI/2; //alignment limit
+    double a,test;
 
-    const int steps = 40; //steps for the lambdas
-    const int steps2 = 1600; //steps for m12
+    const int steps = 10; //steps for the lambdas
+    const int steps2 = 400; //steps for m12
     double l1[steps],l2[steps],l3[steps],l4[steps],l5[steps],m12[steps2];
 
     //initialising each value of the arrays -- there must be a better way to do this?
@@ -87,34 +88,37 @@ int main()
     prefile.open(precise.c_str());//,ios::app);
 
     ofstream bffile;
-    bffile.open(best_fit.c_str());//,ios::app);
+    bffile.open(best_fit.c_str(),ios::app);
 
     //define use angle values
-    double s2ab = pow(sin(a-b),2);
-    double c2ab = pow(cos(a-b),2);
+    double t2a;
+    double s2ab;// = pow(sin(a-b),2);
+    double c2ab;// = pow(cos(a-b),2);
     double sb = sin(b);
     double cb = cos(b);
-    double sa = sin(a);
-    double ca = cos(a);
+    double sa;// = sin(a);
+    double ca;// = cos(a);
     double s2b = sin(2*b);
-    double s2a = sin(2*a);
+    double s2a;// = sin(2*a);
 
     //values to be calculated by lambda basis
     double M2,l345;
     double maH02,mah2,maA2,maHp2;
     double m112,m222;
 
-    //booleans for where each mass calculated is near mass read from file
-    bool ho,hs,ao,hp;
+    //booleans for where each mass calculated is near mass read from file and alpha near align
+    bool ho,hs,ao,hp,ab;
 
+    int counting = 0;               //count overall iterations
     int counter = 0;                //counter of how many successful tests there are
     int lin = 0;                    //register which line of lambdas.dat has best fitting parameters
-    double dho,dhs,dao,dhp,avg;     //difference between calculated and input masses
+    double dho,dhs,dao,dhp,avg,daa;     //difference between calculated and input masses
     double dho2 = 200;              //holds calculated mass values of best fitting point
     double dhs2 = 200;
     double dao2 = 200;
     double dhp2 = 200;
     double avg2 = 200;              //average difference between calc and input masses
+    double daa2 = 200;
 
     double l1b,l2b,l3b,l4b,l5b,m12b;    //best fitting parameter points
     double m112b,m222b;
@@ -131,19 +135,28 @@ int main()
                     {
                         for (int f = 0; f < steps2; f++) //m12
                         {
-                            if (counter == pow(steps,5)*steps2/2.0) {
+                            counting++;
+                            if (counting == pow(steps,5)*steps2/2.0) {
                                 cout << "Don't worry, I'm still working on it. You're halfway through!" << endl;}
 
                             M2 = m12[f]*m12[f]/(sb*cb);
-                            l345 = (l3[c]+l4[d]+l5[e])/2;
+                            l345 = (l3[c]+l4[d]+l5[e])/2.0;
+
+                            t2a = 2.0*(-1*pow(m12[f],2) + 2.0*l345*vev*vev*cb*sb)/(pow(m12[f],2)*(tanb - 1.0/tanb) + l1[i]*pow(vev*cb,2) - l2[j]*pow(vev*sb,2));
+                            a = 0.5*atan(t2a);
+                            s2ab = pow(sin(a-b),2);
+                            c2ab = pow(cos(a-b),2);
+                            sa = sin(a);
+                            ca = cos(a);
+                            s2a = sin(2*a);
 
                             maH02 = M2*s2ab + pow(vev,2)*(l1[i]*pow(ca*cb,2) + l2[j]*pow(sa*sb,2) + l345*s2a*s2b);
                             mah2 = M2*c2ab + pow(vev,2)*(l1[i]*pow(sa*cb,2) + l2[j]*pow(ca*sb,2) - l345*s2a*s2b);
                             maA2 = M2 - l5[e]*pow(vev,2);
-                            maHp2 = M2 - (l4[d]+l5[e])*pow(vev,2)/2;
+                            maHp2 = M2 - (l4[d]+l5[e])*pow(vev,2)/2.0;
 
                             m112 = pow(m12[f],2)*tanb - 0.5*pow(vev*cb*l1[i],2) - l345*pow(vev*sb,2);
-                            m222 = pow(m12[f],2)/tanb - 0.5*pow(vev*sb*l2[j],2) - l345*pow(vev*cb,2);
+                            m222 = pow(m12[f],2)*1.0/tanb - 0.5*pow(vev*sb*l2[j],2) - l345*pow(vev*cb,2);
 
                             //make sure no negative masses
                             if (maH02 < 0) {
@@ -163,10 +176,12 @@ int main()
                             else {
                                 hp = (mHp-100)<sqrt(maHp2) && sqrt(maHp2)<(mHp+100);}
 
+                            test = a/align;
+                            ab = (0.8<test) && (test<1.2);
 
-//                            if (ho || hs || ao || hp) {
-//                                cout << ho << " " << hs << " " << ao << " " << hp << endl;}
-                            if (ho && hs && ao && hp)   //if all masses are close to input ones
+//                            if (ho && hs && ao && hp) {
+//                                cout << ho << " " << hs << " " << ao << " " << hp << " " << a/align << endl;}
+                            if (ho && hs && ao && hp && ab)   //if all masses are close to input ones and alpha in alignment
                             {
                                 //output data to file for reading to BSMPT
                                 lamfile << 2 << " " << l1[i] << " " << l2[j] << " " << l3[c] << " " << l4[d] << " " 
@@ -192,14 +207,16 @@ int main()
                                 dhs = fabs(sqrt(mah2)-hSM);
                                 dao = fabs(sqrt(maA2)-mA0);
                                 dhp = fabs(sqrt(maHp2)-mHp);
+                                daa = fabs(a-align);
 
                                 //output to precision file in case we're interested
                                 prefile << "Line Number: " << counter 
                                         << "; D(mH0): " << dho
                                         << "; D(mh0): " << dhs
                                         << "; D(mA0): " << dao
-                                        << "; D(mH+): " << dhp << endl;
-                                avg = (dho+dhs+dao+dhp)/4.0;    //average best fitting point 
+                                        << "; D(mH+): " << dhp 
+                                        << "; D(alp): " << daa << endl;
+                                avg = (dho+dhs+dao+dhp+daa)/5.0;    //average best fitting point 
 //                                avg = dhs;                      //closest to getting SM Higgs right
 
                                 //set information for best fitting point
@@ -217,6 +234,7 @@ int main()
                                     dhs2 = sqrt(mah2);
                                     dao2 = sqrt(maA2);
                                     dhp2 = sqrt(maHp2);
+                                    daa2 = a;
                                     lin = counter;
                                 }
                             }
@@ -231,8 +249,8 @@ int main()
          << "mH0: " << dho2 << "; mh0: " << dhs2 << "; mA0: " << dao2 << "; mH+:" << dhp2 << endl;
 
     bffile << 2 << " " << l1b << " " << l2b << " " << l3b << " " << l4b << " " << l5b << " " << pow(m12b,2) << " " 
-        << tanb << " " << dho2 << " " << dhs2 << " " << dao2 << " " << dhp2 << " " << a << " " << m112b << " " << m222b  << " "
-        << bs_gamma << " " << maxev << " " << b_h_ss << " " << b_h_cc << " " << b_h_bb << " " << b_h_mumu << " " 
+        << tanb << " " << dho2 << " " << dhs2 << " " << dao2 << " " << dhp2 << " " << daa2 << " " << m112b << " " 
+        << m222b  << " " << bs_gamma << " " << maxev << " " << b_h_ss << " " << b_h_cc << " " << b_h_bb << " " << b_h_mumu << " "
         << b_h_tautau << " " << b_h_WW << " " << b_h_ZZ << " " << b_h_Zga << " " << b_h_gaga << " " << b_h_gg << " " 
         << b_h_AA << " " << w_h << " " << b_A_ss << " " << b_A_cc << " " << b_A_bb << " " << b_A_tt << " " << b_A_mumu << " " 
         << b_A_tautau << " " << b_A_WW << " " << b_A_ZZ << " " << b_A_Zga << " " << b_A_gaga << " " << b_A_gg << " " 
