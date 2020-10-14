@@ -1,3 +1,10 @@
+/*
+ *  Outdated first attempt of getting lambda basis for 2HDM based on
+ *  mass basis parameter points
+ *  Use lam-scan.cpp for more general results
+ *
+ */
+
 #include <fstream>
 #include <iostream>
 #include <iomanip>

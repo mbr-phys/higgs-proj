@@ -55,37 +55,36 @@ int main()
 //    cout << "Input mH+, mH0, mA0, beta: " << endl;
 //    cin >> mHp >> mH0 >> mA0 >> b;
     const double b = atan(tanb);
-    const double align = b - M_PI/2; //alignment limit
+    const double align = b - M_PI/2.0; //alignment limit
     double a,test;
 
-    const int steps = 10; //steps for the lambdas
-    const int steps2 = 400; //steps for m12
+    const int steps = 20; //steps for the lambdas
+    const int steps2 = 800; //steps for m12
     double l1[steps],l2[steps],l3[steps],l4[steps],l5[steps],m12[steps2];
 
     //initialising each value of the arrays -- there must be a better way to do this?
     for (int i = 0; i < steps; i++)     
     {
-        const double st = 8*M_PI/steps;
-        l1[i] = -4*M_PI+st*i;
-        l2[i] = -4*M_PI+st*i;
-        l3[i] = -4*M_PI+st*i;
-        l4[i] = -4*M_PI+st*i;
-        l5[i] = -4*M_PI+st*i;
-
+        const double st = 8.0*M_PI/steps;
+        l1[i] = -4.0*M_PI+st*i;
+        l2[i] = -4.0*M_PI+st*i;
+        l3[i] = -4.0*M_PI+st*i;
+        l4[i] = -4.0*M_PI+st*i;
+        l5[i] = -4.0*M_PI+st*i;
     }
 
     for (int j = 0; j < steps2; j++)
     {
-        const double mt = 10000/steps2;
+        const double mt = 10000.0/steps2;
         m12[j] = mt*j;
     }
 
     //open output files
-    ofstream lamfile;
-    lamfile.open(lam_out.c_str());//,ios::app);
+//    ofstream lamfile;
+//    lamfile.open(lam_out.c_str());//,ios::app);
 
-    ofstream prefile;
-    prefile.open(precise.c_str());//,ios::app);
+//    ofstream prefile;
+//    prefile.open(precise.c_str());//,ios::app);
 
     ofstream bffile;
     bffile.open(best_fit.c_str(),ios::app);
@@ -176,32 +175,32 @@ int main()
                             else {
                                 hp = (mHp-100)<sqrt(maHp2) && sqrt(maHp2)<(mHp+100);}
 
-                            test = a/align;
-                            ab = (0.8<test) && (test<1.2);
+                            test = cos(b-a);
+                            ab = abs(test)<0.05; //Oliver's constraints
 
 //                            if (ho && hs && ao && hp) {
 //                                cout << ho << " " << hs << " " << ao << " " << hp << " " << a/align << endl;}
                             if (ho && hs && ao && hp && ab)   //if all masses are close to input ones and alpha in alignment
                             {
                                 //output data to file for reading to BSMPT
-                                lamfile << 2 << " " << l1[i] << " " << l2[j] << " " << l3[c] << " " << l4[d] << " " 
-                                        << l5[e] << " " << pow(m12[f],2) << " " << tanb << " " << sqrt(maH02) << " " 
-                                        << sqrt(mah2) << " " << sqrt(maA2) << " " << sqrt(maHp2) << " " << a << " " 
-                                        << m112 << " " << m222  << " "
-                                        << bs_gamma << " " << maxev << " " << b_h_ss << " " << b_h_cc << " " << b_h_bb << " " 
-                                        << b_h_mumu << " " << b_h_tautau << " " << b_h_WW << " " << b_h_ZZ << " " 
-                                        << b_h_Zga << " " << b_h_gaga << " " << b_h_gg << " " << b_h_AA << " " << w_h << " " 
-                                        << b_A_ss << " " << b_A_cc << " " << b_A_bb << " " << b_A_tt << " " << b_A_mumu << " " 
-                                        << b_A_tautau << " " << b_A_WW << " " << b_A_ZZ << " " << b_A_Zga << " " 
-                                        << b_A_gaga << " " << b_A_gg << " " << w_A << " " << b_H_ss << " " << b_H_cc << " " 
-                                        << b_H_bb << " " << b_H_tt << " " << b_H_mumu << " " << b_H_tautau << " " 
-                                        << b_H_WW << " " << b_H_ZZ << " " << b_H_Zga << " " << b_H_gaga << " " << b_H_gg << " " 
-                                        << b_H_hh << " " << b_H_AA << " " << w_H << " " << b_t_Wb << " " << b_t_Hcb << " " 
-                                        << b_Hc_cs << " " << b_Hc_cb << " " << b_Hc_tb << " " << b_Hc_ts << " " 
-                                        << b_Hc_tau << " " << b_Hc_Wh << " " << b_Hc_WH << " " << b_Hc_WA << " " << w_Hc << " " 
-                                        << mu_F << " " << mu_V << " " << mu_gaga << " " << mu_ZZ << " " << mu_WW << " " 
-                                        << mu_tautau << " " << mu_bb << " " << x_h_ggF << " " << x_A_ggF << " " 
-                                        << x_H_ggF << " " << endl;
+//                                lamfile << 2 << " " << l1[i] << " " << l2[j] << " " << l3[c] << " " << l4[d] << " " 
+//                                        << l5[e] << " " << pow(m12[f],2) << " " << tanb << " " << sqrt(maH02) << " " 
+//                                        << sqrt(mah2) << " " << sqrt(maA2) << " " << sqrt(maHp2) << " " << a << " " 
+//                                        << m112 << " " << m222  << " "
+//                                        << bs_gamma << " " << maxev << " " << b_h_ss << " " << b_h_cc << " " << b_h_bb << " " 
+//                                        << b_h_mumu << " " << b_h_tautau << " " << b_h_WW << " " << b_h_ZZ << " " 
+//                                        << b_h_Zga << " " << b_h_gaga << " " << b_h_gg << " " << b_h_AA << " " << w_h << " " 
+//                                        << b_A_ss << " " << b_A_cc << " " << b_A_bb << " " << b_A_tt << " " << b_A_mumu << " " 
+//                                        << b_A_tautau << " " << b_A_WW << " " << b_A_ZZ << " " << b_A_Zga << " " 
+//                                        << b_A_gaga << " " << b_A_gg << " " << w_A << " " << b_H_ss << " " << b_H_cc << " " 
+//                                        << b_H_bb << " " << b_H_tt << " " << b_H_mumu << " " << b_H_tautau << " " 
+//                                        << b_H_WW << " " << b_H_ZZ << " " << b_H_Zga << " " << b_H_gaga << " " << b_H_gg << " "
+//                                        << b_H_hh << " " << b_H_AA << " " << w_H << " " << b_t_Wb << " " << b_t_Hcb << " " 
+//                                        << b_Hc_cs << " " << b_Hc_cb << " " << b_Hc_tb << " " << b_Hc_ts << " " 
+//                                        << b_Hc_tau << " " << b_Hc_Wh << " " << b_Hc_WH << " " << b_Hc_WA << " " << w_Hc << " " 
+//                                        << mu_F << " " << mu_V << " " << mu_gaga << " " << mu_ZZ << " " << mu_WW << " " 
+//                                        << mu_tautau << " " << mu_bb << " " << x_h_ggF << " " << x_A_ggF << " " 
+//                                        << x_H_ggF << " " << endl;
                                 counter++;                      //another successful test
                                 dho = fabs(sqrt(maH02)-mH0);    //differences between calc and input masses
                                 dhs = fabs(sqrt(mah2)-hSM);
@@ -210,12 +209,12 @@ int main()
                                 daa = fabs(a-align);
 
                                 //output to precision file in case we're interested
-                                prefile << "Line Number: " << counter 
-                                        << "; D(mH0): " << dho
-                                        << "; D(mh0): " << dhs
-                                        << "; D(mA0): " << dao
-                                        << "; D(mH+): " << dhp 
-                                        << "; D(alp): " << daa << endl;
+//                                prefile << "Line Number: " << counter 
+//                                        << "; D(mH0): " << dho
+//                                        << "; D(mh0): " << dhs
+//                                        << "; D(mA0): " << dao
+//                                        << "; D(mH+): " << dhp 
+//                                        << "; D(alp): " << daa << endl;
                                 avg = (dho+dhs+dao+dhp+daa)/5.0;    //average best fitting point 
 //                                avg = dhs;                      //closest to getting SM Higgs right
 
@@ -244,9 +243,10 @@ int main()
             }
         }
     }
+    double theta = (b-daa2)*180.0/M_PI;
     cout << counter << endl;
     cout << "Closest fitting point is at line " << lin << endl
-         << "mH0: " << dho2 << "; mh0: " << dhs2 << "; mA0: " << dao2 << "; mH+:" << dhp2 << endl;
+         << "mH0: " << dho2 << "; mh0: " << dhs2 << "; mA0: " << dao2 << "; mH+:" << dhp2 << "; theta: " << theta << endl;
 
     bffile << 2 << " " << l1b << " " << l2b << " " << l3b << " " << l4b << " " << l5b << " " << pow(m12b,2) << " " 
         << tanb << " " << dho2 << " " << dhs2 << " " << dao2 << " " << dhp2 << " " << daa2 << " " << m112b << " " 
@@ -261,8 +261,8 @@ int main()
         << mu_gaga << " " << mu_ZZ << " " << mu_WW << " " << mu_tautau << " " << mu_bb << " " << x_h_ggF << " " << x_A_ggF << " "
         << x_H_ggF << " " << endl;
 
-    lamfile.close();
-    prefile.close();
+//    lamfile.close();
+//    prefile.close();
     bffile.close();
     //run BSMPT -- change file names
 //    system("./../../../BSMPT/build/bin/BSMPT r2hdm ~/library/higgs-proj/EWPT/lambdas.dat ~/library/higgs-proj/EWPT/scanPT.dat 1 -1");
