@@ -37,8 +37,8 @@ pars.set_constraint('a_mu SM','116591810(43)e-11')
 
 flavio.measurements.read_file('world_avgs.yml') # read in the world averages we want to use
 
-Fmuon = FastLikelihood(name="muons",observables=['a_mu'],include_measurements=['Anomalous Magnetic Moments'])
-Fmuon.make_measurement(N=500,threads=4)
+#Fmuon = FastLikelihood(name="muons",observables=['a_mu'],include_measurements=['Anomalous Magnetic Moments'])
+#Fmuon.make_measurement(N=500,threads=4)
 
 #------------------------------
 #   Anomalous moments
@@ -47,17 +47,18 @@ Fmuon.make_measurement(N=500,threads=4)
 par = flavio.default_parameters.get_central_all()
 #err = flavio.default_parameters.get_1d_errors_random()
 
+sig = 2
 exp = flavio.combine_measurements('a_mu',include_measurements=['Anomalous Magnetic Moments'])
 expc = exp.central_value
-expr =  2*exp.error_right                                                                                  
-expl = 2*exp.error_left
+expr =  sig*exp.error_right                                                                                  
+expl = sig*exp.error_left
 
 def muon(wcs):
     tanb,mH = wcs
     
-    mH0,mA0 = mH, mH
+#    mH0,mA0 = mH, mH
 #    mH0,mA0 = np.log10(1500), mH
-#    mH0,mA0 = mH, np.log10(1500)
+    mH0,mA0 = mH, np.log10(1500)
 
     csev = a_mu(par,'m_mu',10**tanb,10**mH0,10**mA0,10**mH)
 
@@ -65,12 +66,12 @@ def muon(wcs):
     wc.set_initial({'C7_mumu': csev},scale=1.0,eft='WET-3',basis='flavio')
     
     npp = flavio.np_prediction('a_mu',wc_obj=wc)
-    npe = 2*flavio.np_uncertainty('a_mu',wc_obj=wc)
+    npe = sig*flavio.np_uncertainty('a_mu',wc_obj=wc)
 
 #    expp = ((expc+expr)+(expc-expl))/2
 #    expe = (expc+expr)-expp  
-#    sig = np.sqrt(npe**2 + expe**2)
-#    chisq = ((npp-expp)/sig)**2 
+#    sigs = np.sqrt(npe**2 + expe**2)
+#    chisq = ((npp-expp)/sigs)**2 
 
     if ((expc >= npp) and (npp+npe >= expc-expl)) or ((expc < npp) and (npp-npe <= expc+expr)):
         return 1
@@ -100,7 +101,7 @@ sigmas = (1,2)
 #quit()
 
 steps = 200
-tanb, mH = np.linspace(-6,6,steps),np.linspace(4,8,steps)
+tanb, mH = np.linspace(-1,4,steps),np.linspace(0,4,steps)
 t,h = np.meshgrid(tanb,mH)
 th = np.array([t,h]).reshape(2,steps**2).T
 
@@ -126,8 +127,8 @@ s = fig.add_subplot(1,1,1,xlabel=r'$\log_{10}[\tan\beta]$',ylabel=r'$\log_{10}[m
 im = s.imshow(pred,extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower',cmap='gray',vmin=0,vmax=1)
 fig.colorbar(im)
 plt.title(r'$a_\mu$ 2HDM contribution')
-plt.savefig('amu2HDM.png')
-#plt.show()
+#plt.savefig('amu2HDM.png')
+plt.show()
 quit()
 
 fig = plt.figure()
