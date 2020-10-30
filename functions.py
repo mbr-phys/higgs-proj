@@ -225,8 +225,8 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
     b = np.arctan(tanb)
     a = b - np.pi/2 # alignment limit
 #    a = b - np.arccos(0.05) 
-#    cba,sba = np.sin(2*b),-np.sin(2*b) # wrong sign limit
-    cba,sba = np.cos(b-a),np.sin(b-a) # alignment limit
+    cba,sba = np.sin(2*b),-np.sin(2*b) # wrong sign limit
+#    cba,sba = np.cos(b-a),np.sin(b-a) # alignment limit
 
     Vus, Vub = CKM[0,mss[2]], CKM[0,2]
     Vcs, Vcb = CKM[1,mss[2]], CKM[1,2]
@@ -607,14 +607,10 @@ def mixing(par,CKM,mds,tanb,mH):
 
 def rh(mu,md,ml,tanb,mH):
     '''
-        Function for M->lnu 2HDM WC contribution, based on rH we used from 0907.5135
-
-        I think from looking at the operators, the 2HDM contributions appear in the CSR and CSL WCs, where (m_M**2/(m_l*(m_u+m_d))*(CSR-CSL) = rH
-
-        Used https://github.com/flav-io/flavio/blob/master/flavio/physics/bdecays/blnu.py - line 22 - to figure this out
+        Function for M->lnu 2HDM WC contribution
     '''
-    csr = mu*ml/(mH**2)
-    csl = md*ml*(tanb/mH)**2
+    csl = -1*mu*ml/(mH**2)
+    csr = -1*md*ml*(tanb/mH)**2
     return csr, csl
 
 def chi2_func(tanb, mH, mH0, mA0, obs):

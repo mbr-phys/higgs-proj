@@ -14,6 +14,18 @@
 \begin{document}
 
 %\feynmandiagram [horizontal=a to b] {
+%    i1 -- [fermion,edge label=$q_u$] a -- [anti fermion,edge label=$q_d$] i2,
+%    a -- [boson,edge label'=$W^\pm$] b,
+%    f1 -- [anti fermion,edge label'=$\ell$] b -- [anti fermion,edge label'=$\nu_\ell$] f2,
+%    i1 -- [half left,looseness=0.4,opacity=1] i2 -- [half left,looseness=0.4,opacity=1] i1,
+%};
+%\qquad
+%\feynmandiagram [horizontal=a to b] {
+%    i1 -- [fermion,edge label'=$q_u$] a -- [anti fermion,edge label'=$q_d$] i2,
+%    a -- [scalar,edge label'=$H^\pm$] b,
+%    f1 -- [anti fermion,edge label'=$\ell$] b -- [anti fermion,edge label'=$\nu_\ell$] f2,
+%};
+%\feynmandiagram [horizontal=a to b] {
 %    i1 -- [fermion,edge label=$d$] a -- [fermion,edge label=$\bar{d}$] i2,
 %    a -- [scalar,edge label=$h^0$] b,
 %    i1 -- [half left,looseness=0.3,opacity=0] i2,
@@ -35,42 +47,100 @@
 %    {[same layer] f2 -- [half left,looseness=0.3] f1},
 %    {[same layer] f2 -- [half right,looseness=0.3,edge label'=$\bar{B}_q^0$] f1},
 %};
-
+%\begin{tikzpicture}
+%    \begin{feynman}
+%        \vertex (a1);
+%        \vertex[below=3cm of a1] (a2);
+%        \vertex[above right=1.5cm and 1.5cm of a2] (a3);
+%        \vertex[right=3cm of a3] (a4);
+%        \vertex[above right=1.5cm and 1.5cm of a4] (a5);
+%        \vertex[below=3cm of a5] (a6);
+%
+%        \diagram* {
+%            (a1) -- [fermion,edge label=$q_u$] (a3) -- [anti fermion,edge label=$q_d$] (a2),
+%            (a3) -- [boson,edge label'=$W^\pm$] (a4),
+%            (a5) -- [anti fermion,edge label'=$\ell$] (a4) -- [anti fermion,edge label'=$\bar{\nu}_\ell$] (a6),
+%            (a1) -- [half left,looseness=0.2,opacity=1] (a2) -- [half left,looseness=0.2,opacity=1] (a1),
+%        };
+%    \end{feynman}
+%\end{tikzpicture}
 \begin{tikzpicture}
     \begin{feynman}
-        \vertex (a1);
-        \vertex[right=1.5cm of a1] (a2);
-        \vertex[right=1.2cm of a2] (a3);
-        \vertex[right=1.2cm of a3] (a4);
-        \vertex[right=1.5cm of a4] (a5);
-        \vertex[above=1.2cm of a3] (b1);
-        \vertex[above=1.2cm of b1] (b2);
+        \vertex (a);
+        \vertex[right=3cm of a] (b);
+        \vertex[above right=1.8cm and 2.25cm of b] (f1);
+        \vertex[below right=1.8cm and 2.25cm of b] (c);
+        \vertex[above right=1.8cm and 2.25cm of c] (f2);
+        \vertex[below right=1.8cm and 2.25cm of c] (f3);
 
         \diagram* {
-            (a1) -- [fermion,edge label=$\mu$] (a2) -- [scalar,edge label={$H^0,A^0$}] (a4) -- [fermion,edge label=$\mu$] (a5);
-            (a2) -- [fermion,edge label=$\ell_f$] (b1) -- [fermion,edge label=$\ell_f$] (a4);
-            (b1) -- [boson,edge label=$\gamma$] (b2);
+            (a) -- [fermion,edge label=$q_1$] (b) -- [fermion,edge label=$q_2$] (f1), 
+            (b) -- [boson,edge label'=$W^\pm$] (c),
+            (c) -- [anti fermion,edge label=$\bar{\nu}_\ell$] (f2),
+            (c) -- [fermion,edge label=$\ell$] (f3),
         };
     \end{feynman}
 \end{tikzpicture}
 \qquad
 \begin{tikzpicture}
     \begin{feynman}
-        \vertex (a1);
-        \vertex[right=1.5cm of a1] (a2);
-        \vertex[right=1.2cm of a2] (a3);
-        \vertex[right=1.2cm of a3] (a4);
-        \vertex[right=1.5cm of a4] (a5);
-        \vertex[above=1.2cm of a3] (b1);
-        \vertex[above=1.2cm of b1] (b2);
+        \vertex (a);
+        \vertex[right=3cm of a] (b);
+        \vertex[above right=1.8cm and 2.25cm of b] (f1);
+        \vertex[below right=1.8cm and 2.25cm of b] (c);
+        \vertex[above right=1.8cm and 2.25cm of c] (f2);
+        \vertex[below right=1.8cm and 2.25cm of c] (f3);
 
         \diagram* {
-            (a1) -- [fermion,edge label=$\mu$] (a2) -- [fermion,edge label=$\nu_f$] (a4) -- [fermion,edge label=$\mu$] (a5);
-            (a2) -- [scalar,edge label=$H^\pm$] (b1) -- [scalar,edge label=$H^\pm$] (a4);
-            (b1) -- [boson,edge label=$\gamma$] (b2);
+            (a) -- [fermion,edge label=$q_1$] (b) -- [fermion,edge label=$q_2$] (f1), 
+            (b) -- [scalar,edge label'=$H^\pm$] (c),
+            (c) -- [anti fermion,edge label=$\bar{\nu}_\ell$] (f2),
+            (c) -- [fermion,edge label=$\ell$] (f3),
         };
     \end{feynman}
 \end{tikzpicture}
+
+%\feynmandiagram [large, layered layout, horizontal=a to b] {
+%    a -- [fermion,edge label=$q_1$] b -- [fermion,edge label=$q_2$] f1, 
+%    b -- [scalar,edge label'=$H^\pm$] c,
+%    c -- [anti fermion,edge label=$\bar{\nu}_\ell$] f2,
+%    c -- [fermion,edge label=$\ell$] f3,
+%};
+%\begin{tikzpicture}
+%    \begin{feynman}
+%        \vertex (a1);
+%        \vertex[right=1.5cm of a1] (a2);
+%        \vertex[right=1.2cm of a2] (a3);
+%        \vertex[right=1.2cm of a3] (a4);
+%        \vertex[right=1.5cm of a4] (a5);
+%        \vertex[above=1.2cm of a3] (b1);
+%        \vertex[above=1.2cm of b1] (b2);
+%
+%        \diagram* {
+%            (a1) -- [fermion,edge label=$\mu$] (a2) -- [scalar,edge label={$H^0,A^0$}] (a4) -- [fermion,edge label=$\mu$] (a5);
+%            (a2) -- [fermion,edge label=$\ell_f$] (b1) -- [fermion,edge label=$\ell_f$] (a4);
+%            (b1) -- [boson,edge label=$\gamma$] (b2);
+%        };
+%    \end{feynman}
+%\end{tikzpicture}
+%\qquad
+%\begin{tikzpicture}
+%    \begin{feynman}
+%        \vertex (a1);
+%        \vertex[right=1.5cm of a1] (a2);
+%        \vertex[right=1.2cm of a2] (a3);
+%        \vertex[right=1.2cm of a3] (a4);
+%        \vertex[right=1.5cm of a4] (a5);
+%        \vertex[above=1.2cm of a3] (b1);
+%        \vertex[above=1.2cm of b1] (b2);
+%
+%        \diagram* {
+%            (a1) -- [fermion,edge label=$\mu$] (a2) -- [fermion,edge label=$\nu_f$] (a4) -- [fermion,edge label=$\mu$] (a5);
+%            (a2) -- [scalar,edge label=$H^\pm$] (b1) -- [scalar,edge label=$H^\pm$] (a4);
+%            (b1) -- [boson,edge label=$\gamma$] (b2);
+%        };
+%    \end{feynman}
+%\end{tikzpicture}
 
 %\begin{tikzpicture}
 %    \begin{feynman}

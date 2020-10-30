@@ -1,8 +1,10 @@
 #!/bin/env python3
 
 import flavio
+import flavio.plots as fpl
+from flavio.statistics.functions import delta_chi2
 import pandas as pd
-import plotly.express as px
+#import plotly.express as px
 import numpy as np
 import matplotlib.pyplot as plt
 from stu import *
@@ -28,7 +30,8 @@ steps = 200
 par = flavio.default_parameters.get_central_all()
 err = flavio.default_parameters.get_1d_errors_random()
 
-mHp,mH0,mA0 = np.linspace(0.1,1000,steps),np.linspace(0.1,1000,steps),np.linspace(0.1,1000,steps)
+#mHp,np.linspace(0.1,1000,steps)
+mH0,mA0 = np.linspace(np.log10(9500),np.log10(10500),steps),np.linspace(np.log10(9500),np.log10(10500),steps)
 #p,h,a = np.meshgrid(mHp,mH0,mA0)
 #pha = np.array([p,h,a]).reshape(3,steps**3).T
 h,a = np.meshgrid(mH0,mA0)
@@ -41,12 +44,18 @@ ms = np.array(pool.map(fitting,pha)).reshape((steps,steps))#,steps))
 pool.close()
 pool.join()
 
-mini = np.min(ms)
-mss = np.zeros((steps,steps))
-
-for i in range(steps):
-    for j in range(steps):
-        mss[i,j] = chis(ms[i,j],mini,5.99)
+mss = {}
+mss['x'] = h
+mss['y'] = a
+mss['z'] = ms
+n_sigma = (1,2)
+mss['levels'] = [delta_chi2(n,dof=2) for n in n_sigma] 
+#mini = np.min(ms)
+#mss = np.zeros((steps,steps))
+#
+#for i in range(steps):
+#    for j in range(steps):
+#        mss[i,j] = chis(ms[i,j],mini,5.99)
 
 #pm = ms[:,0]
 #hm = ms[:,0]
@@ -57,11 +66,18 @@ for i in range(steps):
 ##x,y,z = [df[c] for c in df]
 #x,y = [df[c] for c in df]
 
-fig = plt.figure()
-s = fig.add_subplot(1,1,1,xlabel=r'$m_{H^0}$',ylabel=r'$m_{A^0}$')
-im = s.imshow(mss,extent=(mH0[0],mH0[-1],mA0[0],mA0[-1]),origin='lower',cmap='Blues')
-plt.title(r'$m_{H^0}-m_{A^0}$ cross-section for $m_{H^+}=500\,$GeV')
-plt.show()
+fig = plt.figure(figsize=(8,6))
+fpl.contour(**mss)
+plt.xlabel(r'$m_{H^0}$ (GeV)')
+plt.ylabel(r'$m_{A^0}$ (GeV)')
+plt.savefig('ob_10k_log.png')
+quit()
+
+#fig = plt.figure()
+#s = fig.add_subplot(1,1,1,xlabel=r'$m_{H^0}$',ylabel=r'$m_{A^0}$')
+#im = s.imshow(mss,extent=(mH0[0],mH0[-1],mA0[0],mA0[-1]),origin='lower',cmap='Blues')
+#plt.title(r'$m_{H^0}-m_{A^0}$ cross-section for $m_{H^+}=500\,$GeV')
+#plt.show()
 #fig = px.scatter_3d(x=x,y=y,z=z,opacity=0.3)
 #fig.show()
 

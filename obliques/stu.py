@@ -161,8 +161,9 @@ def TOb_err(mHp,mA0,mH0,alpha,beta,mW,mW_err,mZ,mZ_err,mh,mh_err,Gf,alphaem):
 
 def fit(args,ms):
     par, err, Sce, Supe, Sloe, Tce, Tupe, Tloe, Uce, Uupe, Uloe = args
-    mHp = 500
-    mH0,mA0 = ms
+    mHp = 10000
+    lmH0,lmA0 = ms
+    mH0,mA0 = 10**lmH0,10**lmA0
 
     alpha, beta = 0, np.pi/2
     mW, mW_err, mZ, mZ_err, mh, mh_err = par['m_W'], err['m_W'], par['m_Z'], err['m_Z'], par['m_h'], err['m_h']
