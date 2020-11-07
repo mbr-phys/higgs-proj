@@ -225,8 +225,8 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
     b = np.arctan(tanb)
     a = b - np.pi/2 # alignment limit
 #    a = b - np.arccos(0.05) 
-    cba,sba = np.sin(2*b),-np.sin(2*b) # wrong sign limit
-#    cba,sba = np.cos(b-a),np.sin(b-a) # alignment limit
+#    cba,sba = np.sin(2*b),-np.sin(2*b) # wrong sign limit
+    cba,sba = np.cos(b-a),np.sin(b-a) # alignment limit
 
     Vus, Vub = CKM[0,mss[2]], CKM[0,2]
     Vcs, Vcb = CKM[1,mss[2]], CKM[1,2]

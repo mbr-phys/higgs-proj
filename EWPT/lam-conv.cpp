@@ -7,7 +7,6 @@
  * Also outputs a file containing the deviation for each mass calculated from the input value
  */
 
-
 #include <fstream>
 #include <iostream>
 #include <iomanip>
@@ -71,17 +70,18 @@ int main()
     double m222 = m12*1.0/tanb - 0.5*l2*l2*vev*vev*sb*sb - 0.5*vev*vev*cb*cb*(l3+l4+l5);
 
     bffile << 2 << " " << l1 << " " << l2 << " " << l3 << " " << l4 << " " << l5 << " " << m12 << " " 
-        << tanb << " " << mH0 << " " << hSM << " " << mA0 << " " << mHp << " " << alpha << " " << m112 << " " 
-        << m222  << " " << bs_gamma << " " << maxev << " " << b_h_ss << " " << b_h_cc << " " << b_h_bb << " " << b_h_mumu << " "
-        << b_h_tautau << " " << b_h_WW << " " << b_h_ZZ << " " << b_h_Zga << " " << b_h_gaga << " " << b_h_gg << " " 
-        << b_h_AA << " " << w_h << " " << b_A_ss << " " << b_A_cc << " " << b_A_bb << " " << b_A_tt << " " << b_A_mumu << " " 
-        << b_A_tautau << " " << b_A_WW << " " << b_A_ZZ << " " << b_A_Zga << " " << b_A_gaga << " " << b_A_gg << " " 
-        << w_A << " " << b_H_ss << " " << b_H_cc << " " << b_H_bb << " " << b_H_tt << " " << b_H_mumu << " " << b_H_tautau << " "
-        << b_H_WW << " " << b_H_ZZ << " " << b_H_Zga << " " << b_H_gaga << " " << b_H_gg << " " << b_H_hh << " " << b_H_AA << " "
-        << w_H << " " << b_t_Wb << " " << b_t_Hcb << " " << b_Hc_cs << " " << b_Hc_cb << " " << b_Hc_tb << " " << b_Hc_ts << " " 
-        << b_Hc_tau << " " << b_Hc_Wh << " " << b_Hc_WH << " " << b_Hc_WA << " " << w_Hc << " " << mu_F << " " << mu_V << " " 
-        << mu_gaga << " " << mu_ZZ << " " << mu_WW << " " << mu_tautau << " " << mu_bb << " " << x_h_ggF << " " << x_A_ggF << " "
-        << x_H_ggF << " " << endl;
+        << tanb << " " << mH0 << " " << hSM << " " << mA0 << " " << mHp << " " << alpha << endl; 
+//    " " << m112 << " " 
+//        << m222  << " " << bs_gamma << " " << maxev << " " << b_h_ss << " " << b_h_cc << " " << b_h_bb << " " << b_h_mumu << " "
+//        << b_h_tautau << " " << b_h_WW << " " << b_h_ZZ << " " << b_h_Zga << " " << b_h_gaga << " " << b_h_gg << " " 
+//        << b_h_AA << " " << w_h << " " << b_A_ss << " " << b_A_cc << " " << b_A_bb << " " << b_A_tt << " " << b_A_mumu << " " 
+//        << b_A_tautau << " " << b_A_WW << " " << b_A_ZZ << " " << b_A_Zga << " " << b_A_gaga << " " << b_A_gg << " " 
+//        << w_A << " " << b_H_ss << " " << b_H_cc << " " << b_H_bb << " " << b_H_tt << " " << b_H_mumu << " " << b_H_tautau << " "
+//        << b_H_WW << " " << b_H_ZZ << " " << b_H_Zga << " " << b_H_gaga << " " << b_H_gg << " " << b_H_hh << " " << b_H_AA << " "
+//        << w_H << " " << b_t_Wb << " " << b_t_Hcb << " " << b_Hc_cs << " " << b_Hc_cb << " " << b_Hc_tb << " " << b_Hc_ts << " " 
+//        << b_Hc_tau << " " << b_Hc_Wh << " " << b_Hc_WH << " " << b_Hc_WA << " " << w_Hc << " " << mu_F << " " << mu_V << " " 
+//        << mu_gaga << " " << mu_ZZ << " " << mu_WW << " " << mu_tautau << " " << mu_bb << " " << x_h_ggF << " " << x_A_ggF << " "
+//        << x_H_ggF << endl;
 
 //    lamfile.close();
 //    prefile.close();
