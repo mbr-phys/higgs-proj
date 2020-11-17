@@ -223,8 +223,8 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
 
     cob = 1/tanb
     b = np.arctan(tanb)
-    a = b - np.pi/2 # alignment limit
-#    a = b - np.arccos(0.05) 
+#    a = b - np.pi/2 # alignment limit
+    a = b - np.arccos(0.05) 
 #    cba,sba = np.sin(2*b),-np.sin(2*b) # wrong sign limit
     cba,sba = np.cos(b-a),np.sin(b-a) # alignment limit
 
@@ -625,6 +625,7 @@ def chi2_func(tanb, mH, mH0, mA0, obs):
     CSR_b_t, CSL_b_t = rh(par['m_u'],par['m_b'],par['m_tau'],tanb,mH)
     CSR_b_m, CSL_b_m = rh(par['m_u'],par['m_b'],par['m_mu'],tanb,mH)
     CSR_b_e, CSL_b_e = rh(par['m_u'],par['m_b'],par['m_e'],tanb,mH)
+    CSR_d_t, CSL_d_t = rh(par['m_c'],par['m_d'],par['m_tau'],tanb,mH)
     CSR_d_m, CSL_d_m = rh(par['m_c'],par['m_d'],par['m_mu'],tanb,mH)
     CSR_d_e, CSL_d_e = rh(par['m_c'],par['m_d'],par['m_e'],tanb,mH)
     CSR_ds_t, CSL_ds_t = rh(par['m_c'],par['m_s'],par['m_tau'],tanb,mH)
@@ -654,6 +655,7 @@ def chi2_func(tanb, mH, mH0, mA0, obs):
             'CSR_butaunutau': CSR_b_t, 'CSL_butaunutau': CSL_b_t,
             'CSR_bumunumu': CSR_b_m, 'CSL_bumunumu': CSL_b_m,
             'CSR_buenue': CSR_b_e, 'CSL_buenue': CSL_b_e,
+            'CSR_dctaunutau': CSR_d_t, 'CSL_dctaunutau': CSL_d_t,
             'CSR_dcmunumu': CSR_d_m, 'CSL_dcmunumu': CSL_d_m,
             'CSR_dcenue': CSR_d_e, 'CSL_dcenue': CSL_d_e,
             'CSR_sctaunutau': CSR_ds_t, 'CSL_sctaunutau': CSL_ds_t,

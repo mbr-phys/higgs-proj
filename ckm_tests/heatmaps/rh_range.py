@@ -5,6 +5,7 @@ print(datetime.datetime.now())
 import os
 import numpy as np
 import flavio
+import flavio.plots as fpl
 import matplotlib.pyplot as plt
 from extra import *
 import multiprocessing as mp
@@ -83,7 +84,7 @@ def vij_mult(args,ths):
 
 steps = 120
 
-tanb,mH = np.linspace(-1,2,steps), np.linspace(1,3.5,steps)
+tanb,mH = np.linspace(-1,2,steps), np.linspace(1.5,4,steps)
 t, h = np.meshgrid(tanb,mH)
 th = np.array([t,h]).reshape(2,steps**2).T
 
@@ -149,16 +150,16 @@ for i in range(len(us)):
     heatmap['V'+us[i]+ds[i]] = heatmap_v
     errmap['V'+us[i]+ds[i]] = heatmap_e
     
-#    vm = 0
-#    if np.min(np.log10(heatmap_v)) < 0:
-#        vm = np.min(np.log10(heatmap_v))
-#
+    vm = 0
+    if np.min(np.log10(heatmap_v)) < 0:
+        vm = np.min(np.log10(heatmap_v))
+
 #    fig = plt.figure()
-#    s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+} (\text{GeV})]$")
+#    s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+}/\text{GeV}]$")
 #    im = s.imshow(np.log10(heatmap_v),extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower',vmin=vm)#,vmax=1)
 #    fig.colorbar(im)
 #    plt.title("Heatmap of Modification Factor for V"+us[i]+ds[i])
-#    plt.savefig("v"+us[i]+ds[i]+"_heatmap3.png")
+#    plt.savefig("v"+us[i]+ds[i]+"_heatmap4.png")
 
     print("V"+us[i]+ds[i]+" done")
     print(datetime.datetime.now())
@@ -170,12 +171,22 @@ units = np.array(pool4.map(testy,ej)).reshape((steps,steps))
 pool4.close()
 pool4.join()
 
+levs = (0.99,)
+dat = {'x': t, 'y': h, 'z': units, 'levels': levs}
+
 fig = plt.figure()
-s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+} (\text{GeV})]$")
-im = s.imshow(units,extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower',cmap='gray')
+fpl.contour(**dat,col=2)
 plt.title("Modification Regions Allowed By Unitarity \n of full CKM Matrix")
-plt.savefig("ckm_full_mat4.png")
+plt.xlabel(r'$\log_{10}[\tan\beta]$')
+plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$')
+plt.savefig("ckm_full_mat6.png")
 #plt.show()
+
+#fig = plt.figure()
+#s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+}/\text{GeV}]$")
+#im = s.imshow(-1*units,extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower',cmap='gray')
+#plt.title("Modification Regions Allowed By Unitarity \n of full CKM Matrix")
+#plt.savefig("ckm_full_mat5.png")
 
 print("--- %s seconds ---" % (time.time() - start_time))
 print(datetime.datetime.now())

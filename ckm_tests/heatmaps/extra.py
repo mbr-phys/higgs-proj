@@ -240,7 +240,7 @@ def testing(args,ijs):
         for n in range(3):
             if message[m,n]:
                 answer += 1
-    result = 0
+    result = 1
     if answer == 9:
-        result = 1
+        result = 0
     return result
