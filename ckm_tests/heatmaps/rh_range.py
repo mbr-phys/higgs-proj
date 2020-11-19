@@ -82,7 +82,7 @@ def vij_mult(args,ths):
     #array_vs[j,i] = np.average(mod)
     #array_es[j,i] = np.average(mode)
 
-steps = 120
+steps = 100
 
 tanb,mH = np.linspace(-1,2,steps), np.linspace(1.5,4,steps)
 t, h = np.meshgrid(tanb,mH)
@@ -174,19 +174,19 @@ pool4.join()
 levs = (0.99,)
 dat = {'x': t, 'y': h, 'z': units, 'levels': levs}
 
-fig = plt.figure()
+fig = plt.figure(figsize=(6,5))
 fpl.contour(**dat,col=2)
 plt.title("Modification Regions Allowed By Unitarity \n of full CKM Matrix")
 plt.xlabel(r'$\log_{10}[\tan\beta]$')
 plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$')
-plt.savefig("ckm_full_mat6.png")
+plt.savefig("ckm_full_mat7.png")
 #plt.show()
 
 #fig = plt.figure()
 #s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+}/\text{GeV}]$")
 #im = s.imshow(-1*units,extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower',cmap='gray')
 #plt.title("Modification Regions Allowed By Unitarity \n of full CKM Matrix")
-#plt.savefig("ckm_full_mat5.png")
+#plt.savefig("ckm_full_mat8.png")
 
 print("--- %s seconds ---" % (time.time() - start_time))
 print(datetime.datetime.now())

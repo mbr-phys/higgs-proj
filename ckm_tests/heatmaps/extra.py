@@ -242,5 +242,5 @@ def testing(args,ijs):
                 answer += 1
     result = 1
     if answer == 9:
-        result = 0
+        result = -1
     return result
