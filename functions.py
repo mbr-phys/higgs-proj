@@ -3,10 +3,11 @@
 import flavio
 from flavio.classes import Parameter
 from flavio.physics.running.running import get_mt, get_alpha_e
+from scipy.integrate import quad
 import matplotlib.pyplot as plt
 import numpy as np
 
-def mHmin(contour):
+def mHmin(contour,minz=0):
     '''
         Finding the minimum mH and tanb range in the contours
     '''
@@ -14,6 +15,8 @@ def mHmin(contour):
     y = contour['y']
     z = contour['z']
     levels = contour['levels']
+    
+    z = z - minz
 
     xf, yf = np.where(z==np.min(z))
     xbf = 10**x[xf[0],yf[0]]
@@ -22,7 +25,10 @@ def mHmin(contour):
     minh_loc, mint_loc, maxt_loc = [],[],[]
     for i in levels:
         minh, mint, maxt = 100,100,-2
-        x_loc, y_loc = np.where(z<(i+np.min(z)))
+        if minz == 0:
+            x_loc, y_loc = np.where(z<(i+np.min(z)))
+        else:
+            x_loc, y_loc = np.where(z<i)
         for j in range(len(x_loc)):
             k = (x_loc[j],y_loc[j])
             if y[k] < minh:
@@ -224,7 +230,7 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
     cob = 1/tanb
     b = np.arctan(tanb)
 #    a = b - np.pi/2 # alignment limit
-    a = b - np.arccos(0.05) 
+    a = b - np.arccos(-0.05) 
 #    cba,sba = np.sin(2*b),-np.sin(2*b) # wrong sign limit
     cba,sba = np.cos(b-a),np.sin(b-a) # alignment limit
 
@@ -621,7 +627,7 @@ def chi2_func(tanb, mH, mH0, mA0, obs):
     par = flavio.default_parameters.get_central_all()
     ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
 
-    csev = a_mu(par,'m_mu',tanb,mH0,mA0,mH)
+    csev = a_mu2(par,'m_mu',tanb,mH0,mA0,mH)
     CSR_b_t, CSL_b_t = rh(par['m_u'],par['m_b'],par['m_tau'],tanb,mH)
     CSR_b_m, CSL_b_m = rh(par['m_u'],par['m_b'],par['m_mu'],tanb,mH)
     CSR_b_e, CSL_b_e = rh(par['m_u'],par['m_b'],par['m_e'],tanb,mH)
@@ -735,32 +741,140 @@ def a_mu(par,ml,tanb,mH0,mA0,mH):
     csev = (cr_1()+cr_2())/pref
     return csev
 
-#if __name__ == "__main__":
-#    pars = flavio.default_parameters
-#    vev = Parameter('vev')
-#    vev.tex = r"$v$" 
-#    vev.description = "Vacuum Expectation Value of the SM Higgs"
-#    pars.set_constraint('vev','246') 
-#    par = flavio.default_parameters.get_central_all()
+def a_mu2(par,lep,tanb,mH0,mA0,mH):
+    #----------------------------------------------
+    def fH(r):
+        def integ(x):
+            z = (x**2)*(2-x)/(1-x+r*x**2)
+            return z
+        inte, err = quad(integ,0,1)
+        return inte
+    def fA(r):
+        def integ(x):
+            z = -x**3/(1-x+r*x**2)
+            return z
+        inte, err = quad(integ,0,1)
+        return inte
+    def fHp(r):
+        def integ(x):
+            z = -x*(1-x)/(1-(1-x)*r)
+            return z
+        inte, err = quad(integ,0,1)
+        return inte
+
+    GF, mW, s2w, vev = par['GF'],par['m_W'],par['s2w'],par['vev']
+    b = np.arctan(tanb)
+    a = b - np.pi/2
+    ca, cb, sa, sb = np.cos(a), np.cos(b), np.sin(a), np.sin(b)
+    sba, cba = np.sin(b-a), np.cos(b-a)
+
+    mmu = par[lep]
+    rH, rA, rHp = (mmu/mH0)**2, (mmu/mA0)**2, (mmu/mH)**2
+    yHl, yAl = (cba + sba*tanb), -1*tanb
+    yhsl = sba - cba*tanb
+
+    cr1 = GF*(mmu**2)*((yAl**2)*rA*fA(rA) + (yAl**2)*rHp*fHp(rHp) + (yHl**2)*rH*fH(rH))/(4*np.sqrt(2)*np.pi**2)
+
+    #----------------------------------------------
+    def gH(r):
+        def integ(x):
+            z = (2*x*(1-x)-1)*np.log(x*(1-x)/r)/(x*(1-x)-r)
+            return z
+        inte, err = quad(integ,0,1)
+        return inte
+    def gA(r):
+        def integ(x):
+            z = np.log(x*(1-x)/r)/(x*(1-x)-r)
+            return z
+        inte, err = quad(integ,0,1)
+        return inte
+
+    aem = get_alpha_e(par,4.2)
+    yHu, yHd, yAu, yAd = (cba - sba/tanb), yHl, 1/tanb, -1*tanb
+    mu, md, mc, ms, mb, mt = par['m_u'], par['m_d'], par['m_c'], par['m_s'], par['m_b'], par['m_t']
+    Qu, Qd = (2/3)**2, (-1/3)**2
+    #I don't know why I'm not just summing over lists/arrays, but oh well
+    rHu, rHd, rHc, rHs, rHb, rHt = (mu/mH0)**2, (md/mH0)**2, (mc/mH0)**2, (ms/mH0)**2, (mb/mH0)**2, (mt/mH0)**2
+    rAu, rAd, rAc, rAs, rAb, rAt = (mu/mA0)**2, (md/mA0)**2, (mc/mA0)**2, (ms/mA0)**2, (mb/mA0)**2, (mt/mA0)**2
+    
+    cr2 = Qu*yHu*yHl*rHu*gH(rHu) + Qu*yAu*yAl*rAu*gA(rAu)
+    cr2 += Qu*yHu*yHl*rHc*gH(rHc) + Qu*yAu*yAl*rAc*gA(rAc)
+    cr2 += Qu*yHu*yHl*rHt*gH(rHt) + Qu*yAu*yAl*rAt*gA(rAt)
+    cr2 += Qd*yHd*yHl*rHd*gH(rHd) + Qd*yAd*yAl*rAd*gA(rAd)
+    cr2 += Qd*yHd*yHl*rHs*gH(rHs) + Qd*yAd*yAl*rAs*gA(rAs)
+    cr2 += Qd*yHd*yHl*rHb*gH(rHb) + Qd*yAd*yAl*rAb*gA(rAb)
+    cr2 = GF*(mmu**2)*cr2*aem*3/(4*np.sqrt(2)*np.pi**3)
+
+    #----------------------------------------------
+    RH1, RH2 = -1*cba, -1*sba
+    rWH0 = (mW/mH0)**2
+    mhs = par['m_h']
+    rWHp, rHHp, rSMHp, rHW, rSMW = (mW/mH)**2, (mH0/mH)**2, (mhs/mH)**2, (mH0/mW)**2, (mhs/mW)**2
+    lam3 = (mhs**2 + 2*mH**2 - 2*mH0**2)/vev**2
+    lamhs = vev*lam3
+
+    def F2(r):
+        def integ(x):
+            z = x*(x-1)*np.log(r/(x*(1-x)))/(r - x*(1-x))
+            return z
+        inte, err = quad(integ,0,1)
+        return inte/2
+
+    d2 = aem*(mmu**2)*yhsl*lamhs*F2(1/rSMHp)/(8*(mhs**2)*np.pi**3)
+    
+#    def F3(r):
+#        def integ(x):
+#            z = (x*(3*x*(4*x-1)+10)*r - x*(1-x))*np.log(r/(x*(1-x)))/(r-x*(1-x))
+#            return z
+#        inte, err = quad(integ,0,1)
+#        return inte/2
 #
-#    csev = a_mu(par,'m_mu',1,10000,10000,10000,1.0)
-#    wc = flavio.WilsonCoefficients()
-#    wc.set_initial({'C7_mumu': csev,}, scale=1.0, eft='WET-3', basis='flavio')
-#    print(flavio.np_prediction('a_mu',wc_obj=wc)*1e10)
+#    d3 = aem*(mmu**2)*yHl*RH1*F3(rWH0)/(8*(vev**2)*np.pi**3)
+
+    #----------------------------------------------
+    ckms = flavio.physics.ckm.get_ckm(par)
+    Vtb2 = abs(ckms[2,2])**2
+    rtHp, rbHp, rtW, rbW = (mt/mH)**2, (mb/mH)**2, (mt/mW)**2, (mb/mW)**2
+    
+    def G(r1,r2,x):
+        z = np.log((x*r1 + (1-x)*r2)/(x*(1-x)))/(x*(1-x) - x*r1 - (1-x)*r2)
+        return z
+    def I4():
+        def integ(x):
+            z = (2*x/3 - (1-x)/3)*(pow(tanb*mb,2)*x*(1-x) - (mt**2)*x*(1+x))*(G(rtHp,rbHp,x)-G(rtW,rbW,x))
+            return z
+        inte, err = quad(integ,0,1)
+        return inte
+
+    d4 = aem*(mmu**2)*3*Vtb2*I4()/(32*(mH**2 - mW**2)*pow(vev*s2w,2)*np.pi**3)
+    
+    #----------------------------------------------
+    RSM1, RSM2 = -1*sba, cba
+
+#    def I5(m):
+#        def integ(x):
+#            z = (x**2)*((mH**2 + mW**2 - m)*(1-x) - 4*mW**2)*(G(rWHp,m/(mH**2),x)-G(1,m/(mW**2),x))
+#            return z
+#        inte, err = quad(integ,0,1)
+#        return inte
 #
-#    csev1 = a_mu(par,'m_mu',1,10000,10000,10000,4.2)
-#    wc = flavio.WilsonCoefficients()
-#    wc.set_initial({'C7_mumu': csev1,}, scale=4.2, eft='WET', basis='flavio')
-#    print(flavio.np_prediction('a_mu',wc_obj=wc)*1e10)
+#    d5 = -tanb*RSM1*RSM2*I5(mhs**2) - tanb*RH1*RH2*I5(mH0**2)
+#    d5 = d5*aem*(mmu**2)/(64*(mH**2 - mW**2)*pow(vev*s2w,2)*np.pi**3)
+
+    #----------------------------------------------
 #
-#    csev2 = a_mu(par,'m_mu',1,10000,10000,10000,4.2)
-#    wc = flavio.WilsonCoefficients()
-#    wc.set_initial({'C7_mumu': csev1,}, scale=1.0, eft='WET-3', basis='flavio')
-#    print(flavio.np_prediction('a_mu',wc_obj=wc)*1e10)
+#    def I6(m):
+#        def integ(x):
+#            z = (x**2)*(x-1)*(G(1,m/(mH**2),x)-G(1/rWHp,m/(mW**2),x))
+#            return z
+#        inte, err = quad(integ,0,1)
+#        return inte
 #
-#    csev3 = a_mu(par,'m_mu',1,10000,10000,10000,1.0)
-#    wc = flavio.WilsonCoefficients()
-#    wc.set_initial({'C7_mumu': csev1,}, scale=4.2, eft='WET', basis='flavio')
-#    print(flavio.np_prediction('a_mu',wc_obj=wc)*1e10)
-#
-#
+#    d6 = -tanb*RSM2*lamhs*I6(mhs**2)
+#    d6 = d6*aem*(mmu**2)/(64*(mH**2 - mW**2)*(vev**2)*np.pi**3)
+
+    #----------------------------------------------
+    cr = (cr1 + cr2 + d2 + d4)*np.sqrt(2)*(np.pi**2)/(GF*mmu**2)
+
+    return cr
+

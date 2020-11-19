@@ -53,8 +53,8 @@ def ckm_err(t_ckm,par,err):
     return abs(centrals), np.sqrt(a1 + a2 + a3 + a4)
 
 def vcb(mu,md,ml,tanb,mH):
-    csr = mu*ml/(mH**2)
-    csl = md*ml*(tanb/mH)**2
+    csl = -1*mu*ml/(mH**2)
+    csr = -1*md*ml*(tanb/mH)**2
     return csr, csl
 
 def rh(args,th):
