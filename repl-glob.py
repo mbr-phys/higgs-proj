@@ -13,6 +13,7 @@ from flavio.config import config
 import flavio.plots as fpl
 import matplotlib.pyplot as plt
 import numpy as np
+from functools import partial
 from functions import *
 
 #### parameter setting
@@ -89,12 +90,102 @@ my_obs = [
     'BR(D+->taunu)', # [38]
 ]
 
-obs2 = ['BR(B+->pilnu)', 'BR(B0->pilnu)',
-    ("<Rmue>(B+->Kll)", 1.0, 6.0), 
-    ("<Rmue>(B0->K*ll)", 0.045, 1.1), 
-    ("<Rmue>(B0->K*ll)", 1.1, 6.0),
-    'a_mu',
+obs2 = [
+        'BR(B+->pilnu)', 'BR(B0->pilnu)',
+        ("<Rmue>(B+->Kll)", 1.0, 6.0), 
+        ("<Rmue>(B0->K*ll)", 0.045, 1.1), 
+        ("<Rmue>(B0->K*ll)", 1.1, 6.0),
+        'a_mu',
 ]
+
+obs3 = [
+        ('<dBR/dq2>(B+->Kmumu)',1.0,6.0),
+#        ('<dBR/dq2>(B+->Kee)',1.0,6.0),
+        ('<P5p>(B0->K*mumu)',0.1,0.98),
+        ('<P5p>(B0->K*mumu)',1.1,6.0),
+        ('<P5p>(B0->K*mumu)',15.0,19.0),
+        ('<dBR/dq2>(B0->K*mumu)',1.0,6.0),
+#        ('<dBR/dq2>(B0->K*mumu)',6.0,19.0),
+#        ('<P5p>(B0->K*ee)',0.045,1.1),
+#        ('<P5p>(B0->K*ee)',1.1,6.0),
+#        ('<dBR/dq2>(B0->K*ee)',1.1,6.0),
+#        ('<dBR/dq2>(B0->K*ee)',1.1,6.0),
+]
+
+ims = ['BKll Observables','LHCb B+->Kmumu BR 2014','CDF B+>Kmumu 2012','CMS B->K*mumu 2015 4.3-6 BR','CMS B->K*mumu 2013 combined with 2015 BR','LHCb B0->K*mumu BR 2016','CDF B0->K*mumu BR 2012']
+ims2 = [
+        ['LHCb B+->Kmumu BR 2014',
+            'CDF B+>Kmumu 2012',],
+        ['BKll Observables',],
+        ['BKll Observables',],
+        ['BKll Observables',],
+        ['CMS B->K*mumu 2015 4.3-6 BR',
+            'CMS B->K*mumu 2013 combined with 2015 BR',
+            'LHCb B0->K*mumu BR 2016',
+            'CDF B0->K*mumu BR 2012',],
+]
+#for i in range(len(obs3)):
+#    print(obs3[i])
+#    string, q1, q2 = obs3[i]
+#    exp = flavio.combine_measurements(string,q2min=q1,q2max=q2,include_measurements=ims2[i])
+#    expc = exp.central_value
+#    expr = exp.error_right
+#    expl = exp.error_left
+#    print("Exp val:",expc,"+",expr,"-",expl)
+#    smp = flavio.sm_prediction(string,q2min=q1,q2max=q2)
+#    sme = flavio.sm_uncertainty(string,q2min=q1,q2max=q2)
+#    print("SM val:",smp,"+/-",sme)
+#    print()
+#
+#quit()
+    
+
+obs3_png = [
+        'dBRdq2(B+->Kmumu)',
+#        'dBRdq2(B+->Kee)',
+        'P5p(B0->K(st)mumu)-1',
+        'P5p(B0->K(st)mumu)-2',
+        'P5p(B0->K(st)mumu)-3',
+        'dBRdq2(B0->K(st)mumu)',
+#        'dBRdq2(B0->K(st)mumu-2)',
+#        'P5p(B0->K(st)ee)',
+#        'P5p(B0->K(st)ee)',
+#        'dBRdq2(B0->K(st)ee)',
+#        'dBRdq2(B0->K(st)ee)',
+]
+
+obs4 = [
+        r'$\langle\frac{dBR}{dq^2}\rangle(B^+\to K^+\mu^+\mu^-),\,q^2\in[1,6]$',
+#        r'$<\frac{dBR}{dq^2}>(B^+\to K^+ee),\,q^2\in[1,6]$',
+        r"$\langle P5'\rangle(B_0\to K_0^*\mu^+\mu^-),\,q^2\in[0.1,0.98]$",
+        r"$\langle P5'\rangle(B_0\to K_0^*\mu^+\mu^-),\,q^2\in[1.1,6]$",
+        r"$\langle P5'\rangle(B_0\to K_0^*\mu^+\mu^-),\,q^2\in[15,19]$",
+        r"$\langle\frac{dBR}{dq^2}\rangle(B_0\to K_0^*\mu^+\mu^-),\,q^2\in[1,6]$",
+#        r"$<\frac{dBR}{dq^2}>(B_0\to K_0^*\mu\mu),\,q^2\in[6,19]$",
+#        r"$<P5'>(B_0\to K_0*ee),\,q^2\in[0.045,1.1]$",
+#        r"$<P5'>(B_0\to K_0*ee),\,q^2\in[1.1,6]$",
+#        r"$<\frac{dBR}{dq^2}>(B_0\to K_0*ee),\,q^2\in[0.045,1.1]$",
+#        r"$<\frac{dBR}{dq^2}>(B_0\to K_0*ee),\,q^2\in[1.1,6]$",
+]
+
+
+#count = 0
+#for i in obs2:
+#    count += 1
+#    if count < 3:
+#        print(i)
+#        print(flavio.sm_prediction(i))
+#        print(flavio.sm_uncertainty(i))
+#        print()
+#
+#par = flavio.default_parameters.get_central_all()
+#err = flavio.default_parameters.get_1d_errors_random()
+#lists = ['B->pi BSZ a1_f+','B->pi BSZ a0_fT', 'B->pi BSZ a2_f0','B->pi BSZ a1_f0','B->pi BSZ a1_fT','B->pi BSZ a2_f+','B->pi BSZ a0_f+','B->pi BSZ a2_fT']
+#for i in lists:
+#    print(i)
+#    print(par[i],"+/-",err[i])
+#    print()
+#quit()
 
 #strings = 'Dptotaunu'
 #Fleps = FastLikelihood(name="trees",observables=[my_obs[38]],include_measurements=['Tree Level Leptonics'])
@@ -111,7 +202,8 @@ obs2 = ['BR(B+->pilnu)', 'BR(B0->pilnu)',
 #Frad = FastLikelihood(name="rad",observables=[my_obs[9]],include_measurements=['Radiative Decays'])
 #------------------------------
 #Fmu = FastLikelihood(name="mu",observables=obs2[2:5],include_measurements=['LFU K Ratios']) 
-Fmu = FastLikelihood(name="mu",observables=my_obs[12:14],include_measurements=['FCNC Leptonic Decays',]) 
+#Fmu = FastLikelihood(name="mu",observables=my_obs[12:14],include_measurements=['FCNC Leptonic Decays',]) 
+#Fmu = FastLikelihood(name="mu",observables=obs3)
 #------------------------------
 obs_list = my_obs+obs2
 #FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios','Anomalous Magnetic Moments',])
@@ -123,7 +215,7 @@ obs_list = my_obs+obs2
 #Fleps.make_measurement(N=500,threads=4)
 #Fmix.make_measurement(N=500,threads=4)
 #Frad.make_measurement(N=500,threads=4)
-Fmu.make_measurement(N=500,threads=4)
+#Fmu.make_measurement(N=500,threads=4)
 #FL2.make_measurement(N=500,threads=4)
 
 #------------------------------
@@ -219,30 +311,35 @@ def rad(wcs):
 #   B(s/d) -> mumu + R(K) & R(K*)
 #------------------------------
 
-def mu(wcs):
+def mu(app,wcs):
     tanb, mH = wcs # state what the two parameters are going to be on the plot
-#    mH0 = mH
-    mH0 = np.log10(1500)
+    if app == 0:
+        mH0 = mH
+    elif app == 1:
+        mH0 = np.log10(1500)
 
     par = flavio.default_parameters.get_central_all()
     ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
 
 #    C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',1],10**mH0,10**tanb,10**mH)
     C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],10**mH0,10**tanb,10**mH)
-    C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],10**mH0,10**tanb,10**mH)
-#    C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],10**tanb,10**mH)
+#    C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],10**mH0,10**tanb,10**mH)
+    C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],10**tanb,10**mH)
 
     wc = flavio.WilsonCoefficients()
     wc.set_initial({ # tell flavio what WCs you're referring to with your variables
-#           'C7_bs': C7,'C7p_bs': C7p, 
-#           'C8_bs': C8,'C8p_bs': C8p, 
+           'C7_bs': C7,'C7p_bs': C7p, 
+           'C8_bs': C8,'C8p_bs': C8p, 
 #           'C9_bsee': C9_se,'C9p_bsee': C9p_se,
-#           'C9_bsmumu': C9_s,'C9p_bsmumu': C9p_s,
+           'C9_bsmumu': C9_s,'C9p_bsmumu': C9p_s,
 #           'C10_bsee': C10_se,'C10p_bsee': C10p_se,
            'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CP_s,'CPp_bsmumu': CPp_s, # Bs->mumu
-           'C10_bdmumu': C10_d,'C10p_bdmumu': C10p_d,'CS_bdmumu': CS_d,'CSp_bdmumu': CSp_d,'CP_bdmumu': CP_d,'CPp_bdmumu': CPp_d, # B0->mumu
+#           'C10_bdmumu': C10_d,'C10p_bdmumu': C10p_d,'CS_bdmumu': CS_d,'CSp_bdmumu': CSp_d,'CP_bdmumu': CP_d,'CPp_bdmumu': CPp_d, # B0->mumu
         }, scale=4.2, eft='WET', basis='flavio')
     return Fmu.log_likelihood(par,wc)
+
+mu0 = partial(mu,0)
+mu1 = partial(mu,1)
 
 #------------------------------
 #   Anomalous moments
@@ -343,14 +440,14 @@ sigmas = (1,2)
 #sigmas = (3.2,3.3)#3.2)
 
 #cmuon = fpl.likelihood_contour_data(muon,-1,2.5,-2,4, n_sigma=sigmas, threads=4, steps=60) 
-#cmuon = fpl.likelihood_contour_data(muon,0,4,-1,4, n_sigma=sigmas, threads=4, steps=60) 
+cmuon = fpl.likelihood_contour_data(muon,0,4,-1,4, n_sigma=sigmas, threads=4, steps=60) 
 #cleps = fpl.likelihood_contour_data(leps,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=100) 
 #cmix = fpl.likelihood_contour_data(mix,0,4,1.5,4, n_sigma=sigmas, threads=4, steps=60) 
 #cmix = fpl.likelihood_contour_data(mix,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=60) 
 #crad = fpl.likelihood_contour_data(rad,-1,2,700,1000, n_sigma=sigmas, threads=4, steps=800) 
 #cmu = fpl.likelihood_contour_data(mu,2.5,4,-2,1, n_sigma=sigmas, threads=4, steps=60) 
 #cmu = fpl.likelihood_contour_data(mu,-1,2,0,4, n_sigma=sigmas, threads=4, steps=60) 
-cmu = fpl.likelihood_contour_data(mu,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=60) 
+#cmu = fpl.likelihood_contour_data(mu,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=60) 
 #cdat = fpl.likelihood_contour_data(func,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=60) 
 #cdat = fpl.likelihood_contour_data(func,-1,2,2.9,3.2, n_sigma=sigmas, threads=4, steps=400) 
 
@@ -449,27 +546,71 @@ z_min3 = 1.6111964187252177
 # (-1,2,0,3.5)
 z_min4 = 3.5229317450326256
 
+for i in range(len(obs3)):
+    Fmu = FastLikelihood(name="mu",observables=[obs3[i]],include_measurements=ims)
+    Fmu.make_measurement(N=500,threads=4)
+
+    cmu = fpl.likelihood_contour_data(mu0,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=60) 
+    plt.figure(figsize=(6,5))
+    fpl.contour(**cmu,col=9)#,z_min=z_min1) 
+    plt.title(r'$m_{H^0}\sim m_{H^+},$'+'\n'+obs4[i],fontsize=18)
+    plt.xlabel(r'$\log_{10}[\tan\beta]$') 
+    plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
+    plt.savefig(obs3_png[i]+'_apx.png')
+
+    Fmu = FastLikelihood(name="mu",observables=[obs3[i]],include_measurements=ims)
+    Fmu.make_measurement(N=500,threads=4)
+
+    cmu = fpl.likelihood_contour_data(mu1,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=60) 
+    plt.figure(figsize=(6,5))
+    fpl.contour(**cmu,col=9)#,z_min=z_min1) 
+    plt.axhline(y=np.log10(866),color='black',linestyle='--')
+    plt.axhline(y=np.log10(1658),color='black',linestyle='--')
+    plt.title(r'$m_{H^0}=1500\,$GeV,'+'\n'+obs4[i],fontsize=18)
+    plt.xlabel(r'$\log_{10}[\tan\beta]$') 
+    plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
+    plt.savefig(obs3_png[i]+'_fix.png')
+
+Fmu = FastLikelihood(name="mu",observables=obs3,include_measurements=ims)
+Fmu.make_measurement(N=500,threads=4)
+
+cmu = fpl.likelihood_contour_data(mu0,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=60) 
 plt.figure(figsize=(6,5))
 fpl.contour(**cmu,col=9)#,z_min=z_min1) 
-#plt.title(r'$m_{H^0}\sim m_{H^+},\,\cos(\beta-\alpha)=0$',fontsize=18)
-#plt.title(r'$m_{H^0}=1500\,$GeV,$\,\cos(\beta-\alpha)=0$',fontsize=18)
-#plt.title(r'$m_{H^0}\sim m_{H^+},\,\cos(\beta-\alpha)=-0.05$',fontsize=18)
-plt.title(r'$m_{H^0}=1500\,$GeV,$\,\cos(\beta-\alpha)=-0.05$',fontsize=18)
-#plt.title(r'$1,2\sigma$ Contours',fontsize=18)
-#plt.title(r'$3,4\sigma$ Contours',fontsize=18)
-plt.axhline(y=np.log10(866),color='black',linestyle='--')
-plt.axhline(y=np.log10(1658),color='black',linestyle='--')
-#plt.title(r'$m_{H^0}\sim m_{H^+}$, $\cos(\beta-\alpha)=\sin(2\beta)$',fontsize=18)
-#plt.title(r'$m_{H^0}=1500\,$GeV, $\cos(\beta-\alpha)=\sin(2\beta)$',fontsize=18)
+plt.title(r'$m_{H^0}\sim m_{H^+}$',fontsize=18)
 plt.xlabel(r'$\log_{10}[\tan\beta]$') 
 plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
-#plt.savefig('bmumu_wsl2.png')
-#plt.savefig('bmumu_apx_cba02.png')
-#plt.savefig('bmumu_fix_cba02.png')
-#plt.savefig('bmumu_apx_cbam2.png')
-plt.savefig('bmumu_fix_cbam2.png')
-#plt.savefig('rks_34sig.png')
+plt.savefig('bkell_apx.png')
+
+Fmu = FastLikelihood(name="mu",observables=obs3,include_measurements=ims)
+Fmu.make_measurement(N=500,threads=4)
+
+cmu = fpl.likelihood_contour_data(mu1,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=60) 
+plt.figure(figsize=(6,5))
+fpl.contour(**cmu,col=9)#,z_min=z_min1) 
+plt.axhline(y=np.log10(866),color='black',linestyle='--')
+plt.axhline(y=np.log10(1658),color='black',linestyle='--')
+plt.title(r'$m_{H^0}=1500\,$GeV',fontsize=18)
+plt.xlabel(r'$\log_{10}[\tan\beta]$') 
+plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
+plt.savefig('bkell_fix.png')
+
 quit()
+
+    #plt.title(r'$m_{H^0}\sim m_{H^+},\,\cos(\beta-\alpha)=0$',fontsize=18)
+    #plt.title(r'$m_{H^0}=1500\,$GeV,$\,\cos(\beta-\alpha)=0$',fontsize=18)
+    #plt.title(r'$m_{H^0}\sim m_{H^+},\,\cos(\beta-\alpha)=-0.05$',fontsize=18)
+    #plt.title(r'$m_{H^0}=1500\,$GeV,$\,\cos(\beta-\alpha)=-0.05$',fontsize=18)
+    #plt.title(r'$1,2\sigma$ Contours',fontsize=18)
+    #plt.title(r'$3,4\sigma$ Contours',fontsize=18)
+    #plt.savefig('bmumu_wsl2.png')
+    #plt.savefig('bmumu_apx_cba02.png')
+    #plt.savefig('bmumu_fix_cba02.png')
+    #plt.savefig('bmumu_apx_cbam2.png')
+    #plt.savefig('bmumu_fix_cbam2.png')
+    #plt.savefig('rks_34sig.png')
+    #plt.title(r'$m_{H^0}\sim m_{H^+}$, $\cos(\beta-\alpha)=\sin(2\beta)$',fontsize=18)
+    #plt.title(r'$m_{H^0}=1500\,$GeV, $\cos(\beta-\alpha)=\sin(2\beta)$',fontsize=18)
 
 plt.figure(figsize=(6,5))
 fpl.contour(**cdat,col=4) 

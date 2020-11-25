@@ -229,8 +229,8 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
 
     cob = 1/tanb
     b = np.arctan(tanb)
-#    a = b - np.pi/2 # alignment limit
-    a = b - np.arccos(-0.05) 
+    a = b - np.pi/2 # alignment limit
+#    a = b - np.arccos(-0.05) 
 #    cba,sba = np.sin(2*b),-np.sin(2*b) # wrong sign limit
     cba,sba = np.cos(b-a),np.sin(b-a) # alignment limit
 
@@ -773,40 +773,59 @@ def a_mu2(par,lep,tanb,mH0,mA0,mH):
     yHl, yAl = (cba + sba*tanb), -1*tanb
     yhsl = sba - cba*tanb
 
-    cr1 = GF*(mmu**2)*((yAl**2)*rA*fA(rA) + (yAl**2)*rHp*fHp(rHp) + (yHl**2)*rH*fH(rH))/(4*np.sqrt(2)*np.pi**2)
+    def int1():
+        def fu(x):
+            z = (2-x)*(x**2)/(rH*x**2 - x + 1)
+            return z
+        integ,err = quad(fu,0,1)
+        return integ
+    def int2():
+        def fu(x):
+            z = -(x**3)/(rA*x**2 - x + 1)
+            return z
+        integ,err = quad(fu,0,1)
+        return integ
+    def int3():
+        def fu(x):
+            z = (1-x)*(x**2)/(rHp*x*(1-x)-x)
+            return z
+        integ,err = quad(fu,0,1)
+        return integ
 
-    #----------------------------------------------
-    def gH(r):
-        def integ(x):
-            z = (2*x*(1-x)-1)*np.log(x*(1-x)/r)/(x*(1-x)-r)
-            return z
-        inte, err = quad(integ,0,1)
-        return inte
-    def gA(r):
-        def integ(x):
-            z = np.log(x*(1-x)/r)/(x*(1-x)-r)
-            return z
-        inte, err = quad(integ,0,1)
-        return inte
+    da = (rH*(yHl**2)*int1() + rA*(yAl**2)*int2() + rHp*(yAl**2)*int3())*(mmu**2)/(8*pow(np.pi*vev,2))
 
     aem = get_alpha_e(par,4.2)
-    yHu, yHd, yAu, yAd = (cba - sba/tanb), yHl, 1/tanb, -1*tanb
+    yHu, yHd, yAu, yAd = (cba - sba/tanb), yHl, -1/tanb, -1*tanb
     mu, md, mc, ms, mb, mt = par['m_u'], par['m_d'], par['m_c'], par['m_s'], par['m_b'], par['m_t']
     Qu, Qd = (2/3)**2, (-1/3)**2
     #I don't know why I'm not just summing over lists/arrays, but oh well
     rHu, rHd, rHc, rHs, rHb, rHt = (mu/mH0)**2, (md/mH0)**2, (mc/mH0)**2, (ms/mH0)**2, (mb/mH0)**2, (mt/mH0)**2
     rAu, rAd, rAc, rAs, rAb, rAt = (mu/mA0)**2, (md/mA0)**2, (mc/mA0)**2, (ms/mA0)**2, (mb/mA0)**2, (mt/mA0)**2
     
-    cr2 = Qu*yHu*yHl*rHu*gH(rHu) + Qu*yAu*yAl*rAu*gA(rAu)
-    cr2 += Qu*yHu*yHl*rHc*gH(rHc) + Qu*yAu*yAl*rAc*gA(rAc)
-    cr2 += Qu*yHu*yHl*rHt*gH(rHt) + Qu*yAu*yAl*rAt*gA(rAt)
-    cr2 += Qd*yHd*yHl*rHd*gH(rHd) + Qd*yAd*yAl*rAd*gA(rAd)
-    cr2 += Qd*yHd*yHl*rHs*gH(rHs) + Qd*yAd*yAl*rAs*gA(rAs)
-    cr2 += Qd*yHd*yHl*rHb*gH(rHb) + Qd*yAd*yAl*rAb*gA(rAb)
-    cr2 = GF*(mmu**2)*cr2*aem*3/(4*np.sqrt(2)*np.pi**3)
+    def F1(r):
+        def integ(x):
+            z = (2*x*(1-x)-1)*np.log(r/(x*(1-x)))/(r - x*(1-x))
+            return z
+        inte,err = quad(integ,0,1)
+        return inte*r/2
+    def Ft1(r):
+        def integ(x):
+            z = np.log(r/(x*(1-x)))/(r - x*(1-x))
+            return z
+        inte,err = quad(integ,0,1)
+        return inte*r/2
+    
+    pref = aem*(mmu**2)*3/(4*(vev**2)*np.pi**3)
+    d1 = yHu*yHl*Qu*F1(rHu) + yAu*yAl*Qu*Ft1(rHu)
+    d1 += yHu*yHl*Qu*F1(rHc) + yAu*yAl*Qu*Ft1(rHc)
+    d1 += yHu*yHl*Qu*F1(rHt) + yAu*yAl*Qu*Ft1(rHt)
+    d1 += yHd*yHl*Qd*F1(rHd) + yAd*yAl*Qd*Ft1(rHd)
+    d1 += yHd*yHl*Qd*F1(rHs) + yAd*yAl*Qd*Ft1(rHs)
+    d1 += yHd*yHl*Qd*F1(rHb) + yAd*yAl*Qd*Ft1(rHb)
+    d1 = d1*pref
 
     #----------------------------------------------
-    RH1, RH2 = -1*cba, -1*sba
+    RH1, RH2 = cba, -1*sba
     rWH0 = (mW/mH0)**2
     mhs = par['m_h']
     rWHp, rHHp, rSMHp, rHW, rSMW = (mW/mH)**2, (mH0/mH)**2, (mhs/mH)**2, (mH0/mW)**2, (mhs/mW)**2
@@ -849,7 +868,7 @@ def a_mu2(par,lep,tanb,mH0,mA0,mH):
     d4 = aem*(mmu**2)*3*Vtb2*I4()/(32*(mH**2 - mW**2)*pow(vev*s2w,2)*np.pi**3)
     
     #----------------------------------------------
-    RSM1, RSM2 = -1*sba, cba
+    RSM1, RSM2 = sba, cba
 
 #    def I5(m):
 #        def integ(x):
@@ -874,7 +893,7 @@ def a_mu2(par,lep,tanb,mH0,mA0,mH):
 #    d6 = d6*aem*(mmu**2)/(64*(mH**2 - mW**2)*(vev**2)*np.pi**3)
 
     #----------------------------------------------
-    cr = (cr1 + cr2 + d2 + d4)*np.sqrt(2)*(np.pi**2)/(GF*mmu**2)
+    cr = (da + d1 + d2 + d4)*np.sqrt(2)*(np.pi**2)/(GF*mmu**2)
 
     return cr
 
