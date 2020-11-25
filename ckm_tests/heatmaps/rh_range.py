@@ -82,7 +82,7 @@ def vij_mult(args,ths):
     #array_vs[j,i] = np.average(mod)
     #array_es[j,i] = np.average(mode)
 
-steps = 100
+steps = 120
 
 tanb,mH = np.linspace(-1,2,steps), np.linspace(1.5,4,steps)
 t, h = np.meshgrid(tanb,mH)
@@ -103,30 +103,6 @@ lats = ['$m_{B^+}$','$m_{D^+}$','$m_{D_s}$','$m_{K^+}$',r'$m_{\pi^+}$']
 pngs = ['mB','mD','mDs','mK','mpi']
 heatmap = {}
 errmap = {}
-
-#for m in range(len(mus)):
-#    pool1 = Pool()
-#    data_list = [par[mus[m]],par[mds[m]],par[mms[m]]]#,10**tanb,10**mH]
-#    errs_list = [par,err,mus,mds,mms,m]#tanb,mH,m]
-#    rhth = partial(rh,data_list)
-#    rh_err = partial(errors1,errs_list)
-#    heatmap_i = np.array(pool1.map(rhth,th)).reshape((steps,steps))
-#    heatmap_e = np.array(pool1.map(rh_err,th)).reshape((steps,steps))
-#    pool1.close()
-#    pool1.join()
-#        #        fig_title = r"$\frac{|\tilde{V}_{ij}|}{|V_{ij}|}$ for " + lats[m]
-#        #        fig_name = pngs[m] + "-" + "rH" + str(x) + ".png"
-#        #        print("Range for "+fig_title+" is "+str(np.min(heatmap_i))+" to " +str(np.max(heatmap_i)))
-#    heatmap[pngs[m]] = heatmap_i
-#    errmap[pngs[m]] = heatmap_e
-#
-#        #        fig = plt.figure()
-#        #        s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+}]$")
-#        #        im = s.imshow(heatmap_i,extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower')
-#        #        fig.colorbar(im)
-#        #        plt.title(fig_title)
-#        #        plt.savefig(fig_name)
-#        #        plt.show()
 
 for i in range(len(us)):
     args = [par,err,my_obs[i],steps,ds[i],us[i],1]
@@ -154,12 +130,12 @@ for i in range(len(us)):
     if np.min(np.log10(heatmap_v)) < 0:
         vm = np.min(np.log10(heatmap_v))
 
-#    fig = plt.figure()
-#    s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+}/\text{GeV}]$")
-#    im = s.imshow(np.log10(heatmap_v),extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower',vmin=vm)#,vmax=1)
-#    fig.colorbar(im)
-#    plt.title("Heatmap of Modification Factor for V"+us[i]+ds[i])
-#    plt.savefig("v"+us[i]+ds[i]+"_heatmap4.png")
+    fig = plt.figure()
+    s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+}/\text{GeV}]$")
+    im = s.imshow(np.log10(heatmap_v),extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower',vmin=vm)#,vmax=1)
+    fig.colorbar(im)
+    plt.title("Heatmap of Modification Factor for V"+us[i]+ds[i])
+    plt.savefig("v"+us[i]+ds[i]+"_heatmap4.png")
 
     print("V"+us[i]+ds[i]+" done")
     print(datetime.datetime.now())
@@ -182,11 +158,11 @@ plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$')
 plt.savefig("ckm_full_mat7.png")
 #plt.show()
 
-#fig = plt.figure()
-#s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+}/\text{GeV}]$")
-#im = s.imshow(-1*units,extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower',cmap='gray')
-#plt.title("Modification Regions Allowed By Unitarity \n of full CKM Matrix")
-#plt.savefig("ckm_full_mat8.png")
+fig = plt.figure()
+s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+}/\text{GeV}]$")
+im = s.imshow(-1*units,extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower',cmap='gray')
+plt.title("Modification Regions Allowed By Unitarity \n of full CKM Matrix")
+plt.savefig("ckm_full_mat8.png")
 
 print("--- %s seconds ---" % (time.time() - start_time))
 print(datetime.datetime.now())
