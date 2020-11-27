@@ -90,39 +90,31 @@ my_obs = [
     'BR(D+->taunu)', # [38]
 ]
 
-obs2 = [
-        'BR(B+->pilnu)', 'BR(B0->pilnu)',
+obs2 = ['BR(B+->pilnu)', 'BR(B0->pilnu)',
         ("<Rmue>(B+->Kll)", 1.0, 6.0), 
         ("<Rmue>(B0->K*ll)", 0.045, 1.1), 
         ("<Rmue>(B0->K*ll)", 1.1, 6.0),
-        'a_mu',
-]
+        'a_mu',]
 
-obs3 = [
-        ('<dBR/dq2>(B+->Kmumu)',1.0,6.0),
+obs3 = [('<dBR/dq2>(B+->Kmumu)',1.0,6.0),
         ('<dBR/dq2>(B0->K*mumu)',1.0,6.0),
         ('<P5p>(B0->K*mumu)',0.1,0.98),
         ('<P5p>(B0->K*mumu)',1.1,6.0),
-        ('<P5p>(B0->K*mumu)',15.0,19.0),
-]
+        ('<P5p>(B0->K*mumu)',15.0,19.0),]
 
 obs5 = ['<FL>(B0->K*mumu)','<S3>(B0->K*mumu)','<S4>(B0->K*mumu)','<S5>(B0->K*mumu)','<AFB>(B0->K*mumu)','<S7>(B0->K*mumu)','<S8>(B0->K*mumu)','<S9>(B0->K*mumu)','<P1>(B0->K*mumu)','<P2>(B0->K*mumu)','<P3>(B0->K*mumu)','<P4p>(B0->K*mumu)','<P5p>(B0->K*mumu)','<P6p>(B0->K*mumu)','<P8p>(B0->K*mumu)',]
-bins1 = [0.1,1.1,2.5,4.0,1.1]#,6.0,11.0,15.0,17.0,15.0]
-bins2 = [0.98,2.5,4.0,6.0,6.0]#,8.0,12.5,17.0,19.0,19.0]
+bins1 = [0.1,1.1,2.5,4.0,1.1,6.0,11.0,15.0,17.0,15.0]
+bins2 = [0.98,2.5,4.0,6.0,6.0,8.0,12.5,17.0,19.0,19.0]
 
 ims1 = ['BKll Observables',]
 ims = ['BKll Observables','LHCb B+->Kmumu BR 2014','CDF B+>Kmumu 2012','CMS B->K*mumu 2015 4.3-6 BR','CMS B->K*mumu 2013 combined with 2015 BR','LHCb B0->K*mumu BR 2016','CDF B0->K*mumu BR 2012']
-ims2 = [
-        ['LHCb B+->Kmumu BR 2014',
+ims2 = [['LHCb B+->Kmumu BR 2014',
             'CDF B+>Kmumu 2012',],
         ['CMS B->K*mumu 2015 4.3-6 BR',
             'CMS B->K*mumu 2013 combined with 2015 BR',
             'LHCb B0->K*mumu BR 2016',
             'CDF B0->K*mumu BR 2012',],
-        ['BKll Observables',],
-        ['BKll Observables',],
-        ['BKll Observables',],
-]
+        ['BKll Observables',],['BKll Observables',],['BKll Observables',],]
 #for i in range(len(obs3)):
 #    print(obs3[i])
 #    string, q1, q2 = obs3[i]
@@ -137,22 +129,17 @@ ims2 = [
 #    print()
     
 
-obs3_png = [
-        'dBRdq2(B+->Kmumu)',
-        'dBRdq2(B0->K(st)mumu)',
-        'P5p(B0->K(st)mumu)-1',
-        'P5p(B0->K(st)mumu)-2',
-        'P5p(B0->K(st)mumu)-3',
-]
+obs3_png = ['dBRdq2(B+->Kmumu)',
+            'dBRdq2(B0->K(st)mumu)',
+            'P5p(B0->K(st)mumu)-1',
+            'P5p(B0->K(st)mumu)-2',
+            'P5p(B0->K(st)mumu)-3',]
 
-obs4 = [
-        r'$\langle\frac{dBR}{dq^2}\rangle(B^+\to K^+\mu^+\mu^-),\,q^2\in[1,6]$',
+obs4 = [r'$\langle\frac{dBR}{dq^2}\rangle(B^+\to K^+\mu^+\mu^-),\,q^2\in[1,6]$',
         r"$\langle\frac{dBR}{dq^2}\rangle(B_0\to K_0^*\mu^+\mu^-),\,q^2\in[1,6]$",
         r"$\langle P5'\rangle(B_0\to K_0^*\mu^+\mu^-),\,q^2\in[0.1,0.98]$",
         r"$\langle P5'\rangle(B_0\to K_0^*\mu^+\mu^-),\,q^2\in[1.1,6]$",
-        r"$\langle P5'\rangle(B_0\to K_0^*\mu^+\mu^-),\,q^2\in[15,19]$",
-]
-
+        r"$\langle P5'\rangle(B_0\to K_0^*\mu^+\mu^-),\,q^2\in[15,19]$",]
 
 #count = 0
 #for i in obs2:
@@ -420,9 +407,8 @@ def func(wcs):
 #   Get Contour Data
 #------------------------------
 
-sigmas = (1,2)
-#sigmas = (1,2,3,4)
-#sigmas = (3.2,3.3)#3.2)
+#sigmas = (1,2)
+sigmas = (1,2,3,4,5,6)
 
 #cmuon = fpl.likelihood_contour_data(muon,-1,2.5,-2,4, n_sigma=sigmas, threads=4, steps=60) 
 #cmuon = fpl.likelihood_contour_data(muon,0,4,-1,4, n_sigma=sigmas, threads=4, steps=60) 
@@ -440,7 +426,7 @@ sigmas = (1,2)
 #   Print Out Values
 #------------------------------
 
-#minz_bsgam = -19.066889111832868
+minz_bsgam = -19.066889111832868
 minz_allsim = -759.1565659885084
 minz_Hsim = -757.8282739220956
 minz_Asim = -756.8886543429611
@@ -509,27 +495,18 @@ minz_Asim = -756.8886543429611
 #plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
 ##plt.savefig('md_plot.png')
 #plt.show()
-#quit()
 
 #plt.figure(figsize=(12,4))
 #plt.figure(figsize=(6,5))
-#fpl.contour(**crad,col=3,z_min=-19.066889111832868) 
+#fpl.contour(**crad,col=3,z_min=minz_bsgam)
 ##plt.title(r'$\bar{B}\to X_s\gamma$ Radiative Decay')
 #plt.xlabel(r'$\log_{10}[\tan\beta]$') 
 #plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
 ##plt.yticks(np.arange(2.5,3.6,0.25))
 #plt.savefig('bsgamma_plot2.png')
-#
-#quit()
 
 # (2.4,4.2,-2,1)
 z_min1 = -5.182818890948422
-# (1,3,0,3.5)
-z_min2 = -2.1479938777001504
-# (-1,2.5,0,3.5)
-z_min3 = 1.6111964187252177
-# (-1,2,0,3.5)
-z_min4 = 3.5229317450326256
 
 #for i in range(len(obs3)):
 #    Fmu = FastLikelihood(name="mu",observables=[obs3[i]],include_measurements=ims)
@@ -537,7 +514,7 @@ z_min4 = 3.5229317450326256
 #
 #    cmu = fpl.likelihood_contour_data(mu0,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=60) 
 #    plt.figure(figsize=(6,5))
-#    fpl.contour(**cmu,col=9)#,z_min=z_min1) 
+#    fpl.contour(**cmu,col=9)
 #    plt.title(r'$m_{H^0}\sim m_{H^+},$'+'\n'+obs4[i],fontsize=18)
 #    plt.xlabel(r'$\log_{10}[\tan\beta]$') 
 #    plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
@@ -548,7 +525,7 @@ z_min4 = 3.5229317450326256
 #
 #    cmu = fpl.likelihood_contour_data(mu1,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=60) 
 #    plt.figure(figsize=(6,5))
-#    fpl.contour(**cmu,col=9)#,z_min=z_min1) 
+#    fpl.contour(**cmu,col=9)
 #    plt.axhline(y=np.log10(866),color='black',linestyle='--')
 #    plt.axhline(y=np.log10(1658),color='black',linestyle='--')
 #    plt.title(r'$m_{H^0}=1500\,$GeV,'+'\n'+obs4[i],fontsize=18)
@@ -562,6 +539,7 @@ for i in obs5:
         angle_list.append((i,bins1[j],bins2[j]))
 
 print(angle_list)
+print(len(angle_list))
 Fmu = FastLikelihood(name="mu",observables=angle_list,include_measurements=ims1)
 Fmu.make_measurement(N=500,threads=4)
 
