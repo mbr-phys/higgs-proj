@@ -176,7 +176,7 @@ def bsgamma2(par,CKM,mub1,tanb,mH):
 
     return C7, C7p, C8, C8p
 
-def bsll(par,CKM,mss,mls,mH0,tanb,mH):
+def bsll(par,CKM,mss,mls,mH0,tanb,mH,ali):
     '''
         Calculating C9, C9', C10, C10', CS, CS', CP, CP' 2HDM WCs
     '''
@@ -229,8 +229,12 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH):
 
     cob = 1/tanb
     b = np.arctan(tanb)
-    a = b - np.pi/2 # alignment limit
-#    a = b - np.arccos(-0.05) 
+    if ali == 0:
+        a = b - np.pi/2 # alignment limit
+    elif ali == 1:
+        a = b - np.arccos(0.05) 
+    elif ali == 2:
+        a = b - np.arccos(-0.05) 
 #    cba,sba = np.sin(2*b),-np.sin(2*b) # wrong sign limit
     cba,sba = np.cos(b-a),np.sin(b-a) # alignment limit
 
