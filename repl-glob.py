@@ -125,12 +125,18 @@ obs7 = [('<dBR/dq2>(B0->K*mumu)',1.1,2.5),('<dBR/dq2>(B0->K*mumu)',1.0,2.0), ('<
         ('<dBR/dq2>(B0->Kmumu)',0.0,2.0),('<dBR/dq2>(B0->Kmumu)',1.0,6.0),('<dBR/dq2>(B0->Kmumu)',2.0,4.0),
         ('<dBR/dq2>(B0->Kmumu)',2.0,4.3),('<dBR/dq2>(B0->Kmumu)',4.0,6.0),('<dBR/dq2>(B0->Kmumu)',15.0,22.0),
         ('<dBR/dq2>(B0->Kmumu)',4.0,8.12),('<dBR/dq2>(B0->Kmumu)',10.2,12.8),('<dBR/dq2>(B0->Kmumu)',0.1,4.0),
+        ('<dBR/dq2>(B0->Kmumu)',0.1,2.0),('<dBR/dq2>(B0->Kmumu)',15.0,17.0),('<dBR/dq2>(B0->Kmumu)',17.0,19.0),
         ('<dBR/dq2>(B+->Kmumu)',1.1,2.0),('<dBR/dq2>(B+->Kmumu)',5.0,6.0),('<dBR/dq2>(B+->Kmumu)',2.0,3.0),
         ('<dBR/dq2>(B+->Kmumu)',15.0,22.0),('<dBR/dq2>(B+->Kmumu)',3.0,4.0),('<dBR/dq2>(B+->Kmumu)',0.0,2.0),
         ('<dBR/dq2>(B+->Kmumu)',4.0,5.0),('<dBR/dq2>(B+->Kmumu)',2.0,4.3),('<dBR/dq2>(B+->Kmumu)',0.1,4.0),
         ('<dBR/dq2>(B+->Kmumu)',4.0,8.12),('<dBR/dq2>(B+->Kmumu)',1.0,6.0),('<dBR/dq2>(B+->Kmumu)',10.2,12.8),
+        ('<dBR/dq2>(B+->Kmumu)',15.0,16.0),('<dBR/dq2>(B+->Kmumu)',16.0,17.0),('<dBR/dq2>(B+->Kmumu)',17.0,18.0),
+        ('<dBR/dq2>(B+->Kmumu)',18.0,19.0),('<dBR/dq2>(B+->Kmumu)',19.0,20.0),('<dBR/dq2>(B+->Kmumu)',20.0,21.0),
+        ('<dBR/dq2>(B+->Kmumu)',21.0,22.0),('<dBR/dq2>(B+->Kmumu)',0.1,0.98),
         ('<dBR/dq2>(B+->K*mumu)',0.1,2.0),('<dBR/dq2>(B+->K*mumu)',0.0,2.0),('<dBR/dq2>(B+->K*mumu)',2.0,4.0),
-        ('<dBR/dq2>(B+->K*mumu)',2.0,4.3),('<dBR/dq2>(B+->K*mumu)',4.0,6.0),('<dBR/dq2>(B+->K*mumu)',15.0,19.0)]
+        ('<dBR/dq2>(B+->K*mumu)',2.0,4.3),('<dBR/dq2>(B+->K*mumu)',4.0,6.0),('<dBR/dq2>(B+->K*mumu)',15.0,19.0),
+        ('<dBR/dq2>(B+->K*mumu)',15.0,17.0),('<dBR/dq2>(B+->K*mumu)',17.0,19.0)]
+
 obs8 = [('<dBR/dq2>(Bs->phimumu)',1.0,6.0),('<dBR/dq2>(Bs->phimumu)',15.0,19.0),
         ('<FL>(Bs->phimumu)',0.1,2.0),('<FL>(Bs->phimumu)',2.0,5.0),('<FL>(Bs->phimumu)',15.0,19.0),
         ('<S3>(Bs->phimumu)',0.1,2.0),('<S3>(Bs->phimumu)',2.0,5.0),('<S3>(Bs->phimumu)',15.0,19.0),
@@ -175,6 +181,8 @@ angle_list += obs6 + obs7 + obs8
 #Fmu = FastLikelihood(name="mu",observables=obs3)
 #------------------------------
 obs_list = my_obs+obs2[:2]+angle_list
+print(len(obs_list))
+quit()
 #FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios']+ims)
 FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics']+ims)
 #------------------------------
