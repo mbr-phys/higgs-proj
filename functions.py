@@ -3,9 +3,12 @@
 import flavio
 from flavio.classes import Parameter
 from flavio.physics.running.running import get_mt, get_alpha_e
+from flavio.statistics.functions import pvalue
 from scipy.integrate import quad
 import matplotlib.pyplot as plt
 import numpy as np
+
+ims = ['BKll Observables 1','BKll Observables 2','BKll Observables 3','BKll Observables 4','BKll Observables 5','BKll Observables 6']
 
 def mHmin(contour,minz=0):
     '''
@@ -16,7 +19,11 @@ def mHmin(contour,minz=0):
     z = contour['z']
     levels = contour['levels']
     
-    z = z - minz
+    if minz == 0:
+        mince = np.min(z)
+    else:
+        mince = minz
+    z = z - mince
 
     xf, yf = np.where(z==np.min(z))
     xbf = 10**x[xf[0],yf[0]]
@@ -25,10 +32,7 @@ def mHmin(contour,minz=0):
     minh_loc, mint_loc, maxt_loc = [],[],[]
     for i in levels:
         minh, mint, maxt = 100,100,-2
-        if minz == 0:
-            x_loc, y_loc = np.where(z<(i+np.min(z)))
-        else:
-            x_loc, y_loc = np.where(z<i)
+        x_loc, y_loc = np.where(z<i)
         for j in range(len(x_loc)):
             k = (x_loc[j],y_loc[j])
             if y[k] < minh:
@@ -41,7 +45,7 @@ def mHmin(contour,minz=0):
         mint_loc.append(10**mint)
         maxt_loc.append(10**maxt)
 
-    return [xbf,ybf], minh_loc, mint_loc, maxt_loc, np.min(z)
+    return [xbf,ybf], minh_loc, mint_loc, maxt_loc, mince
 
 def bsgamma2(par,CKM,mub1,tanb,mH):
     '''
@@ -631,7 +635,7 @@ def chi2_func(tanb, mH, mH0, mA0, obs):
     par = flavio.default_parameters.get_central_all()
     ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
 
-    csev = a_mu2(par,'m_mu',tanb,mH0,mA0,mH)
+#    csev = a_mu2(par,'m_mu',tanb,mH0,mA0,mH)
     CSR_b_t, CSL_b_t = rh(par['m_u'],par['m_b'],par['m_tau'],tanb,mH)
     CSR_b_m, CSL_b_m = rh(par['m_u'],par['m_b'],par['m_mu'],tanb,mH)
     CSR_b_e, CSL_b_e = rh(par['m_u'],par['m_b'],par['m_e'],tanb,mH)
@@ -651,14 +655,14 @@ def chi2_func(tanb, mH, mH0, mA0, obs):
     CSR_bc_e, CSL_bc_e = rh(par['m_c'],par['m_b'],par['m_e'],tanb,mH)
     C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],tanb,mH)
     C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',1],mH0,tanb,mH)
-    C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],mH0,tanb,mH)
-    C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],mH0,tanb,mH)
+    C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],mH0,tanb,mH,0)
+    C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],mH0,tanb,mH,0)
     CVLL_bs, CVRR_bs, CSLL_bs, CSRR_bs, CSLR_bs, CVLR_bs = mixing(par,ckm_els,['m_s',1,'m_d'],tanb,mH)
     CVLL_bd, CVRR_bd, CSLL_bd, CSRR_bd, CSLR_bd, CVLR_bd = mixing(par,ckm_els,['m_d',0,'m_s'],tanb,mH)
 
     wc = flavio.WilsonCoefficients()
     wc.set_initial({ # tell flavio what WCs you're referring to with your variables
-            'C7_mumu': csev,
+#            'C7_mumu': csev,
             'CSR_bctaunutau': CSR_bc_t, 'CSL_bctaunutau': CSL_bc_t,
             'CSR_bcmunumu': CSR_bc_m, 'CSL_bcmunumu': CSL_bc_m,
             'CSR_bcenue': CSR_bc_e, 'CSL_bcenue': CSL_bc_e,
@@ -680,7 +684,7 @@ def chi2_func(tanb, mH, mH0, mA0, obs):
             'C8_bs': C8,'C8p_bs': C8p, 
             'C9_bsee': C9_se,'C9p_bsee': C9p_se,
             'C9_bsmumu': C9_s,'C9p_bsmumu': C9p_s,
-            'C10_bsee': C10_se,'C10p_bsee': C10p_se,
+            'C10_bsee': C10_se,'C10p_bsee': C10p_se,'CS_bsee': CS_se,'CSp_bsee': CSp_se,'CP_bsee': CP_se,'CPp_bsee': CPp_se,
             'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CP_s,'CPp_bsmumu': CPp_s, # Bs->mumu
             'C10_bdmumu': C10_d,'C10p_bdmumu': C10p_d,'CS_bdmumu': CS_d,'CSp_bdmumu': CSp_d,'CP_bdmumu': CP_d,'CPp_bdmumu': CPp_d, # B0->mumu
             'CVLL_bsbs': CVLL_bs,'CVRR_bsbs': CVRR_bs,'CSLL_bsbs': CSLL_bs,'CSRR_bsbs': CSRR_bs,'CSLR_bsbs': CSLR_bs,'CVLR_bsbs': CVLR_bs, # DeltaM_s
@@ -695,7 +699,7 @@ def chi2_func(tanb, mH, mH0, mA0, obs):
             ob, q1, q2 = i
             npp = flavio.np_prediction(ob,wc_obj=wc,q2min=q1,q2max=q2)
             npe = flavio.np_uncertainty(ob,wc_obj=wc,q2min=q1,q2max=q2)
-        exp = flavio.combine_measurements(i,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios','Anomalous Magnetic Moments',])
+        exp = flavio.combine_measurements(i,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios','Anomalous Magnetic Moments']+ims)
         expc = exp.central_value
         expr = exp.error_right
         expl = exp.error_left
@@ -705,6 +709,36 @@ def chi2_func(tanb, mH, mH0, mA0, obs):
         chisq += ((npp-expp)/sig)**2
 
     return chisq
+
+def pval_func(cdat,app,obs,sigmas):
+    bf,minh,mint,maxt,minz = mHmin(cdat)#,minz_allsim)
+
+    if app == 0:
+        mHp,mH0,mA0 = bf[1],bf[1],bf[1]
+        print('mH+ = mH0 = mA0')
+    elif app == 2:
+        mHp,mH0,mA0 = bf[1],bf[1],1500
+        print('mH+ = mH0, mA0 = 1500 GeV')
+    elif app == 1:
+        mHp,mH0,mA0 = bf[1],1500,bf[1]
+        print('mH+ = mA0, mH0 = 1500 GeV')
+
+    print("Best fit value is found for (tanb,mH) =", bf)
+    print("Print outs are lists for values at", sigmas, "sigmas")
+    print("Minimum value of mH+ is:", minh) 
+    print("Minimum value of tanb is:", mint)
+    print("Maximum value of tanb is:", maxt)
+    print(minz)
+
+    chi2 = chi2_func(bf[0],mHp,mH0,mA0,obs)
+    degs = len(obs)-2
+    pval = pvalue(chi2,degs)
+    print("chi2tilde_min is:",minz) 
+    print("chi2_min is:",chi2)
+    print("chi2_nu is:",chi2/degs)  
+    print("2log(L(theta)) = ",chi2-minz)
+    print("p-value at chi2_min point with dof =",degs," is",pval*100,"%")
+    return None
 
 def a_mu(par,ml,tanb,mH0,mA0,mH):
     '''
@@ -820,12 +854,12 @@ def a_mu2(par,lep,tanb,mH0,mA0,mH):
         return inte*r/2
     
     pref = aem*(mmu**2)*3/(4*(vev**2)*np.pi**3)
-    d1 = yHu*yHl*Qu*F1(rHu) + yAu*yAl*Qu*Ft1(rHu)
-    d1 += yHu*yHl*Qu*F1(rHc) + yAu*yAl*Qu*Ft1(rHc)
-    d1 += yHu*yHl*Qu*F1(rHt) + yAu*yAl*Qu*Ft1(rHt)
-    d1 += yHd*yHl*Qd*F1(rHd) + yAd*yAl*Qd*Ft1(rHd)
-    d1 += yHd*yHl*Qd*F1(rHs) + yAd*yAl*Qd*Ft1(rHs)
-    d1 += yHd*yHl*Qd*F1(rHb) + yAd*yAl*Qd*Ft1(rHb)
+    d1 = yHu*yHl*Qu*F1(rHu) + yAu*yAl*Qu*Ft1(rAu)
+    d1 += yHu*yHl*Qu*F1(rHc) + yAu*yAl*Qu*Ft1(rAc)
+    d1 += yHu*yHl*Qu*F1(rHt) + yAu*yAl*Qu*Ft1(rAt)
+    d1 += yHd*yHl*Qd*F1(rHd) + yAd*yAl*Qd*Ft1(rAd)
+    d1 += yHd*yHl*Qd*F1(rHs) + yAd*yAl*Qd*Ft1(rAs)
+    d1 += yHd*yHl*Qd*F1(rHb) + yAd*yAl*Qd*Ft1(rAb)
     d1 = d1*pref
 
     #----------------------------------------------
@@ -869,7 +903,7 @@ def a_mu2(par,lep,tanb,mH0,mA0,mH):
         inte, err = quad(integ,0,1)
         return inte
 
-    d4 = aem*(mmu**2)*3*Vtb2*I4()/(32*(mH**2 - mW**2)*pow(vev*s2w,2)*np.pi**3)
+    d4 = aem*(mmu**2)*3*Vtb2*I4()/(32*(mH**2 - mW**2)*s2w*pow(vev,2)*np.pi**3)
     
     #----------------------------------------------
     RSM1, RSM2 = sba, cba

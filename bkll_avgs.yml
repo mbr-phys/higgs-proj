@@ -1,0 +1,1217 @@
+# Experimental values for BKll observables
+
+BKll Observables 1:
+  experiment: 2003.04831 + 1903.09252 LHCb
+  values:
+    - name: <dBR/dq2>(B+->Kee)
+      q2min: 1.1
+      q2max: 6.0
+      value: 28.6 + 2.0 - 1.7 ± 1.4 1e-9
+    - name: <FL>(B0->K*mumu)
+      q2min: 0.1
+      q2max: 0.98
+      value: 0.255 ± 0.032 ± 0.007
+    - name: <FL>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: 0.655 ± 0.046 ± 0.017
+    - name: <FL>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: 0.756 ± 0.047 ± 0.023
+    - name: <FL>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 0.684 ± 0.035 ± 0.015
+    - name: <FL>(B0->K*mumu)
+      q2min: 6.0
+      q2max: 8.0
+      value: 0.645 ± 0.030 ± 0.011
+    - name: <FL>(B0->K*mumu)
+      q2min: 11.0
+      q2max: 12.5
+      value: 0.461 ± 0.031 ± 0.010
+    - name: <FL>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 17.0
+      value: 0.352 ± 0.026 ± 0.009
+    - name: <FL>(B0->K*mumu)
+      q2min: 17.0
+      q2max: 19.0
+      value: 0.344 ± 0.032 ± 0.025
+    - name: <FL>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 6.0
+      value: 0.700 ± 0.025 ± 0.013
+    - name: <FL>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: 0.345 ± 0.032 ± 0.025
+    - name: <S3>(B0->K*mumu)
+      q2min: 0.1
+      q2max: 0.98
+      value: 0.034 ± 0.044 ± 0.003
+    - name: <S3>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: -0.107 ± 0.052 ± 0.003
+    - name: <S3>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: 0.020 ± 0.053 ± 0.002
+    - name: <S3>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 0.014 ± 0.038 ± 0.003
+    - name: <S3>(B0->K*mumu)
+      q2min: 6.0
+      q2max: 8.0
+      value: -0.013 ± 0.038 ± 0.004
+    - name: <S3>(B0->K*mumu)
+      q2min: 11.0
+      q2max: 12.5
+      value: -0.124 ± 0.037 ± 0.003
+    - name: <S3>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 17.0
+      value: -0.166 ± 0.034 ± 0.007
+    - name: <S3>(B0->K*mumu)
+      q2min: 17.0
+      q2max: 19.0
+      value: -0.250 ± 0.050 ± 0.025
+    - name: <S3>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 6.0
+      value: -0.012 ± 0.025 ± 0.003
+    - name: <S3>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: -0.189 ± 0.030 ± 0.009
+    - name: <S4>(B0->K*mumu)
+      q2min: 0.1
+      q2max: 0.98
+      value: 0.059 ± 0.050 ± 0.004
+    - name: <S4>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: -0.038 ± 0.070 ± 0.011
+    - name: <S4>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: -0.187 ± 0.074 ± 0.008
+    - name: <S4>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: -0.145 ± 0.057 ± 0.004
+    - name: <S4>(B0->K*mumu)
+      q2min: 6.0
+      q2max: 8.0
+      value: -0.275 ± 0.045 ± 0.006
+    - name: <S4>(B0->K*mumu)
+      q2min: 11.0
+      q2max: 12.5
+      value: -0.245 ± 0.047 ± 0.007
+    - name: <S4>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 17.0
+      value: -0.299 ± 0.033 ± 0.008
+    - name: <S4>(B0->K*mumu)
+      q2min: 17.0
+      q2max: 19.0
+      value: -0.307 ± 0.041 ± 0.008
+    - name: <S4>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 6.0
+      value: -0.136 ± 0.039 ± 0.003
+    - name: <S4>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: -0.303 ± 0.024 ± 0.008
+    - name: <S5>(B0->K*mumu)
+      q2min: 0.1
+      q2max: 0.98
+      value: 0.227 ± 0.041 ± 0.008
+    - name: <S5>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: 0.174 ± 0.060 ± 0.007
+    - name: <S5>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: -0.064 ± 0.068 ± 0.010
+    - name: <S5>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: -0.204 ± 0.051 ± 0.013
+    - name: <S5>(B0->K*mumu)
+      q2min: 6.0
+      q2max: 8.0
+      value: -0.279 ± 0.043 ± 0.013
+    - name: <S5>(B0->K*mumu)
+      q2min: 11.0
+      q2max: 12.5
+      value: -0.310 ± 0.043 ± 0.011
+    - name: <S5>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 17.0
+      value: -0.341 ± 0.034 ± 0.009
+    - name: <S5>(B0->K*mumu)
+      q2min: 17.0
+      q2max: 19.0
+      value: -0.280 ± 0.040 ± 0.014
+    - name: <S5>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 6.0
+      value: -0.052 ± 0.034 ± 0.007
+    - name: <S5>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: -0.317 ± 0.024 ± 0.011
+    - name: <AFB>(B0->K*mumu)
+      q2min: 0.1
+      q2max: 0.98
+      value: -0.004 ± 0.040 ± 0.004
+    - name: <AFB>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: -0.229 ± 0.046 ± 0.009
+    - name: <AFB>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: -0.070 ± 0.043 ± 0.006
+    - name: <AFB>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 0.050 ± 0.033 ± 0.002
+    - name: <AFB>(B0->K*mumu)
+      q2min: 6.0
+      q2max: 8.0
+      value: 0.110 ± 0.027 ± 0.005
+    - name: <AFB>(B0->K*mumu)
+      q2min: 11.0
+      q2max: 12.5
+      value: 0.333 ± 0.030 ± 0.008
+    - name: <AFB>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 17.0
+      value: 0.385 ± 0.024 ± 0.007
+    - name: <AFB>(B0->K*mumu)
+      q2min: 17.0
+      q2max: 19.0
+      value: 0.323 ± 0.032 ± 0.019
+    - name: <AFB>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 6.0
+      value: -0.073 ± 0.021 ± 0.002
+    - name: <AFB>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: 0.353 ± 0.020 ± 0.010
+    - name: <S7>(B0->K*mumu)
+      q2min: 0.1
+      q2max: 0.98
+      value: 0.006 ± 0.042 ± 0.002
+    - name: <S7>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: -0.107 ± 0.063 ± 0.004
+    - name: <S7>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: -0.066 ± 0.065 ± 0.004
+    - name: <S7>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: -0.136 ± 0.053 ± 0.002
+    - name: <S7>(B0->K*mumu)
+      q2min: 6.0
+      q2max: 8.0
+      value: -0.074 ± 0.046 ± 0.003
+    - name: <S7>(B0->K*mumu)
+      q2min: 11.0
+      q2max: 12.5
+      value: -0.096 ± 0.050 ± 0.003
+    - name: <S7>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 17.0
+      value: 0.029 ± 0.039 ± 0.001
+    - name: <S7>(B0->K*mumu)
+      q2min: 17.0
+      q2max: 19.0
+      value: 0.049 ± 0.049 ± 0.007
+    - name: <S7>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 6.0
+      value: -0.090 ± 0.034 ± 0.002
+    - name: <S7>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: 0.035 ± 0.030 ± 0.003
+    - name: <S8>(B0->K*mumu)
+      q2min: 0.1
+      q2max: 0.98
+      value: -0.003 ± 0.051 ± 0.001
+    - name: <S8>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: -0.174 ± 0.075 ± 0.002
+    - name: <S8>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: 0.016 ± 0.074 ± 0.002
+    - name: <S8>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 0.077 ± 0.062 ± 0.001
+    - name: <S8>(B0->K*mumu)
+      q2min: 6.0
+      q2max: 8.0
+      value: -0.062 ± 0.047 ± 0.001
+    - name: <S8>(B0->K*mumu)
+      q2min: 11.0
+      q2max: 12.5
+      value: 0.009 ± 0.049 ± 0.001
+    - name: <S8>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 17.0
+      value: 0.003 ± 0.042 ± 0.002
+    - name: <S8>(B0->K*mumu)
+      q2min: 17.0
+      q2max: 19.0
+      value: -0.026 ± 0.046 ± 0.002
+    - name: <S8>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 6.0
+      value: -0.009 ± 0.037 ± 0.002
+    - name: <S8>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: 0.005 ± 0.031 ± 0.001
+    - name: <S9>(B0->K*mumu)
+      q2min: 0.1
+      q2max: 0.98
+      value: -0.055 ± 0.041 ± 0.002
+    - name: <S9>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: -0.112 ± 0.054 ± 0.005
+    - name: <S9>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: -0.012 ± 0.055 ± 0.003
+    - name: <S9>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 0.029 ± 0.045 ± 0.002
+    - name: <S9>(B0->K*mumu)
+      q2min: 6.0
+      q2max: 8.0
+      value: 0.024 ± 0.035 ± 0.002
+    - name: <S9>(B0->K*mumu)
+      q2min: 11.0
+      q2max: 12.5
+      value: 0.042 ± 0.040 ± 0.003
+    - name: <S9>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 17.0
+      value: 0.000 ± 0.037 ± 0.002
+    - name: <S9>(B0->K*mumu)
+      q2min: 17.0
+      q2max: 19.0
+      value: -0.056 ± 0.045 ± 0.002
+    - name: <S9>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 6.0
+      value: -0.025 ± 0.026 ± 0.002
+    - name: <S9>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: -0.031 ± 0.029 ± 0.001
+    - name: <P1>(B0->K*mumu)
+      q2min: 0.1
+      q2max: 0.98
+      value: 0.090 ± 0.119 ± 0.009
+    - name: <P1>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: -0.617 ± 0.296 ± 0.023
+    - name: <P1>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: 0.168 ± 0.371 ± 0.043
+    - name: <P1>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 0.088 ± 0.235 ± 0.029
+    - name: <P1>(B0->K*mumu)
+      q2min: 6.0
+      q2max: 8.0
+      value: -0.071 ± 0.211 ± 0.020
+    - name: <P1>(B0->K*mumu)
+      q2min: 11.0
+      q2max: 12.5
+      value: -0.460 ± 0.132 ± 0.015
+    - name: <P1>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 17.0
+      value: -0.511 ± 0.096 ± 0.020
+    - name: <P1>(B0->K*mumu)
+      q2min: 17.0
+      q2max: 19.0
+      value: -0.763 ± 0.152 ± 0.094
+    - name: <P1>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 6.0
+      value: -0.079 ± 0.159 ± 0.021
+    - name: <P1>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: -0.577 ± 0.090 ± 0.031
+    - name: <P2>(B0->K*mumu)
+      q2min: 0.1
+      q2max: 0.98
+      value: -0.003 ± 0.038 ± 0.003
+    - name: <P2>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: -0.443 ± 0.100 ± 0.027
+    - name: <P2>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: -0.191 ± 0.116 ± 0.043
+    - name: <P2>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 0.105 ± 0.068 ± 0.009
+    - name: <P2>(B0->K*mumu)
+      q2min: 6.0
+      q2max: 8.0
+      value: 0.207 ± 0.048 ± 0.013
+    - name: <P2>(B0->K*mumu)
+      q2min: 11.0
+      q2max: 12.5
+      value: 0.411 ± 0.033 ± 0.008
+    - name: <P2>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 17.0
+      value: 0.396 ± 0.022 ± 0.004
+    - name: <P2>(B0->K*mumu)
+      q2min: 17.0
+      q2max: 19.0
+      value: 0.328 ± 0.032 ± 0.017
+    - name: <P2>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 6.0
+      value: -0.162 ± 0.050 ± 0.012
+    - name: <P2>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: 0.359 ± 0.018 ± 0.009
+    - name: <P3>(B0->K*mumu)
+      q2min: 0.1
+      q2max: 0.98
+      value: 0.073 ± 0.057 ± 0.003
+    - name: <P3>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: 0.324 ± 0.147 ± 0.014
+    - name: <P3>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: 0.049 ± 0.195 ± 0.014
+    - name: <P3>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: -0.090 ± 0.139 ± 0.006
+    - name: <P3>(B0->K*mumu)
+      q2min: 6.0
+      q2max: 8.0
+      value: -0.068 ± 0.104 ± 0.007
+    - name: <P3>(B0->K*mumu)
+      q2min: 11.0
+      q2max: 12.5
+      value: -0.078 ± 0.077 ± 0.007
+    - name: <P3>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 17.0
+      value: -0.000 ± 0.056 ± 0.003
+    - name: <P3>(B0->K*mumu)
+      q2min: 17.0
+      q2max: 19.0
+      value: 0.085 ± 0.068 ± 0.004
+    - name: <P3>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 6.0
+      value: 0.085 ± 0.090 ± 0.005
+    - name: <P3>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: 0.048 ± 0.045 ± 0.002
+    - name: <P4p>(B0->K*mumu)
+      q2min: 0.1
+      q2max: 0.98
+      value: 0.135 ± 0.118 ± 0.010
+    - name: <P4p>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: -0.080 ± 0.142 ± 0.019
+    - name: <P4p>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: -0.435 ± 0.169 ± 0.035
+    - name: <P4p>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: -0.312 ± 0.115 ± 0.013
+    - name: <P4p>(B0->K*mumu)
+      q2min: 6.0
+      q2max: 8.0
+      value: -0.574 ± 0.091 ± 0.018
+    - name: <P4p>(B0->K*mumu)
+      q2min: 11.0
+      q2max: 12.5
+      value: -0.491 ± 0.095 ± 0.013
+    - name: <P4p>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 17.0
+      value: -0.626 ± 0.069 ± 0.018
+    - name: <P4p>(B0->K*mumu)
+      q2min: 17.0
+      q2max: 19.0
+      value: -0.647 ± 0.086 ± 0.057
+    - name: <P4p>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 6.0
+      value: -0.298 ± 0.087 ± 0.016
+    - name: <P4p>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: -0.638 ± 0.055 ± 0.020
+    - name: <P5p>(B0->K*mumu)
+      q2min: 0.1
+      q2max: 0.98
+      value: 0.521 ± 0.095 ± 0.024
+    - name: <P5p>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: 0.365 ± 0.122 ± 0.013
+    - name: <P5p>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: -0.150 ± 0.144 ± 0.032
+    - name: <P5p>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: -0.439 ± 0.111 ± 0.036
+    - name: <P5p>(B0->K*mumu)
+      q2min: 6.0
+      q2max: 8.0
+      value: -0.583 ± 0.090 ± 0.030
+    - name: <P5p>(B0->K*mumu)
+      q2min: 11.0
+      q2max: 12.5
+      value: -0.622 ± 0.088 ± 0.017
+    - name: <P5p>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 17.0
+      value: -0.714 ± 0.074 ± 0.021
+    - name: <P5p>(B0->K*mumu)
+      q2min: 17.0
+      q2max: 19.0
+      value: -0.590 ± 0.084 ± 0.059
+    - name: <P5p>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 6.0
+      value: -0.114 ± 0.068 ± 0.026
+    - name: <P5p>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: -0.667 ± 0.053 ± 0.029
+    - name: <P6p>(B0->K*mumu)
+      q2min: 0.1
+      q2max: 0.98
+      value: 0.015 ± 0.094 ± 0.007
+    - name: <P6p>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: -0.226 ± 0.128 ± 0.005
+    - name: <P6p>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: -0.155 ± 0.148 ± 0.024
+    - name: <P6p>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: -0.293 ± 0.117 ± 0.004
+    - name: <P6p>(B0->K*mumu)
+      q2min: 6.0
+      q2max: 8.0
+      value: -0.155 ± 0.098 ± 0.009
+    - name: <P6p>(B0->K*mumu)
+      q2min: 11.0
+      q2max: 12.5
+      value: -0.193 ± 0.100 ± 0.003
+    - name: <P6p>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 17.0
+      value: 0.061 ± 0.085 ± 0.003
+    - name: <P6p>(B0->K*mumu)
+      q2min: 17.0
+      q2max: 19.0
+      value: 0.103 ± 0.105 ± 0.016
+    - name: <P6p>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 6.0
+      value: -0.197 ± 0.075 ± 0.009
+    - name: <P6p>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: 0.073 ± 0.067 ± 0.006
+    - name: <P8p>(B0->K*mumu)
+      q2min: 0.1
+      q2max: 0.98
+      value: -0.007 ± 0.122 ± 0.002
+    - name: <P8p>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: -0.366 ± 0.158 ± 0.005
+    - name: <P8p>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: 0.037 ± 0.169 ± 0.007
+    - name: <P8p>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 0.166 ± 0.127 ± 0.004
+    - name: <P8p>(B0->K*mumu)
+      q2min: 6.0
+      q2max: 8.0
+      value: -0.129 ± 0.098 ± 0.005
+    - name: <P8p>(B0->K*mumu)
+      q2min: 11.0
+      q2max: 12.5
+      value: 0.018 ± 0.099 ± 0.009
+    - name: <P8p>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 17.0
+      value: 0.007 ± 0.086 ± 0.002
+    - name: <P8p>(B0->K*mumu)
+      q2min: 17.0
+      q2max: 19.0
+      value: -0.055 ± 0.099 ± 0.006
+    - name: <P8p>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 6.0
+      value: -0.020 ± 0.089 ± 0.009
+    - name: <P8p>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: 0.011 ± 0.069 ± 0.003
+
+BKll Observables 2:
+  experiment: 1903.10932 LHCb and Belle
+  values:
+    - name: <FL>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: 0.666 + 0.083 - 0.077 ± 0.022
+    - name: <FL>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: 0.876 + 0.109 - 0.097 ± 0.017
+    - name: <FL>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 0.611 + 0.052 - 0.053 ± 0.017
+    - name: <FL>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: 0.344 + 0.028 - 0.030 ± 0.008
+    - name: <AFB>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: -0.191 + 0.068 - 0.080 ± 0.012
+    - name: <AFB>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: -0.118 + 0.082 - 0.090 ± 0.007
+    - name: <AFB>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 0.025 + 0.051 - 0.052 ± 0.004
+    - name: <AFB>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: 0.355 + 0.027 - 0.027 ± 0.009
+    - name: <S3>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: -0.077 + 0.087 - 0.105 ± 0.005
+    - name: <S3>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: 0.035 + 0.098 - 0.089 ± 0.007
+    - name: <S3>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 0.035 + 0.069 - 0.068 ± 0.007
+    - name: <S3>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: -0.163 + 0.033 - 0.033 ± 0.009
+    - name: <S4>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: -0.077 + 0.111 - 0.113 ± 0.005
+    - name: <S4>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: -0.234 + 0.127 - 0.144 ± 0.006
+    - name: <S4>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: -0.219 + 0.086 - 0.084 ± 0.008
+    - name: <S4>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: -0.284 + 0.038 - 0.041 ± 0.007
+    - name: <S5>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: 0.137 + 0.099 - 0.094 ± 0.009 
+    - name: <S5>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: -0.022 + 0.110 - 0.103 ± 0.008
+    - name: <S5>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: -0.146 + 0.077 - 0.078 ± 0.011
+    - name: <S5>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: -0.325 + 0.036 - 0.037 ± 0.009
+    - name: <S7>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: -0.219 + 0.094 - 0.104 ± 0.004
+    - name: <S7>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: 0.068 + 0.120 - 0.112 ± 0.005
+    - name: <S7>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: -0.016 + 0.081 - 0.080 ± 0.004
+    - name: <S7>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: 0.048 + 0.043 - 0.043 ± 0.006
+    - name: <S8>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: -0.098 + 0.108 - 0.123 ± 0.005
+    - name: <S8>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: 0.030 + 0.129 - 0.131 ± 0.006
+    - name: <S8>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 0.167 + 0.094 - 0.091 ± 0.004
+    - name: <S8>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: 0.028 + 0.044 - 0.045 ± 0.003
+    - name: <S9>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: -0.119 + 0.087 - 0.104 ± 0.005 
+    - name: <S9>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: -0.092 + 0.105 - 0.125 ± 0.007
+    - name: <S9>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: -0.032 + 0.071 - 0.071 ± 0.004
+    - name: <S9>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: -0.053 + 0.039 - 0.039 ± 0.002
+    - name: <P4p>(B0->K*mumu)
+      q2min: 0.1
+      q2max: 4.0
+      value: -0.38 + 0.50 - 0.48 ± 0.12
+    - name: <P4p>(B0->K*mumu)
+      q2min: 14.18
+      q2max: 19.0
+      value: -0.10 ± 0.39 ± 0.07
+    - name: <P5p>(B0->K*mumu)
+      q2min: 0.1
+      q2max: 4.0
+      value: 0.42 + 0.39 - 0.39 ± 0.14
+    - name: <P5p>(B0->K*mumu)
+      q2min: 14.18
+      q2max: 19.0
+      value: -0.13 + 0.39 - 0.35 ± 0.06
+    - name: <dBR/dq2>(B0->K*mumu)
+      q2min: 1.1
+      q2max: 2.5
+      value: 3.26 + 0.32 - 0.31 ± 0.10 ± 0.22 1e-8
+    - name: <dBR/dq2>(B0->K*mumu)
+      q2min: 2.5
+      q2max: 4.0
+      value: 3.34 + 0.31 - 0.33 ± 0.09 ± 0.23 1e-8
+    - name: <dBR/dq2>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 3.54 + 0.27 - 0.26 ± 0.09 ± 0.24 1e-8
+    - name: <dBR/dq2>(B0->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: 4.36 + 0.18 - 0.19 ± 0.07 ± 0.30 1e-8
+    - name: <dBR/dq2>(B0->Kmumu)
+      q2min: 0.1
+      q2max: 2.0
+      value: 1.22 + 0.59 - 0.52 ± 0.06 1e-8
+    - name: <dBR/dq2>(B0->Kmumu)
+      q2min: 2.0
+      q2max: 4.0
+      value: 1.87 + 0.55 - 0.49 ± 0.09 1e-8
+    - name: <dBR/dq2>(B0->Kmumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 1.73 + 0.53 - 0.48 ± 0.09 1e-8
+    - name: <dBR/dq2>(B0->Kmumu)
+      q2min: 15.0
+      q2max: 22.0
+      value: 0.95 + 0.16 - 0.15 ± 0.05 1e-8
+    - name: <dBR/dq2>(B+->Kmumu)
+      q2min: 1.1
+      q2max: 2.0
+      value: 2.33 ± 0.15 ± 0.12 1e-8
+    - name: <dBR/dq2>(B+->Kmumu)
+      q2min: 2.0
+      q2max: 3.0
+      value: 2.82 ± 0.16 ± 0.14 1e-8
+    - name: <dBR/dq2>(B+->Kmumu)
+      q2min: 3.0
+      q2max: 4.0
+      value: 2.54 ± 0.15 ± 0.13 1e-8
+    - name: <dBR/dq2>(B+->Kmumu)
+      q2min: 4.0
+      q2max: 5.0
+      value: 2.21 ± 0.14 ± 0.11 1e-8
+    - name: <dBR/dq2>(B+->Kmumu)
+      q2min: 5.0
+      q2max: 6.0
+      value: 2.31 ± 0.14 ± 0.12 1e-8
+    - name: <dBR/dq2>(B+->Kmumu)
+      q2min: 15.0
+      q2max: 22.0
+      value: 1.21 ± 0.04 ± 0.06 1e-8
+    - name: <dBR/dq2>(B+->K*mumu)
+      q2min: 0.1
+      q2max: 2.0
+      value: 5.92 + 1.44 - 1.30 ± 0.40 1e-8
+    - name: <dBR/dq2>(B+->K*mumu)
+      q2min: 2.0
+      q2max: 4.0
+      value: 5.59 + 1.59 - 1.44 ± 0.38 1e-8
+    - name: <dBR/dq2>(B+->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 2.49 + 1.10 - 0.96 ± 0.17 1e-8
+    - name: <dBR/dq2>(B+->K*mumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: 3.95 + 0.80 - 0.73 ± 0.28 1e-8
+    - name: <dBR/dq2>(Bs->phimumu)
+      q2min: 1.0
+      q2max: 6.0
+      value: 2.58 + 0.33 - 0.31 ± 0.08 ± 0.19 1e-8
+    - name: <dBR/dq2>(Bs->phimumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: 4.04 + 0.39 - 0.38 ± 0.13 ± 0.30 1e-8
+    - name: <FL>(Bs->phimumu)
+      q2min: 0.1
+      q2max: 2.0
+      value: 0.20 + 0.08 - 0.09 ± 0.02
+    - name: <FL>(Bs->phimumu)
+      q2min: 2.0
+      q2max: 5.0
+      value: 0.68 + 0.16 - 0.13 ± 0.03
+    - name: <FL>(Bs->phimumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: 0.29 + 0.07 - 0.06 ± 0.02
+    - name: <S3>(Bs->phimumu)
+      q2min: 0.1
+      q2max: 2.0
+      value: -0.05 + 0.13 - 0.13 ± 0.01
+    - name: <S3>(Bs->phimumu)
+      q2min: 2.0
+      q2max: 5.0
+      value: -0.06 + 0.19 - 0.23 ± 0.01
+    - name: <S3>(Bs->phimumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: -0.09 + 0.11 - 0.12 ± 0.01
+    - name: <S4>(Bs->phimumu)
+      q2min: 0.1
+      q2max: 2.0
+      value: 0.27 + 0.28 - 0.18 ± 0.01
+    - name: <S4>(Bs->phimumu)
+      q2min: 2.0
+      q2max: 5.0
+      value: -0.47 + 0.30 - 0.44 ± 0.01
+    - name: <S4>(Bs->phimumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: -0.14 + 0.11 - 0.11 ± 0.01
+    - name: <S7>(Bs->phimumu)
+      q2min: 0.1
+      q2max: 2.0
+      value: 0.04 + 0.12 - 0.12 ± 0.00
+    - name: <S7>(Bs->phimumu)
+      q2min: 2.0
+      q2max: 5.0
+      value: -0.03 + 0.18 - 0.23 ± 0.01
+    - name: <S7>(Bs->phimumu)
+      q2min: 15.0
+      q2max: 19.0
+      value: 0.13 + 0.11 - 0.11 ± 0.01
+    - name: <dBR/dq2>(Lambdab->Lambdamumu)
+      q2min: 1.0
+      q2max: 6.0
+      value: 0.09 + 0.06 - 0.05 ± 0.02 1e-7
+    - name: <dBR/dq2>(Lambdab->Lambdamumu)
+      q2min: 15.0
+      q2max: 20.0
+      value: 1.20 + 0.09 - 0.09 ± 0.25 1e-7
+    - name: AFBh(Lambdab->Lambdamumu)
+      q2min: 15.0
+      q2max: 20.0
+      value: -0.39 ± 0.04 ± 0.01
+    - name: AFBl(Lambdab->Lambdamumu)
+      q2min: 15.0
+      q2max: 20.0
+      value: -0.30 ± 0.05 ± 0.02
+    - name: AFBlh(Lambdab->Lambdamumu)
+      q2min: 15.0
+      q2max: 20.0
+      value: 0.25 ± 0.04 ± 0.01
+    - name: <P4p>(B0->K*ee)
+      q2min: 1.0 
+      q2max: 4.0
+      value: 0.34 + 0.41 - 0.45 ± 0.11
+    - name: <P4p>(B0->K*ee)
+      q2min: 14.18
+      q2max: 19.0
+      value: -0.15 + 0.41 - 0.40 ± 0.04
+    - name: <P5p>(B0->K*ee)
+      q2min: 1.0 
+      q2max: 4.0
+      value: 0.51 + 0.39 - 0.46 ± 0.09
+    - name: <P5p>(B0->K*ee)
+      q2min: 14.18
+      q2max: 19.0
+      value: -0.91 + 0.36 - 0.30 ± 0.03
+    - name: <FL>(B0->K*ee)
+      q2min: 0.002
+      q2max: 1.12
+      value: 0.16 ± 0.06 ± 0.03
+    - name: <dBR/dq2>(B0->K*ee)
+      q2min: 0.003
+      q2max: 1.0
+      value: 3.1 + 0.9 - 0.9 ± 0.2 1e-7
+    - name: <dBR/dq2>(B+->Kee)
+      q2min: 1.0
+      q2max: 6.0
+      value: 0.312 + 0.040 - 0.031 1e-7
+
+BKll Observables 3:
+  experiment: 1903.10932 ATLAS 
+  values:
+    - name: <FL>(B0->K*mumu)
+      q2min: 0.04
+      q2max: 2.0
+      value: 0.44 ± 0.08 ± 0.07
+    - name: <FL>(B0->K*mumu)
+      q2min: 2.0
+      q2max: 4.0
+      value: 0.64 ± 0.11 ± 0.05
+    - name: <FL>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 0.42 ± 0.13 ± 0.12
+    - name: <S3>(B0->K*mumu)
+      q2min: 0.04
+      q2max: 2.0
+      value: -0.02 ± 0.09 ± 0.02
+    - name: <S3>(B0->K*mumu)
+      q2min: 2.0
+      q2max: 4.0
+      value: -0.15 ± 0.10 ± 0.07
+    - name: <S3>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 0.00 ± 0.12 ± 0.07
+    - name: <S4>(B0->K*mumu)
+      q2min: 0.04
+      q2max: 2.0
+      value: 0.15 ± 0.20 ± 0.10
+    - name: <S4>(B0->K*mumu)
+      q2min: 2.0
+      q2max: 4.0
+      value: -0.37 ± 0.15 ± 0.10
+    - name: <S4>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 0.32 ± 0.16 ± 0.09
+    - name: <S5>(B0->K*mumu)
+      q2min: 0.04
+      q2max: 2.0
+      value: 0.33 ± 0.13 ± 0.08 
+    - name: <S5>(B0->K*mumu)
+      q2min: 2.0
+      q2max: 4.0
+      value: -0.16 ± 0.15 ± 0.06
+    - name: <S5>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 0.13 ± 0.18 ± 0.09
+    - name: <S7>(B0->K*mumu)
+      q2min: 0.04
+      q2max: 2.0
+      value: -0.09 ± 0.10 ± 0.02
+    - name: <S7>(B0->K*mumu)
+      q2min: 2.0
+      q2max: 4.0
+      value: 0.15 ± 0.14 ± 0.09
+    - name: <S7>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: 0.03 ± 0.13 ± 0.07
+    - name: <S8>(B0->K*mumu)
+      q2min: 0.04
+      q2max: 2.0
+      value: -0.14 ± 0.24 ± 0.09
+    - name: <S8>(B0->K*mumu)
+      q2min: 2.0
+      q2max: 4.0
+      value: 0.52 ± 0.20 ± 0.19
+    - name: <S8>(B0->K*mumu)
+      q2min: 4.0
+      q2max: 6.0
+      value: -0.12 ± 0.21 ± 0.05
+
+BKll Observables 4:
+  experiment: 1903.10932 CMS
+  values:
+    - name: <FL>(B0->K*mumu)
+      q2min: 1.0
+      q2max: 2.0
+      value: 0.64 + 0.10 - 0.09 ± 0.07
+    - name: <FL>(B0->K*mumu)
+      q2min: 2.0
+      q2max: 4.3
+      value: 0.80 + 0.08 - 0.08 ± 0.06
+    - name: <FL>(B0->K*mumu)
+      q2min: 4.3
+      q2max: 6.0
+      value: 0.62 + 0.10 - 0.09 ± 0.07
+    - name: <AFB>(B0->K*mumu)
+      q2min: 1.0
+      q2max: 2.0
+      value: -0.27 + 0.17 - 0.40 ± 0.07
+    - name: <AFB>(B0->K*mumu)
+      q2min: 2.0
+      q2max: 4.3
+      value: -0.12 + 0.15 - 0.17 ± 0.05
+    - name: <AFB>(B0->K*mumu)
+      q2min: 4.3
+      q2max: 6.0
+      value: 0.01 + 0.15 - 0.15 ± 0.03
+    - name: <P1>(B0->K*mumu)
+      q2min: 1.0
+      q2max: 2.0
+      value: 0.12 + 0.46 - 0.47 ± 0.10
+    - name: <P1>(B0->K*mumu)
+      q2min: 2.0
+      q2max: 4.3
+      value: -0.69 + 0.58 - 0.27 ± 0.23
+    - name: <P1>(B0->K*mumu)
+      q2min: 4.3
+      q2max: 6.0
+      value: 0.53 + 0.24 - 0.33 ± 0.19
+    - name: <P5p>(B0->K*mumu)
+      q2min: 1.0
+      q2max: 2.0
+      value: 0.10 + 0.32 - 0.31 ± 0.07
+    - name: <P5p>(B0->K*mumu)
+      q2min: 2.0
+      q2max: 4.3
+      value: -0.57 + 0.34 - 0.31 ± 0.18
+    - name: <P5p>(B0->K*mumu)
+      q2min: 4.3
+      q2max: 6.0
+      value: -0.96 + 0.22 - 0.21 ± 0.25
+    - name: <dBR/dq2>(B0->K*mumu)
+      q2min: 1.0
+      q2max: 2.0
+      value: 4.6 ± 0.7 ± 0.3 1e-8
+    - name: <dBR/dq2>(B0->K*mumu)
+      q2min: 2.0
+      q2max: 4.3
+      value: 3.3 ± 0.5 ± 0.2 1e-8
+    - name: <dBR/dq2>(B0->K*mumu)
+      q2min: 4.3
+      q2max: 6.0
+      value: 3.4 ± 0.5 ± 0.3 1e-8
+    - name: <AFB>(B+->Kmumu)
+      q2min: 1.0
+      q2max: 6.0
+      value: -0.14 + 0.07 - 0.06 ± 0.03
+    - name: <FH>(B+->Kmumu)
+      q2min: 2.0
+      q2max: 4.3
+      value: 0.85 + 0.34 - 0.31 ± 0.14
+
+BKll Observables 5:
+  experiment: 1903.10932 CDF and BaBar
+  values:
+    - name: <FL>(B0->K*mumu)
+      q2min: 0.0
+      q2max: 2.0
+      value: 0.26 + 0.14 - 0.13 ± 0.04
+    - name: <FL>(B0->K*mumu)
+      q2min: 2.0
+      q2max: 4.3
+      value: 0.72 + 0.15 - 0.17  0.09
+    - name: <AFB>(B0->K*mumu)
+      q2min: 0.0
+      q2max: 2.0
+      value: 0.07 + 0.29 - 0.28 ± 0.11
+    - name: <AFB>(B0->K*mumu)
+      q2min: 2.0
+      q2max: 4.3
+      value: -0.11 + 0.34 - 0.45 ± 0.16
+    - name: <dBR/dq2>(B0->K*mumu)
+      q2min: 0.0
+      q2max: 2.0
+      value: 9.12 ± 1.73 ± 0.49 1e-8
+    - name: <dBR/dq2>(B0->K*mumu)
+      q2min: 2.0
+      q2max: 4.3
+      value: 4.61 ± 1.19 ± 0.27 1e-8
+    - name: <dBR/dq2>(B0->Kmumu)
+      q2min: 0.0
+      q2max: 2.0
+      value: 2.45 ± 1.59 ± 0.21 1e-8
+    - name: <dBR/dq2>(B0->Kmumu)
+      q2min: 2.0
+      q2max: 4.3
+      value: 2.55 ± 1.70 ± 0.35 1e-8
+    - name: <dBR/dq2>(B+->Kmumu)
+      q2min: 0.0
+      q2max: 2.0
+      value: 1.80 ± 0.53 ± 0.12 1e-8
+    - name: <dBR/dq2>(B+->Kmumu)
+      q2min: 2.0
+      q2max: 4.3
+      value: 3.16 ± 0.54 ± 0.18 1e-8
+    - name: <dBR/dq2>(B+->K*mumu)
+      q2min: 0.0
+      q2max: 2.0
+      value: 7.50 ± 4.68 ± 0.88 1e-8
+    - name: <dBR/dq2>(B+->K*mumu)
+      q2min: 2.0
+      q2max: 4.3
+      value: 4.94 ± 3.58 ± 0.63 1e-8
+    - name: <BR>(B->Xsmumu)
+      q2min: 1.0
+      q2max: 6.0
+      value: 0.66 + 0.87 - 0.80 ± 0.07 1e-6
+    - name: <BR>(B->Xsmumu)
+      q2min: 14.2
+      q2max: 25.0
+      value: 0.60 + 0.31 - 0.29 ± 0.00 1e-6
+    - name: <BR>(B->Xsee)
+      q2min: 1.0
+      q2max: 6.0
+      value: 1.93 + 0.51 - 0.48 ± 0.18 1e-6
+    - name: <BR>(B->Xsee)
+      q2min: 14.2
+      q2max: 25.0
+      value: 0.56 + 0.19 - 0.18 ± 0.00 1e-6
+
+BKll Observables 6:
+  experiment: 1908.01848 Belle
+  values:
+    - name: <dBR/dq2>(B+->Kmumu)
+      q2min: 0.1
+      q2max: 4.0
+      value: 1.76 + 0.41 - 0.37 ± 0.04 1e-7
+    - name: <dBR/dq2>(B+->Kmumu)
+      q2min: 4.0
+      q2max: 8.12
+      value: 1.24 + 0.28 - 0.25 ± 0.03 1e-7
+    - name: <dBR/dq2>(B+->Kmumu)
+      q2min: 1.0
+      q2max: 6.0
+      value: 2.30 + 0.41 - 0.38 ± 0.05 1e-7
+    - name: <dBR/dq2>(B+->Kmumu)
+      q2min: 10.2
+      q2max: 12.8
+      value: 0.86 + 0.22 - 0.20 ± 0.02 1e-7
+    - name: <dBR/dq2>(B0->Kmumu)
+      q2min: 0.1
+      q2max: 4.0
+      value: 0.62 + 0.30 - 0.23 ± 0.02 1e-7
+    - name: <dBR/dq2>(B0->Kmumu)
+      q2min: 4.0
+      q2max: 8.12
+      value: 0.27 + 0.18 - 0.13 ± 0.01 1e-7
+    - name: <dBR/dq2>(B0->Kmumu)
+      q2min: 1.0
+      q2max: 6.0
+      value: 0.31 + 0.22 - 0.16 ± 0.01 1e-7
+    - name: <dBR/dq2>(B0->Kmumu)
+      q2min: 10.2
+      q2max: 12.8
+      value: 0.29 + 0.17 - 0.13 ± 0.01 1e-7
+    - name: <dBR/dq2>(B+->Kee)
+      q2min: 0.1
+      q2max: 4.0
+      value: 1.80 + 0.33 - 0.30 ± 0.05 1e-7
+    - name: <dBR/dq2>(B+->Kee)
+      q2min: 4.0
+      q2max: 8.12
+      value: 0.96 + 0.24 - 0.22 ± 0.03 1e-7
+    - name: <dBR/dq2>(B+->Kee)
+      q2min: 1.0
+      q2max: 6.0
+      value: 1.66 + 0.32 - 0.29 ± 0.04 1e-7
+    - name: <dBR/dq2>(B+->Kee)
+      q2min: 10.2
+      q2max: 12.8
+      value: 0.44 + 0.20 - 0.17 ± 0.01 1e-7
+    - name: <dBR/dq2>(B0->Kee)
+      q2min: 0.1
+      q2max: 4.0
+      value: 0.38 + 0.25 - 0.19 ± 0.01 1e-7
+    - name: <dBR/dq2>(B0->Kee)
+      q2min: 4.0
+      q2max: 8.12
+      value: 0.52 + 0.21 - 0.17 ± 0.02 1e-7
+    - name: <dBR/dq2>(B0->Kee)
+      q2min: 1.0
+      q2max: 6.0
+      value: 0.56 + 0.25 - 0.20 ± 0.02 1e-7
+    - name: <dBR/dq2>(B0->Kee)
+      q2min: 10.2
+      q2max: 12.8
+      value: 0.06 + 0.19 - 0.15 ± 0.01 1e-7
