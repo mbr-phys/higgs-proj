@@ -182,7 +182,6 @@ angle_list += obs6 + obs7 + obs8
 #------------------------------
 obs_list = my_obs+obs2[:2]+angle_list
 print(len(obs_list))
-quit()
 #FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios']+ims)
 FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics']+ims)
 #------------------------------
@@ -290,7 +289,7 @@ def rad(wcs):
 
 def mu(app,wcs):
     tanb, mH = wcs # state what the two parameters are going to be on the plot
-    mass, align = app
+    mass = app
     if mass == 0:
         mH0 = mH
     elif mass == 1:
@@ -299,8 +298,8 @@ def mu(app,wcs):
     par = flavio.default_parameters.get_central_all()
     ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
 
-#    C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',1],10**mH0,10**tanb,10**mH,align)
-    C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],10**mH0,10**tanb,10**mH,align)
+    C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',1],10**mH0,10**tanb,10**mH,0)
+    C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],10**mH0,10**tanb,10**mH,0)
 #    C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],10**mH0,10**tanb,10**mH,align)
     C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],10**tanb,10**mH)
 
@@ -308,16 +307,16 @@ def mu(app,wcs):
     wc.set_initial({ # tell flavio what WCs you're referring to with your variables
            'C7_bs': C7,'C7p_bs': C7p, 
            'C8_bs': C8,'C8p_bs': C8p, 
-#           'C9_bsee': C9_se,'C9p_bsee': C9p_se,
+           'C9_bsee': C9_se,'C9p_bsee': C9p_se,
            'C9_bsmumu': C9_s,'C9p_bsmumu': C9p_s,
-#           'C10_bsee': C10_se,'C10p_bsee': C10p_se,
+           'C10_bsee': C10_se,'C10p_bsee': C10p_se,'CS_bsee': CS_se,'CSp_bsee': CSp_se,'CP_bsee': CP_se,'CPp_bsee': CPp_se, 
            'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CP_s,'CPp_bsmumu': CPp_s, # Bs->mumu
 #           'C10_bdmumu': C10_d,'C10p_bdmumu': C10p_d,'CS_bdmumu': CS_d,'CSp_bdmumu': CSp_d,'CP_bdmumu': CP_d,'CPp_bdmumu': CPp_d, # B0->mumu
         }, scale=4.2, eft='WET', basis='flavio')
     return Fmu.log_likelihood(par,wc)
 
-mu0 = partial(mu,(0,0))
-mu1 = partial(mu,(1,0))
+mu0 = partial(mu,0)
+mu1 = partial(mu,1)
 #mu_apx_plu = partial(mu,(0,1))
 #mu_fix_plu = partial(mu,(1,1))
 #mu_apx_min = partial(mu,(0,2))
@@ -557,28 +556,26 @@ z_min1 = -5.182818890948422
 #    plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
 #    plt.savefig(obs3_png[i]+'_fix.png')
 
-#Fmu = FastLikelihood(name="mu",observables=obs3,include_measurements=ims)
-#Fmu.make_measurement(N=500,threads=4)
-#
-#cmu = fpl.likelihood_contour_data(mu0,-1,3,1.5,6, n_sigma=sigmas, threads=4, steps=80) 
-#plt.figure(figsize=(6,5))
-#fpl.contour(**cmu,col=9)#,z_min=z_min1) 
-#plt.title(r'$m_{H^0}\sim m_{H^+}$',fontsize=18)
-#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-#plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
-#plt.savefig('bkell_apx.png')
-#
-#cmu = fpl.likelihood_contour_data(mu1,-1,3,1.5,6, n_sigma=sigmas, threads=4, steps=80) 
-#plt.figure(figsize=(6,5))
-#fpl.contour(**cmu,col=9)#,z_min=z_min1) 
-#plt.axhline(y=np.log10(866),color='black',linestyle='--')
-#plt.axhline(y=np.log10(1658),color='black',linestyle='--')
-#plt.title(r'$m_{H^0}=1500\,$GeV',fontsize=18)
-#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-#plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
-#plt.savefig('bkell_fix.png')
+Fmu = FastLikelihood(name="mu",observables=angle_list,include_measurements=ims)
+Fmu.make_measurement(N=500,threads=4)
 
-quit()
+cmu = fpl.likelihood_contour_data(mu0,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=80) 
+plt.figure(figsize=(6,5))
+fpl.contour(**cmu,col=9)#,z_min=z_min1) 
+plt.title(r'$m_{H^0}\sim m_{H^+}$',fontsize=18)
+plt.xlabel(r'$\log_{10}[\tan\beta]$') 
+plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
+plt.savefig('bkell_apx3.pdf')
+
+cmu = fpl.likelihood_contour_data(mu1,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=80) 
+plt.figure(figsize=(6,5))
+fpl.contour(**cmu,col=9)#,z_min=z_min1) 
+plt.axhline(y=np.log10(866),color='black',linestyle='--')
+plt.axhline(y=np.log10(1658),color='black',linestyle='--')
+plt.title(r'$m_{H^0}=1500\,$GeV',fontsize=18)
+plt.xlabel(r'$\log_{10}[\tan\beta]$') 
+plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
+plt.savefig('bkell_fix3.pdf')
 
 for i in range(2):
     globo = partial(func,i) 
