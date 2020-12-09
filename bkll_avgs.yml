@@ -874,7 +874,7 @@ BKll Observables 2:
     - name: <S7>(Bs->phimumu)
       q2min: 0.1
       q2max: 2.0
-      value: 0.04 + 0.12 - 0.12 ± 0.00
+      value: 0.04 ± 0.12
     - name: <S7>(Bs->phimumu)
       q2min: 2.0
       q2max: 5.0
@@ -891,15 +891,15 @@ BKll Observables 2:
       q2min: 15.0
       q2max: 20.0
       value: 1.20 + 0.09 - 0.09 ± 0.25 1e-7
-    - name: AFBh(Lambdab->Lambdamumu)
+    - name: <AFBh>(Lambdab->Lambdamumu)
       q2min: 15.0
       q2max: 20.0
       value: -0.39 ± 0.04 ± 0.01
-    - name: AFBl(Lambdab->Lambdamumu)
+    - name: <AFBl>(Lambdab->Lambdamumu)
       q2min: 15.0
       q2max: 20.0
       value: -0.30 ± 0.05 ± 0.02
-    - name: AFBlh(Lambdab->Lambdamumu)
+    - name: <AFBlh>(Lambdab->Lambdamumu)
       q2min: 15.0
       q2max: 20.0
       value: 0.25 ± 0.04 ± 0.01
@@ -1090,7 +1090,7 @@ BKll Observables 5:
     - name: <FL>(B0->K*mumu)
       q2min: 2.0
       q2max: 4.3
-      value: 0.72 + 0.15 - 0.17  0.09
+      value: 0.72 + 0.15 - 0.17 ± 0.09
     - name: <AFB>(B0->K*mumu)
       q2min: 0.0
       q2max: 2.0
@@ -1138,7 +1138,7 @@ BKll Observables 5:
     - name: <BR>(B->Xsmumu)
       q2min: 14.2
       q2max: 25.0
-      value: 0.60 + 0.31 - 0.29 ± 0.00 1e-6
+      value: 0.60 + 0.31 - 0.29 1e-6
     - name: <BR>(B->Xsee)
       q2min: 1.0
       q2max: 6.0
@@ -1146,7 +1146,7 @@ BKll Observables 5:
     - name: <BR>(B->Xsee)
       q2min: 14.2
       q2max: 25.0
-      value: 0.56 + 0.19 - 0.18 ± 0.00 1e-6
+      value: 0.56 + 0.19 - 0.18 1e-6
 
 BKll Observables 6:
   experiment: 1908.01848 Belle

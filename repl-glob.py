@@ -80,7 +80,7 @@ bsdsi.set_description("CLN parameterization")
 #### fitting stuff
 
 flavio.measurements.read_file('world_avgs.yml') # read in the world averages we want to use
-#flavio.measurements.read_file('bkll_avgs.yml') 
+flavio.measurements.read_file('bkll_avgs.yml') 
 config['renormalization scale']['bxgamma'] = 1.74
 
 my_obs = [
@@ -158,7 +158,7 @@ for i in obs5:
             angle_list.append((i,bins3[3],bins4[3]))
 angle_list += obs6 + obs7 + obs8
 #print(angle_list)
-print(len(angle_list))
+#print(len(angle_list))
 
 #Fleps = FastLikelihood(name="trees",observables=my_obs[:9]+my_obs[14:]+obs2[:2],include_measurements=['Tree Level Leptonics','LFU D Ratios','Tree Level Semileptonics']) 
 #Fleps = FastLikelihood(name="trees",observables=my_obs[14:16],include_measurements=['LFU D Ratios',]) 
@@ -569,8 +569,8 @@ z_min1 = -5.182818890948422
 #plt.xlabel(r'$\log_{10}[\tan\beta]$') 
 #plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
 #plt.savefig('bkell_fix.png')
-#
-#quit()
+
+quit()
 
 for i in range(2):
     globo = partial(func,i) 
