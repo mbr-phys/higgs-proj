@@ -75,13 +75,21 @@ LFU D Ratios:
     Rtaul(B->Dlnu): 0.340 ± 0.030
     Rtaul(B->D*lnu): 0.295 ± 0.014
 
-LFU K Ratios:
-  experiment: LHCb 1705.05802 + 1903.09252
+LFU K Ratios 1:
+  experiment: LHCb 1903.09252
   values:
     - name: <Rmue>(B+->Kll)
       q2min: 1.0
       q2max: 6.0
       value: 0.846 + 0.060 - 0.054 + 0.016 - 0.014
+    - name: <dBR/dq2>(B+->Kee)
+      q2min: 1.1
+      q2max: 6.0
+      value: 28.6 + 2.0 - 1.7 ± 1.4 1e-9
+
+LFU K Ratios 2:
+  experiment: LHCb 1705.05802 
+  values:
     - name: <Rmue>(B0->K*ll)
       q2min: 0.045
       q2max: 1.1

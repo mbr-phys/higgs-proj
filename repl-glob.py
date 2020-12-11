@@ -16,6 +16,8 @@ import numpy as np
 from functools import partial
 from functions import *
 
+#np.seterr(divide='raise',over='raise',invalid='raise') 
+
 #### parameter setting
 
 # should add these to flavio's yml doc at some point, but this will do for now
@@ -106,35 +108,63 @@ bins2 = [0.98,2.5,4.0,6.0,6.0,12.5,17.0,19.0,19.0,2.0,4.0]
 bins3 = [1.0,2.0,4.3,0.0,0.1,14.18]
 bins4 = [2.0,4.3,6.0,2.0,4.0,19.0]
 
-ims = ['BKll Observables 1','BKll Observables 2','BKll Observables 3','BKll Observables 4','BKll Observables 5','BKll Observables 6']
+ims = ['LHCb-2003.04831 S 0.1-0.98','LHCb-2003.04831 S 1.1-2.5','LHCb-2003.04831 S 2.5-4.0',
+       'LHCb-2003.04831 S 4.0-6.0','LHCb-2003.04831 S 11.0-12.5','LHCb-2003.04831 S 15.0-17.0',
+       'LHCb-2003.04831 S 17.0-19.0','LHCb-2003.04831 S 1.1-6.0','LHCb-2003.04831 S 15.0-19.0',
+       'LHCb-2003.04831 P 0.1-0.98','LHCb-2003.04831 P 1.1-2.5','LHCb-2003.04831 P 2.5-4.0',
+       'LHCb-2003.04831 P 4.0-6.0','LHCb-2003.04831 P 11.0-12.5','LHCb-2003.04831 P 15.0-17.0',
+       'LHCb-2003.04831 P 17.0-19.0','LHCb-2003.04831 P 1.1-6.0','LHCb-2003.04831 P 15.0-19.0',
+       'LHCb-1512.04442 S 1.1-2.5','LHCb-1512.04442 S 2.5-4.0',
+       'LHCb-1512.04442 S 4.0-6.0','LHCb-1512.04442 S 15.0-19.0',
+       'Belle-1612.05014 P45','LHCb-1606.04731','LHCb-1403.80441','LHCb-1506.08777 BRs',
+       'LHCb-1506.08777 S 0.1-2.0','LHCb-1506.08777 S 2.0-5.0','LHCb-1506.08777 S 15.0-19.0',
+       'LHCb-1503.07138','LHCb-1808.00264','LHCb-1501.03038','LHCb-1304.3035','LHCb-1406.6482',
+       'ATLAS-1805.04000 S 0.04-2.0','ATLAS-1805.04000 S 2.0-4.0','ATLAS-1805.04000 S 4.0-6.0',
+       'CMS-1507.08126 1.0-2.0','CMS-1507.08126 2.0-4.3','CMS-1507.08126 4.3-6.0',
+       'CMS-1710.02846 P 1.0-2.0','CMS-1710.02846 P 2.0-4.3','CMS-1710.02846 P 4.3-6.0',
+       'CMS-1806.00636','CDF 0.0-2.0','CDF 2.0-4.3','BaBar-1312.5364 Xs',
+       'Belle-1908.01848','LHCb-1403.8044']
 
 #obs3 = [('<dBR/dq2>(B+->Kmumu)',1.0,6.0),('<dBR/dq2>(B0->K*mumu)',1.0,6.0),
 #        ('<P5p>(B0->K*mumu)',0.1,0.98),('<P5p>(B0->K*mumu)',1.1,6.0), ('<P5p>(B0->K*mumu)',15.0,19.0),]
 #obs3_png = ['dBRdq2(B+->Kmumu)','dBRdq2(B0->K(st)mumu)','P5p(B0->K(st)mumu)-1','P5p(B0->K(st)mumu)-2','P5p(B0->K(st)mumu)-3',]
 #obs4 = [r'$\langle\frac{dBR}{dq^2}\rangle(B^+\to K^+\mu^+\mu^-),\,q^2\in[1,6]$',r"$\langle\frac{dBR}{dq^2}\rangle(B^0\to K^{0*}\mu^+\mu^-),\,q^2\in[1,6]$",r"$\langle P5'\rangle(B^0\to K^{0*}\mu^+\mu^-),\,q^2\in[0.1,0.98]$",r"$\langle P5'\rangle(B^0\to K^{0*}\mu^+\mu^-),\,q^2\in[1.1,6]$",r"$\langle P5'\rangle(B^0\to K^{0*}\mu^+\mu^-),\,q^2\in[15,19]$",]
 obs6 = [('<dBR/dq2>(B+->Kee)',1.1,6.0),('<dBR/dq2>(B+->Kee)',1.0,6.0),('<dBR/dq2>(B+->Kee)',0.1,4.0),
-        ('<dBR/dq2>(B+->Kee)',4.0,8.12),('<dBR/dq2>(B+->Kee)',10.2,12.8),('<dBR/dq2>(B0->Kee)',1.0,6.0),
-        ('<dBR/dq2>(B0->Kee)',0.1,4.0),('<dBR/dq2>(B0->Kee)',4.0,8.12),('<dBR/dq2>(B0->Kee)',10.2,12.8),
+        ('<dBR/dq2>(B+->Kee)',4.0,8.12),
+        #('<dBR/dq2>(B+->Kee)',10.2,12.8),
+        ('<dBR/dq2>(B0->Kee)',1.0,6.0),
+        ('<dBR/dq2>(B0->Kee)',0.1,4.0),('<dBR/dq2>(B0->Kee)',4.0,8.12),
+        #('<dBR/dq2>(B0->Kee)',10.2,12.8),
         ('<P4p>(B0->K*ee)',1.0,4.0),('<P4p>(B0->K*ee)',14.18,19.0),('<P5p>(B0->K*ee)',1.0,4.0),
         ('<P5p>(B0->K*ee)',14.18,19.0),('<FL>(B0->K*ee)',0.002,1.12),('<dBR/dq2>(B0->K*ee)',0.003,1.0),
         ('<BR>(B->Xsmumu)',1.0,6.0),('<BR>(B->Xsmumu)',14.2,25.0),
         ('<BR>(B->Xsee)',1.0,6.0),('<BR>(B->Xsee)',14.2,25.0)]
-obs7 = [('<dBR/dq2>(B0->K*mumu)',1.1,2.5),('<dBR/dq2>(B0->K*mumu)',1.0,2.0), ('<dBR/dq2>(B0->K*mumu)',2.5,4.0),
-        ('<dBR/dq2>(B0->K*mumu)',2.0,4.3),('<dBR/dq2>(B0->K*mumu)',4.0,6.0),('<dBR/dq2>(B0->K*mumu)',4.3,6.0),
-        ('<dBR/dq2>(B0->K*mumu)',15.0,19.0),('<dBR/dq2>(B0->K*mumu)',0.0,2.0),('<dBR/dq2>(B0->Kmumu)',0.1,2.0),
+obs7 = [
+        #('<dBR/dq2>(B0->K*mumu)',1.1,2.5),
+        ('<dBR/dq2>(B0->K*mumu)',1.0,2.0),#('<dBR/dq2>(B0->K*mumu)',2.5,4.0),
+        ('<dBR/dq2>(B0->K*mumu)',2.0,4.3),#('<dBR/dq2>(B0->K*mumu)',4.0,6.0),
+        ('<dBR/dq2>(B0->K*mumu)',4.3,6.0),
+        ('<dBR/dq2>(B0->K*mumu)',15.0,19.0),('<dBR/dq2>(B0->K*mumu)',0.0,2.0),
+        #('<dBR/dq2>(B0->Kmumu)',0.1,2.0),
         ('<dBR/dq2>(B0->Kmumu)',0.0,2.0),('<dBR/dq2>(B0->Kmumu)',1.0,6.0),('<dBR/dq2>(B0->Kmumu)',2.0,4.0),
-        ('<dBR/dq2>(B0->Kmumu)',2.0,4.3),('<dBR/dq2>(B0->Kmumu)',4.0,6.0),('<dBR/dq2>(B0->Kmumu)',15.0,22.0),
-        ('<dBR/dq2>(B0->Kmumu)',4.0,8.12),('<dBR/dq2>(B0->Kmumu)',10.2,12.8),('<dBR/dq2>(B0->Kmumu)',0.1,4.0),
-        ('<dBR/dq2>(B0->Kmumu)',0.1,2.0),('<dBR/dq2>(B0->Kmumu)',15.0,17.0),('<dBR/dq2>(B0->Kmumu)',17.0,19.0),
+        #('<dBR/dq2>(B0->Kmumu)',2.0,4.3),
+        ('<dBR/dq2>(B0->Kmumu)',4.0,6.0),('<dBR/dq2>(B0->Kmumu)',15.0,22.0),('<dBR/dq2>(B0->Kmumu)',4.0,8.12),
+        #('<dBR/dq2>(B0->Kmumu)',10.2,12.8),
+        ('<dBR/dq2>(B0->Kmumu)',0.1,4.0),#('<dBR/dq2>(B0->Kmumu)',0.1,2.0),
+        ('<dBR/dq2>(B0->Kmumu)',15.0,17.0),('<dBR/dq2>(B0->Kmumu)',17.0,19.0),
+        
         ('<dBR/dq2>(B+->Kmumu)',1.1,2.0),('<dBR/dq2>(B+->Kmumu)',5.0,6.0),('<dBR/dq2>(B+->Kmumu)',2.0,3.0),
         ('<dBR/dq2>(B+->Kmumu)',15.0,22.0),('<dBR/dq2>(B+->Kmumu)',3.0,4.0),('<dBR/dq2>(B+->Kmumu)',0.0,2.0),
         ('<dBR/dq2>(B+->Kmumu)',4.0,5.0),('<dBR/dq2>(B+->Kmumu)',2.0,4.3),('<dBR/dq2>(B+->Kmumu)',0.1,4.0),
-        ('<dBR/dq2>(B+->Kmumu)',4.0,8.12),('<dBR/dq2>(B+->Kmumu)',1.0,6.0),('<dBR/dq2>(B+->Kmumu)',10.2,12.8),
+        ('<dBR/dq2>(B+->Kmumu)',4.0,8.12),('<dBR/dq2>(B+->Kmumu)',1.0,6.0),
+        #('<dBR/dq2>(B+->Kmumu)',10.2,12.8),
         ('<dBR/dq2>(B+->Kmumu)',15.0,16.0),('<dBR/dq2>(B+->Kmumu)',16.0,17.0),('<dBR/dq2>(B+->Kmumu)',17.0,18.0),
         ('<dBR/dq2>(B+->Kmumu)',18.0,19.0),('<dBR/dq2>(B+->Kmumu)',19.0,20.0),('<dBR/dq2>(B+->Kmumu)',20.0,21.0),
-        ('<dBR/dq2>(B+->Kmumu)',21.0,22.0),('<dBR/dq2>(B+->Kmumu)',0.1,0.98),
-        ('<dBR/dq2>(B+->K*mumu)',0.1,2.0),('<dBR/dq2>(B+->K*mumu)',0.0,2.0),('<dBR/dq2>(B+->K*mumu)',2.0,4.0),
-        ('<dBR/dq2>(B+->K*mumu)',2.0,4.3),('<dBR/dq2>(B+->K*mumu)',4.0,6.0),('<dBR/dq2>(B+->K*mumu)',15.0,19.0),
+       ('<dBR/dq2>(B+->Kmumu)',21.0,22.0),('<dBR/dq2>(B+->Kmumu)',0.1,0.98),('<dBR/dq2>(B+->K*mumu)',0.1,2.0),
+        #('<dBR/dq2>(B+->K*mumu)',0.0,2.0),
+        ('<dBR/dq2>(B+->K*mumu)',2.0,4.0),
+        #('<dBR/dq2>(B+->K*mumu)',2.0,4.3),
+        ('<dBR/dq2>(B+->K*mumu)',4.0,6.0),('<dBR/dq2>(B+->K*mumu)',15.0,19.0),
         ('<dBR/dq2>(B+->K*mumu)',15.0,17.0),('<dBR/dq2>(B+->K*mumu)',17.0,19.0)]
 
 obs8 = [('<dBR/dq2>(Bs->phimumu)',1.0,6.0),('<dBR/dq2>(Bs->phimumu)',15.0,19.0),
@@ -154,13 +184,13 @@ for i in obs5:
         rg = 11
     for j in range(rg):
         angle_list.append((i,bins1[j],bins2[j]))
-    if i[2] == '5' or i[2] == '4':
+    if i[1:2] == 'P5' or i[2] == 'P4':
         angle_list.append((i,bins3[4],bins4[5]))
         angle_list.append((i,bins3[4],bins4[5]))
-    if i[2] in ['5','1','F']:
+    if i[1:2] in ['P5','P1','AF']:
         for k in range(3):
             angle_list.append((i,bins3[k],bins4[k]))
-        if i[2] == 'F':
+        if i[1:2] == 'AF':
             angle_list.append((i,bins3[3],bins4[3]))
 angle_list += obs6 + obs7 + obs8
 #print(angle_list)
@@ -176,14 +206,14 @@ angle_list += obs6 + obs7 + obs8
 #Fmix = FastLikelihood(name="mix",observables=my_obs[10:12],include_measurements=['B Mixing',]) 
 #Frad = FastLikelihood(name="rad",observables=[my_obs[9]],include_measurements=['Radiative Decays'])
 #------------------------------
-#Fmu = FastLikelihood(name="mu",observables=obs2[2:5],include_measurements=['LFU K Ratios']) 
+#Fmu = FastLikelihood(name="mu",observables=obs2[2:5],include_measurements=['LFU K Ratios 1','LFU K Ratios 2']) 
 #Fmu = FastLikelihood(name="mu",observables=my_obs[12:14],include_measurements=['FCNC Leptonic Decays',]) 
 #Fmu = FastLikelihood(name="mu",observables=obs3)
 #------------------------------
 obs_list = my_obs+obs2[:2]+angle_list
+print(len(angle_list))
 print(len(obs_list))
-#FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios']+ims)
-FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics']+ims)
+#FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1']+ims)
 #------------------------------
 #Fmuon = FastLikelihood(name="muons",observables=['a_mu'],include_measurements=['Anomalous Magnetic Moments'])
 #Fmuon.make_measurement(N=500,threads=4)
@@ -192,7 +222,6 @@ FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tre
 #Fmix.make_measurement(N=500,threads=4)
 #Frad.make_measurement(N=500,threads=4)
 #Fmu.make_measurement(N=500,threads=4)
-FL2.make_measurement(N=500,threads=4)
 
 #------------------------------
 #   Leptonic and Semileptonic Tree Levels
@@ -556,26 +585,31 @@ z_min1 = -5.182818890948422
 #    plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
 #    plt.savefig(obs3_png[i]+'_fix.png')
 
-Fmu = FastLikelihood(name="mu",observables=angle_list,include_measurements=ims)
-Fmu.make_measurement(N=500,threads=4)
+#Fmu = FastLikelihood(name="mu",observables=angle_list,include_measurements=ims+['LFU K Ratios 1'])
+#Fmu.make_measurement(N=500,threads=4)
+#
+#cmu = fpl.likelihood_contour_data(mu0,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=80) 
+#plt.figure(figsize=(6,5))
+#fpl.contour(**cmu,col=9)#,z_min=z_min1) 
+#plt.title(r'$m_{H^0}\sim m_{H^+}$',fontsize=18)
+#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
+#plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
+#plt.savefig('bkell_apx3.pdf')
+#
+#cmu = fpl.likelihood_contour_data(mu1,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=80) 
+#plt.figure(figsize=(6,5))
+#fpl.contour(**cmu,col=9)#,z_min=z_min1) 
+#plt.axhline(y=np.log10(866),color='black',linestyle='--')
+#plt.axhline(y=np.log10(1658),color='black',linestyle='--')
+#plt.title(r'$m_{H^0}=1500\,$GeV',fontsize=18)
+#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
+#plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
+#plt.savefig('bkell_fix3.pdf')
+#
+#print("bklls done")
 
-cmu = fpl.likelihood_contour_data(mu0,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=80) 
-plt.figure(figsize=(6,5))
-fpl.contour(**cmu,col=9)#,z_min=z_min1) 
-plt.title(r'$m_{H^0}\sim m_{H^+}$',fontsize=18)
-plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
-plt.savefig('bkell_apx3.pdf')
-
-cmu = fpl.likelihood_contour_data(mu1,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=80) 
-plt.figure(figsize=(6,5))
-fpl.contour(**cmu,col=9)#,z_min=z_min1) 
-plt.axhline(y=np.log10(866),color='black',linestyle='--')
-plt.axhline(y=np.log10(1658),color='black',linestyle='--')
-plt.title(r'$m_{H^0}=1500\,$GeV',fontsize=18)
-plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
-plt.savefig('bkell_fix3.pdf')
+FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1','LFU K Ratios 2']+ims)
+FL2.make_measurement(N=500,threads=4)
 
 for i in range(2):
     globo = partial(func,i) 

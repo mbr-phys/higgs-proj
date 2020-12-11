@@ -8,7 +8,22 @@ from scipy.integrate import quad
 import matplotlib.pyplot as plt
 import numpy as np
 
-ims = ['BKll Observables 1','BKll Observables 2','BKll Observables 3','BKll Observables 4','BKll Observables 5','BKll Observables 6']
+ims = ['LHCb-2003.04831 S 0.1-0.98','LHCb-2003.04831 S 1.1-2.5','LHCb-2003.04831 S 2.5-4.0',
+       'LHCb-2003.04831 S 4.0-6.0','LHCb-2003.04831 S 11.0-12.5','LHCb-2003.04831 S 15.0-17.0',
+       'LHCb-2003.04831 S 17.0-19.0','LHCb-2003.04831 S 1.1-6.0','LHCb-2003.04831 S 15.0-19.0',  
+       'LHCb-2003.04831 P 0.1-0.98','LHCb-2003.04831 P 1.1-2.5','LHCb-2003.04831 P 2.5-4.0', 
+       'LHCb-2003.04831 P 4.0-6.0','LHCb-2003.04831 P 11.0-12.5','LHCb-2003.04831 P 15.0-17.0',
+       'LHCb-2003.04831 P 17.0-19.0','LHCb-2003.04831 P 1.1-6.0','LHCb-2003.04831 P 15.0-19.0',
+       'LHCb-1512.04442 S 1.1-2.5','LHCb-1512.04442 S 2.5-4.0',
+       'LHCb-1512.04442 S 4.0-6.0','LHCb-1512.04442 S 15.0-19.0',
+       'Belle-1612.05014 P45','LHCb-1606.04731','LHCb-1403.80441','LHCb-1506.08777 BRs', 
+       'LHCb-1506.08777 S 0.1-2.0','LHCb-1506.08777 S 2.0-5.0','LHCb-1506.08777 S 15.0-19.0',
+       'LHCb-1503.07138','LHCb-1808.00264','LHCb-1501.03038','LHCb-1304.3035','LHCb-1406.6482',
+       'ATLAS-1805.04000 S 0.04-2.0','ATLAS-1805.04000 S 2.0-4.0','ATLAS-1805.04000 S 4.0-6.0',
+       'CMS-1507.08126 1.0-2.0','CMS-1507.08126 2.0-4.3','CMS-1507.08126 4.3-6.0',
+       'CMS-1710.02846 P 1.0-2.0','CMS-1710.02846 P 2.0-4.3','CMS-1710.02846 P 4.3-6.0', 
+       'CMS-1806.00636','CDF 0.0-2.0','CDF 2.0-4.3','BaBar-1312.5364 Xs',
+       'Belle-1908.01848','LHCb-1403.8044']
 
 def mHmin(contour,minz=0):
     '''
@@ -654,7 +669,7 @@ def chi2_func(tanb, mH, mH0, mA0, obs):
     CSR_bc_m, CSL_bc_m = rh(par['m_c'],par['m_b'],par['m_mu'],tanb,mH)
     CSR_bc_e, CSL_bc_e = rh(par['m_c'],par['m_b'],par['m_e'],tanb,mH)
     C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],tanb,mH)
-    C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',1],mH0,tanb,mH)
+    C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',1],mH0,tanb,mH,0)
     C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],mH0,tanb,mH,0)
     C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],mH0,tanb,mH,0)
     CVLL_bs, CVRR_bs, CSLL_bs, CSRR_bs, CSLR_bs, CVLR_bs = mixing(par,ckm_els,['m_s',1,'m_d'],tanb,mH)
@@ -699,7 +714,7 @@ def chi2_func(tanb, mH, mH0, mA0, obs):
             ob, q1, q2 = i
             npp = flavio.np_prediction(ob,wc_obj=wc,q2min=q1,q2max=q2)
             npe = flavio.np_uncertainty(ob,wc_obj=wc,q2min=q1,q2max=q2)
-        exp = flavio.combine_measurements(i,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios','Anomalous Magnetic Moments']+ims)
+        exp = flavio.combine_measurements(i,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1','LFU K Ratios 2']+ims)
         expc = exp.central_value
         expr = exp.error_right
         expl = exp.error_left
@@ -723,6 +738,8 @@ def pval_func(cdat,app,obs,sigmas):
         mHp,mH0,mA0 = bf[1],1500,bf[1]
         print('mH+ = mA0, mH0 = 1500 GeV')
 
+    chi2 = chi2_func(bf[0],mHp,mH0,mA0,obs)
+
     print("Best fit value is found for (tanb,mH) =", bf)
     print("Print outs are lists for values at", sigmas, "sigmas")
     print("Minimum value of mH+ is:", minh) 
@@ -730,7 +747,6 @@ def pval_func(cdat,app,obs,sigmas):
     print("Maximum value of tanb is:", maxt)
     print(minz)
 
-    chi2 = chi2_func(bf[0],mHp,mH0,mA0,obs)
     degs = len(obs)-2
     pval = pvalue(chi2,degs)
     print("chi2tilde_min is:",minz) 
