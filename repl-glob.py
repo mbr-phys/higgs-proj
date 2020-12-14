@@ -608,36 +608,43 @@ z_min1 = -5.182818890948422
 #
 #print("bklls done")
 
-FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1','LFU K Ratios 2']+ims)
-FL2.make_measurement(N=500,threads=4)
+for op in range(2):
+    if op == 0:
+        obs_list = my_obs+obs2[:2]+angle_list
+    elif op == 1:
+        obs_list = my_obs+obs2[:5]+angle_list
+#    print(len(angle_list))
+    print(len(obs_list))
+    FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1','LFU K Ratios 2']+ims)
+    FL2.make_measurement(N=500,threads=4)
 
-for i in range(2):
-    globo = partial(func,i) 
-    cdat = fpl.likelihood_contour_data(globo,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=60) 
-    pval_func(cdat,i,obs_list,sigmas)
+    for i in range(2):
+        globo = partial(func,i) 
+        cdat = fpl.likelihood_contour_data(globo,-1,2,1.5,10, n_sigma=sigmas, threads=4, steps=150) 
+        pval_func(cdat,i,obs_list,sigmas)
 
-    plt.figure(figsize=(6,5))
-    fpl.contour(**cdat,col=4) 
-    plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-    plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$')
-    #plt.title(r'Combined Tree-Level Leptonics, $\Delta M_{d,s}$, $\bar{B}\to X_s\gamma$')
-    if i == 0:
-        plt.title(r'$m_{H^0}\sim m_{H^+}$',fontsize=18)
-        plt.savefig('comb4_Hsim.pdf')
-    elif i == 2:
-        plt.title(r'$m_{H^0}\sim m_{H^+},\; m_{A^0}=1500\,$GeV',fontsize=18)
-        plt.axhline(y=np.log10(1220),color='black',linestyle='--') # Asim = 866, Hsim = 1220
-        plt.axhline(y=np.log10(1660),color='black',linestyle='--') # Asim = 1660, Hsim = 1660
-        plt.savefig('comb4_Hsim.pdf')
-    elif i == 1:
-        plt.title(r'$m_{H^0}=1500\,$GeV',fontsize=18)
-        plt.axhline(y=np.log10(866),color='black',linestyle='--') # Asim = 866, Hsim = 1220
-        plt.axhline(y=np.log10(1660),color='black',linestyle='--') # Asim = 1660, Hsim = 1660
-        plt.savefig('comb4_Hfix.pdf')
-    #plt.savefig('comb1_plot.png')
-    #plt.savefig('comb2_allsim.png')
-    #plt.savefig('comb2_Hsim.png')
-    #plt.savefig('comb2_Asim.png')
+        plt.figure(figsize=(6,5))
+        fpl.contour(**cdat,col=4) 
+        plt.xlabel(r'$\log_{10}[\tan\beta]$') 
+        plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$')
+        #plt.title(r'Combined Tree-Level Leptonics, $\Delta M_{d,s}$, $\bar{B}\to X_s\gamma$')
+        if i == 0:
+            plt.title(r'$m_{H^0}\sim m_{H^+}$',fontsize=18)
+            plt.savefig('comb4_Hsim'+str(op)+'.pdf')
+        elif i == 2:
+            plt.title(r'$m_{H^0}\sim m_{H^+},\; m_{A^0}=1500\,$GeV',fontsize=18)
+            plt.axhline(y=np.log10(1220),color='black',linestyle='--') # Asim = 866, Hsim = 1220
+            plt.axhline(y=np.log10(1660),color='black',linestyle='--') # Asim = 1660, Hsim = 1660
+            plt.savefig('comb4_Hsim'+str(op)+'.pdf')
+        elif i == 1:
+            plt.title(r'$m_{H^0}=1500\,$GeV',fontsize=18)
+            plt.axhline(y=np.log10(866),color='black',linestyle='--') # Asim = 866, Hsim = 1220
+            plt.axhline(y=np.log10(1660),color='black',linestyle='--') # Asim = 1660, Hsim = 1660
+            plt.savefig('comb4_Hfix'+str(op)+'.pdf')
+        #plt.savefig('comb1_plot.png')
+        #plt.savefig('comb2_allsim.png')
+        #plt.savefig('comb2_Hsim.png')
+        #plt.savefig('comb2_Asim.png')
 
 print("--- %s seconds ---" % (time.time() - start_time))
 print(datetime.datetime.now())
