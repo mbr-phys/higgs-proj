@@ -210,9 +210,9 @@ angle_list += obs6 + obs7 + obs8
 #Fmu = FastLikelihood(name="mu",observables=my_obs[12:14],include_measurements=['FCNC Leptonic Decays',]) 
 #Fmu = FastLikelihood(name="mu",observables=obs3)
 #------------------------------
-obs_list = my_obs+obs2[:2]+angle_list
+#obs_list = my_obs+obs2[:2]+angle_list
 print(len(angle_list))
-print(len(obs_list))
+#print(len(obs_list))
 #FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1']+ims)
 #------------------------------
 #Fmuon = FastLikelihood(name="muons",observables=['a_mu'],include_measurements=['Anomalous Magnetic Moments'])
@@ -585,27 +585,28 @@ z_min1 = -5.182818890948422
 #    plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
 #    plt.savefig(obs3_png[i]+'_fix.png')
 
-#Fmu = FastLikelihood(name="mu",observables=angle_list,include_measurements=ims+['LFU K Ratios 1'])
-#Fmu.make_measurement(N=500,threads=4)
-#
-#cmu = fpl.likelihood_contour_data(mu0,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=80) 
-#plt.figure(figsize=(6,5))
-#fpl.contour(**cmu,col=9)#,z_min=z_min1) 
-#plt.title(r'$m_{H^0}\sim m_{H^+}$',fontsize=18)
-#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-#plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
-#plt.savefig('bkell_apx3.pdf')
-#
-#cmu = fpl.likelihood_contour_data(mu1,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=80) 
-#plt.figure(figsize=(6,5))
-#fpl.contour(**cmu,col=9)#,z_min=z_min1) 
-#plt.axhline(y=np.log10(866),color='black',linestyle='--')
-#plt.axhline(y=np.log10(1658),color='black',linestyle='--')
-#plt.title(r'$m_{H^0}=1500\,$GeV',fontsize=18)
-#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-#plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
-#plt.savefig('bkell_fix3.pdf')
-#
+Fmu = FastLikelihood(name="mu",observables=angle_list,include_measurements=ims+['LFU K Ratios 1'])
+Fmu.make_measurement(N=500,threads=4)
+
+cmu = fpl.likelihood_contour_data(mu0,-1,2,1.5,20, n_sigma=sigmas, threads=4, steps=60) 
+plt.figure(figsize=(6,5))
+fpl.contour(**cmu,col=9)#,z_min=z_min1) 
+plt.title(r'$m_{H^0}\sim m_{H^+}$',fontsize=18)
+plt.xlabel(r'$\log_{10}[\tan\beta]$') 
+plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
+plt.savefig('bkell_apx4.pdf')
+
+cmu = fpl.likelihood_contour_data(mu1,-1,2,1.5,20, n_sigma=sigmas, threads=4, steps=60) 
+plt.figure(figsize=(6,5))
+fpl.contour(**cmu,col=9)#,z_min=z_min1) 
+plt.axhline(y=np.log10(866),color='black',linestyle='--')
+plt.axhline(y=np.log10(1658),color='black',linestyle='--')
+plt.title(r'$m_{H^0}=1500\,$GeV',fontsize=18)
+plt.xlabel(r'$\log_{10}[\tan\beta]$') 
+plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
+plt.savefig('bkell_fix4.pdf')
+
+quit()
 #print("bklls done")
 
 for op in range(2):
@@ -620,7 +621,7 @@ for op in range(2):
 
     for i in range(2):
         globo = partial(func,i) 
-        cdat = fpl.likelihood_contour_data(globo,-1,2,1.5,10, n_sigma=sigmas, threads=4, steps=150) 
+        cdat = fpl.likelihood_contour_data(globo,-1,2,1.5,20, n_sigma=sigmas, threads=4, steps=150) 
         pval_func(cdat,i,obs_list,sigmas)
 
         plt.figure(figsize=(6,5))
