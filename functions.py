@@ -1,9 +1,11 @@
 #!/bin/env python3
 
 import flavio
-from flavio.classes import Parameter
+from flavio.classes import Parameter, Observable, Measurement
 from flavio.physics.running.running import get_mt, get_alpha_e
 from flavio.statistics.functions import pvalue
+from flavio.statistics.likelihood import *
+from flavio.statistics.probability import NormalDistribution, MultivariateNormalDistribution
 from scipy.integrate import quad
 import matplotlib.pyplot as plt
 import numpy as np
@@ -250,12 +252,15 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH,ali):
     b = np.arctan(tanb)
     if ali == 0:
         a = b - np.pi/2 # alignment limit
+        cba,sba = np.cos(b-a),np.sin(b-a)
     elif ali == 1:
         a = b - np.arccos(0.05) 
+        cba,sba = np.cos(b-a),np.sin(b-a) 
     elif ali == 2:
         a = b - np.arccos(-0.05) 
-#    cba,sba = np.sin(2*b),-np.sin(2*b) # wrong sign limit
-    cba,sba = np.cos(b-a),np.sin(b-a) # alignment limit
+        cba,sba = np.cos(b-a),np.sin(b-a) 
+    elif ali == 3:
+        cba,sba = np.sin(2*b),-np.sin(2*b) 
 
     Vus, Vub = CKM[0,mss[2]], CKM[0,2]
     Vcs, Vcb = CKM[1,mss[2]], CKM[1,2]
@@ -642,7 +647,7 @@ def rh(mu,md,ml,tanb,mH):
     csr = -1*md*ml*(tanb/mH)**2
     return csr, csl
 
-def chi2_func(tanb, mH, mH0, mA0, obs):
+def chi2_func(tanb, mH, mH0, mA0, obs, measures, uppers, lowers):
     '''
         Finding chisq value cause there's some extra factor going on in flavio's
     '''
@@ -708,16 +713,29 @@ def chi2_func(tanb, mH, mH0, mA0, obs):
     chisq = 0
     for i in obs:
         if type(i) == str:
+            name = i
             npp = flavio.np_prediction(i,wc_obj=wc) 
             npe = flavio.np_uncertainty(i,wc_obj=wc) 
         elif type(i) == tuple:
+            name = i[0]+' '+str(i[1])+' '+str(i[2])
             ob, q1, q2 = i
             npp = flavio.np_prediction(ob,wc_obj=wc,q2min=q1,q2max=q2)
             npe = flavio.np_uncertainty(ob,wc_obj=wc,q2min=q1,q2max=q2)
-        exp = flavio.combine_measurements(i,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1','LFU K Ratios 2']+ims)
-        expc = exp.central_value
-        expr = exp.error_right
-        expl = exp.error_left
+        expc = measures[name]
+        expr = uppers[name]
+        expl = lowers[name]
+#    for i in obs:
+#        if type(i) == str:
+#            npp = flavio.np_prediction(i,wc_obj=wc) 
+#            npe = flavio.np_uncertainty(i,wc_obj=wc) 
+#        elif type(i) == tuple:
+#            ob, q1, q2 = i
+#            npp = flavio.np_prediction(ob,wc_obj=wc,q2min=q1,q2max=q2)
+#            npe = flavio.np_uncertainty(ob,wc_obj=wc,q2min=q1,q2max=q2)
+#        exp = flavio.combine_measurements(i,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1','LFU K Ratios 2']+ims)
+#        expc = exp.central_value
+#        expr = exp.error_right
+#        expl = exp.error_left
         expp = ((expc+expr)+(expc-expl))/2
         expe = (expc+expr)-expp
         sig = np.sqrt(npe**2 + expe**2)
@@ -951,3 +969,46 @@ def a_mu2(par,lep,tanb,mH0,mA0,mH):
 
     return cr
 
+def mk_measure(obs,N=500,Nexp=5000,threads=4,force=False,force_exp=False):
+    par_obj = flavio.default_parameters
+    nuisance_parameters = par_obj.all_parameters
+    ts = ['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1','LFU K Ratios 2']+ims
+    full_measurement_likelihood = MeasurementLikelihood(obs,include_measurements=ts)
+    sm_covariance = SMCovariance(obs,vary_parameters=nuisance_parameters,par_obj=par_obj)
+    exp_covariance = MeasurementCovariance(full_measurement_likelihood)
+    central_exp, cov_exp = exp_covariance.get(Nexp, force=force_exp)
+    cov_sm = sm_covariance.get(N, force=force, threads=threads)
+    covariance = cov_exp + cov_sm
+    # add the Pseudo-measurement
+    m = flavio.classes.Measurement('Pseudo-measurement for FastLikelihood instance:')
+    if np.asarray(central_exp).ndim == 0 or len(central_exp) <= 1: # for a 1D (or 0D) array
+        m.add_constraint(obs,NormalDistribution(central_exp, np.sqrt(covariance)))
+    else: 
+        m.add_constraint(obs,MultivariateNormalDistribution(central_exp, covariance))
+    ms = m._constraints
+    measures, uppers, lowers = {},{},{}
+    for i in range(len(ms)):
+        obi = ms[i]
+        dist = obi[0]
+        obis = obi[1]
+        if type(obis) == tuple or type(obis) == str:
+            if type(obis) == str:
+                name = obis
+            elif type(obis) == tuple:
+                name = obis[0]+' '+str(obis[1])+' '+str(obis[2])
+            measures[name] = np.mean(dist.get_random(size=10)) 
+            uppers[name] = dist.get_error_right()
+            lowers[name] = dist.get_error_left()
+        elif type(obis) == list:
+            centrals = np.mean(dist.get_random(size=10),axis=0)
+            ups = dist.get_error_right()
+            los = dist.get_error_left()
+            for j in range(len(obis)):
+                if type(obis[j]) == str:
+                    name = obis[j]
+                elif type(obis[j]) == tuple:
+                    name = obis[j][0]+' '+str(obis[j][1])+' '+str(obis[j][2])
+                measures[name] = centrals[j]
+                uppers[name] = ups[j]
+                lowers[name] = los[j]
+    return measures, uppers, lowers

@@ -55,7 +55,7 @@ def ckm_err(t_ckm,par,err):
 def vcb(mu,md,ml,tanb,mH):
     csl = -1*mu*ml/(mH**2)
     csr = -1*md*ml*(tanb/mH)**2
-    return csr, csl
+    return csr, csl 
 
 def rh(args,th):
     mu,md,mm = args

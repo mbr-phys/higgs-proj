@@ -82,7 +82,7 @@ def vij_mult(args,ths):
     #array_vs[j,i] = np.average(mod)
     #array_es[j,i] = np.average(mode)
 
-steps = 120
+steps = 100
 
 tanb,mH = np.linspace(-1,2,steps), np.linspace(1.5,4,steps)
 t, h = np.meshgrid(tanb,mH)
@@ -126,16 +126,16 @@ for i in range(len(us)):
     heatmap['V'+us[i]+ds[i]] = heatmap_v
     errmap['V'+us[i]+ds[i]] = heatmap_e
     
-    vm = 0
-    if np.min(np.log10(heatmap_v)) < 0:
-        vm = np.min(np.log10(heatmap_v))
-
-    fig = plt.figure()
-    s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+}/\text{GeV}]$")
-    im = s.imshow(np.log10(heatmap_v),extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower',vmin=vm)#,vmax=1)
-    fig.colorbar(im)
-    plt.title("Heatmap of Modification Factor for V"+us[i]+ds[i])
-    plt.savefig("v"+us[i]+ds[i]+"_heatmap4.png")
+#    vm = 0
+#    if np.min(np.log10(heatmap_v)) < 0:
+#        vm = np.min(np.log10(heatmap_v))
+#
+#    fig = plt.figure()
+#    s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+}/\text{GeV}]$")
+#    im = s.imshow(np.log10(heatmap_v),extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower',vmin=vm)#,vmax=1)
+#    fig.colorbar(im)
+#    plt.title("Heatmap of Modification Factor for V"+us[i]+ds[i])
+#    plt.savefig("v"+us[i]+ds[i]+"_heatmap4.pdf")
 
     print("V"+us[i]+ds[i]+" done")
     print(datetime.datetime.now())
@@ -155,14 +155,14 @@ fpl.contour(**dat,col=2)
 plt.title("Modification Regions Allowed By Unitarity \n of full CKM Matrix")
 plt.xlabel(r'$\log_{10}[\tan\beta]$')
 plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$')
-plt.savefig("ckm_full_mat7.png")
+plt.savefig("ckm_full_mat7.pdf")
 #plt.show()
 
 fig = plt.figure()
 s = fig.add_subplot(1,1,1,xlabel=r"$\log_{10}[\tan\beta]$",ylabel=r"$\log_{10}[m_{H^+}/\text{GeV}]$")
 im = s.imshow(-1*units,extent=(tanb[0],tanb[-1],mH[0],mH[-1]),origin='lower',cmap='gray')
 plt.title("Modification Regions Allowed By Unitarity \n of full CKM Matrix")
-plt.savefig("ckm_full_mat8.png")
+plt.savefig("ckm_full_mat8.pdf")
 
 print("--- %s seconds ---" % (time.time() - start_time))
 print(datetime.datetime.now())
