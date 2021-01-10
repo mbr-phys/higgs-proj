@@ -87,6 +87,47 @@ flavio.measurements.read_file('world_avgs.yml') # read in the world averages we 
 flavio.measurements.read_file('bkll_avgs.yml') 
 config['renormalization scale']['bxgamma'] = 1.74
 
+#par = flavio.default_parameters.get_central_all()
+#ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
+#mH0, mH = 3200, 3200
+#tanb = 10
+#C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],mH0,tanb,mH,0)
+#C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],mH0,tanb,mH,0)
+#print("For mH0 = mH+ = 3200 GeV, tanb = 10:")
+#print()
+#print("C9_bsmumu:",C9_s)
+#print()
+#print("C9'_bsmumu:",C9p_s)
+#print()
+#print("C10_bsmumu:",C10_s)
+#print()
+#print("C10'_bsmumu:",C10p_s)
+#print()
+#print("CS_bsmumu:",CS_s)
+#print()
+#print("CS'_bsmumu:",CSp_s)
+#print()
+#print("CP_bsmumu:",CP_s)
+#print()
+#print("CP'_bsmumu:",CPp_s)
+#print()
+#print("C9_bdmumu:",C9_d)
+#print()
+#print("C9'_bdmumu:",C9p_d)
+#print()
+#print("C10_bdmumu:",C10_d)
+#print()
+#print("C10'_bdmumu:",C10p_d)
+#print()
+#print("CS_bdmumu:",CS_d)
+#print()
+#print("CS'_bdmumu:",CSp_d)
+#print()
+#print("CP_bdmumu:",CP_d)
+#print()
+#print("CP'_bdmumu:",CPp_d)
+#quit()
+
 my_obs = [
     'BR(B+->taunu)', 'BR(B+->munu)', 'BR(D+->munu)', 'BR(Ds->munu)', 'BR(Ds->taunu)', 'BR(tau->Knu)', 'BR(K+->munu)', 'BR(tau->pinu)', 'Gamma(pi+->munu)', # [:9]
     'BR(B->Xsgamma)', # [9]
@@ -98,39 +139,37 @@ my_obs = [
 ]
 
 obs2 = ['BR(B+->pilnu)', 'BR(B0->pilnu)',
-        ("<Rmue>(B+->Kll)", 1.0, 6.0),("<Rmue>(B0->K*ll)", 0.045, 1.1),("<Rmue>(B0->K*ll)", 1.1, 6.0),'a_mu',]
+        ("<Rmue>(B+->Kll)",1.0,6.0),("<Rmue>(B+->Kll)",1.1,6.0),
+        ("<Rmue>(B0->K*ll)",0.045,1.1),("<Rmue>(B0->K*ll)",1.1,6.0),("<Rmue>(B0->K*ll)",15.0,19.0),
+        ("<Rmue>(B+->K*ll)",0.045,1.1),("<Rmue>(B+->K*ll)",1.1,6.0),("<Rmue>(B+->K*ll)",15.0,19.0),
+        'a_mu']
 
 strings = 'B0topilnu'
 #Fleps = FastLikelihood(name="trees",observables=[my_obs[38]],include_measurements=['Tree Level Leptonics'])
 #Fleps = FastLikelihood(name="trees",observables=[obs2[1]],include_measurements=['Tree Level Semileptonics',])
 
-obs5 = ['<FL>(B0->K*mumu)','<S3>(B0->K*mumu)','<S4>(B0->K*mumu)','<S5>(B0->K*mumu)','<AFB>(B0->K*mumu)','<S7>(B0->K*mumu)','<S8>(B0->K*mumu)','<S9>(B0->K*mumu)','<P1>(B0->K*mumu)','<P2>(B0->K*mumu)','<P3>(B0->K*mumu)','<P4p>(B0->K*mumu)','<P5p>(B0->K*mumu)','<P6p>(B0->K*mumu)','<P8p>(B0->K*mumu)',]
-bins1 = [0.1,1.1,2.5,4.0,1.1,11.0,15.0,17.0,15.0,0.04,2.0]
-bins2 = [0.98,2.5,4.0,6.0,6.0,12.5,17.0,19.0,19.0,2.0,4.0]
-bins3 = [1.0,2.0,4.3,0.0,0.1,14.18]
-bins4 = [2.0,4.3,6.0,2.0,4.0,19.0]
-
-ims = ['LHCb-2003.04831 S 0.1-0.98','LHCb-2003.04831 S 1.1-2.5','LHCb-2003.04831 S 2.5-4.0',
-       'LHCb-2003.04831 S 4.0-6.0','LHCb-2003.04831 S 11.0-12.5','LHCb-2003.04831 S 15.0-17.0',
-       'LHCb-2003.04831 S 17.0-19.0','LHCb-2003.04831 S 1.1-6.0','LHCb-2003.04831 S 15.0-19.0',
+ims = [
+#       'LHCb-2003.04831 S 0.1-0.98','LHCb-2003.04831 S 1.1-2.5','LHCb-2003.04831 S 2.5-4.0',
+#       'LHCb-2003.04831 S 4.0-6.0','LHCb-2003.04831 S 11.0-12.5','LHCb-2003.04831 S 15.0-17.0',
+#       'LHCb-2003.04831 S 17.0-19.0','LHCb-2003.04831 S 1.1-6.0','LHCb-2003.04831 S 15.0-19.0',
+       'LHCb-2012.13241 P 0.1-0.98','LHCb-2012.13241 P 1.1-2.5','LHCb-2012.13241 P 2.5-4.0',
+       'LHCb-2012.13241 P 4.0-6.0','LHCb-2012.13241 P 15.0-17.0','LHCb-2012.13241 P 17.0-19.0',
        'LHCb-2003.04831 P 0.1-0.98','LHCb-2003.04831 P 1.1-2.5','LHCb-2003.04831 P 2.5-4.0',
        'LHCb-2003.04831 P 4.0-6.0','LHCb-2003.04831 P 11.0-12.5','LHCb-2003.04831 P 15.0-17.0',
        'LHCb-2003.04831 P 17.0-19.0','LHCb-2003.04831 P 1.1-6.0','LHCb-2003.04831 P 15.0-19.0',
-       'LHCb-1512.04442 S 1.1-2.5','LHCb-1512.04442 S 2.5-4.0',
-       'LHCb-1512.04442 S 4.0-6.0','LHCb-1512.04442 S 15.0-19.0',
+#       'LHCb-1512.04442 S 1.1-2.5','LHCb-1512.04442 S 2.5-4.0',
+#       'LHCb-1512.04442 S 4.0-6.0','LHCb-1512.04442 S 15.0-19.0',
        'Belle-1612.05014 P45','LHCb-1606.04731','LHCb-1403.80441','LHCb-1506.08777 BRs',
-       'LHCb-1506.08777 S 0.1-2.0','LHCb-1506.08777 S 2.0-5.0','LHCb-1506.08777 S 15.0-19.0',
+       'LHCb-1506.08777 S 0.1-2.0','LHCb-1506.08777 S 2.0-5.0',
+       'LHCb-1506.08777 S 15.0-17.0','LHCb-1506.08777 S 17.0-19.0',
        'LHCb-1503.07138','LHCb-1808.00264','LHCb-1501.03038','LHCb-1304.3035','LHCb-1406.6482',
-       'ATLAS-1805.04000 S 0.04-2.0','ATLAS-1805.04000 S 2.0-4.0','ATLAS-1805.04000 S 4.0-6.0',
+#       'ATLAS-1805.04000 S 0.04-2.0','ATLAS-1805.04000 S 2.0-4.0','ATLAS-1805.04000 S 4.0-6.0',
        'CMS-1507.08126 1.0-2.0','CMS-1507.08126 2.0-4.3','CMS-1507.08126 4.3-6.0',
        'CMS-1710.02846 P 1.0-2.0','CMS-1710.02846 P 2.0-4.3','CMS-1710.02846 P 4.3-6.0',
-       'CMS-1806.00636','CDF 0.0-2.0','CDF 2.0-4.3','BaBar-1312.5364 Xs',
-       'Belle-1908.01848','LHCb-1403.8044']
+       'CMS-1806.00636 1.0-6.0','CMS-1806.00636 16.0-18.0','CMS-1806.00636 18.0-22.0',
+       'CDF 0.0-2.0','CDF 2.0-4.3','BaBar-1312.5364 Xs',
+       'Belle-1908.01848','Belle-1904.02440','LHCb-1403.8044']
 
-#obs3 = [('<dBR/dq2>(B+->Kmumu)',1.0,6.0),('<dBR/dq2>(B0->K*mumu)',1.0,6.0),
-#        ('<P5p>(B0->K*mumu)',0.1,0.98),('<P5p>(B0->K*mumu)',1.1,6.0), ('<P5p>(B0->K*mumu)',15.0,19.0),]
-#obs3_png = ['dBRdq2(B+->Kmumu)','dBRdq2(B0->K(st)mumu)','P5p(B0->K(st)mumu)-1','P5p(B0->K(st)mumu)-2','P5p(B0->K(st)mumu)-3',]
-#obs4 = [r'$\langle\frac{dBR}{dq^2}\rangle(B^+\to K^+\mu^+\mu^-),\,q^2\in[1,6]$',r"$\langle\frac{dBR}{dq^2}\rangle(B^0\to K^{0*}\mu^+\mu^-),\,q^2\in[1,6]$",r"$\langle P5'\rangle(B^0\to K^{0*}\mu^+\mu^-),\,q^2\in[0.1,0.98]$",r"$\langle P5'\rangle(B^0\to K^{0*}\mu^+\mu^-),\,q^2\in[1.1,6]$",r"$\langle P5'\rangle(B^0\to K^{0*}\mu^+\mu^-),\,q^2\in[15,19]$",]
 obs6 = [('<dBR/dq2>(B+->Kee)',1.1,6.0),('<dBR/dq2>(B+->Kee)',1.0,6.0),('<dBR/dq2>(B+->Kee)',0.1,4.0),
         ('<dBR/dq2>(B+->Kee)',4.0,8.12),
         #('<dBR/dq2>(B+->Kee)',10.2,12.8),
@@ -142,61 +181,96 @@ obs6 = [('<dBR/dq2>(B+->Kee)',1.1,6.0),('<dBR/dq2>(B+->Kee)',1.0,6.0),('<dBR/dq2
         ('<BR>(B->Xsmumu)',1.0,6.0),('<BR>(B->Xsmumu)',14.2,25.0),
         ('<BR>(B->Xsee)',1.0,6.0),('<BR>(B->Xsee)',14.2,25.0)]
 obs7 = [
-        #('<dBR/dq2>(B0->K*mumu)',1.1,2.5),
-        ('<dBR/dq2>(B0->K*mumu)',1.0,2.0),#('<dBR/dq2>(B0->K*mumu)',2.5,4.0),
-        ('<dBR/dq2>(B0->K*mumu)',2.0,4.3),#('<dBR/dq2>(B0->K*mumu)',4.0,6.0),
-        ('<dBR/dq2>(B0->K*mumu)',4.3,6.0),
-        ('<dBR/dq2>(B0->K*mumu)',15.0,19.0),('<dBR/dq2>(B0->K*mumu)',0.0,2.0),
-        #('<dBR/dq2>(B0->Kmumu)',0.1,2.0),
-        ('<dBR/dq2>(B0->Kmumu)',0.0,2.0),('<dBR/dq2>(B0->Kmumu)',1.0,6.0),('<dBR/dq2>(B0->Kmumu)',2.0,4.0),
-        #('<dBR/dq2>(B0->Kmumu)',2.0,4.3),
-        ('<dBR/dq2>(B0->Kmumu)',4.0,6.0),('<dBR/dq2>(B0->Kmumu)',15.0,22.0),('<dBR/dq2>(B0->Kmumu)',4.0,8.12),
-        #('<dBR/dq2>(B0->Kmumu)',10.2,12.8),
-        ('<dBR/dq2>(B0->Kmumu)',0.1,4.0),#('<dBR/dq2>(B0->Kmumu)',0.1,2.0),
+#        ('<dBR/dq2>(B0->K*mumu)',1.0,2.0),('<dBR/dq2>(B0->K*mumu)',2.0,4.3),('<dBR/dq2>(B0->K*mumu)',4.3,6.0),
+#        ('<dBR/dq2>(B0->K*mumu)',14.18,16.0),('<dBR/dq2>(B0->K*mumu)',16.0,19.0),
+        ('<dBR/dq2>(B0->K*mumu)',1.1,6.0),('<dBR/dq2>(B0->K*mumu)',15.0,19.0),
+        ('<AFB>(B0->K*mumu)',1.0,2.0),('<AFB>(B0->K*mumu)',2.0,4.3),('<AFB>(B0->K*mumu)',4.3,6.0),
+        ('<AFB>(B0->K*mumu)',14.18,16.0),('<AFB>(B0->K*mumu)',16.0,19.0),
+        ('<FL>(B0->K*mumu)',1.0,2.0),('<FL>(B0->K*mumu)',2.0,4.3),('<FL>(B0->K*mumu)',4.3,6.0),
+        ('<FL>(B0->K*mumu)',14.18,16.0),('<FL>(B0->K*mumu)',16.0,19.0),
+        ('<FL>(B0->K*mumu)',0.04,2.0),('<FL>(B0->K*mumu)',2.0,4.0),('<FL>(B0->K*mumu)',4.0,6.0),
+        ('<FL>(B0->K*mumu)',0.1,0.98),('<FL>(B0->K*mumu)',1.1,2.5),('<FL>(B0->K*mumu)',2.5,4.0),
+        ('<FL>(B0->K*mumu)',4.0,6.0),('<FL>(B0->K*mumu)',15.0,17.0),('<FL>(B0->K*mumu)',17.0,19.0),
+        ('<P1>(B0->K*mumu)',1.0,2.0),('<P1>(B0->K*mumu)',2.0,4.3),('<P1>(B0->K*mumu)',4.3,6.0),
+        ('<P1>(B0->K*mumu)',14.18,16.0),('<P1>(B0->K*mumu)',16.0,19.0),
+        ('<P1>(B0->K*mumu)',0.04,2.0),('<P1>(B0->K*mumu)',2.0,4.0),('<P1>(B0->K*mumu)',4.0,6.0),
+        ('<P1>(B0->K*mumu)',0.1,0.98),('<P1>(B0->K*mumu)',1.1,2.5),('<P1>(B0->K*mumu)',2.5,4.0),
+        ('<P1>(B0->K*mumu)',4.0,6.0),('<P1>(B0->K*mumu)',15.0,17.0),('<P1>(B0->K*mumu)',17.0,19.0),
+        ('<P2>(B0->K*mumu)',0.1,0.98),('<P2>(B0->K*mumu)',1.1,2.5),('<P2>(B0->K*mumu)',2.5,4.0),
+        ('<P2>(B0->K*mumu)',4.0,6.0),('<P2>(B0->K*mumu)',15.0,17.0),('<P2>(B0->K*mumu)',17.0,19.0),
+        ('<P3>(B0->K*mumu)',0.1,0.98),('<P3>(B0->K*mumu)',1.1,2.5),('<P3>(B0->K*mumu)',2.5,4.0),
+        ('<P3>(B0->K*mumu)',4.0,6.0),('<P3>(B0->K*mumu)',15.0,17.0),('<P3>(B0->K*mumu)',17.0,19.0),
+        ('<P4p>(B0->K*mumu)',0.04,2.0),('<P4p>(B0->K*mumu)',2.0,4.0),('<P4p>(B0->K*mumu)',4.0,6.0),
+        ('<P4p>(B0->K*mumu)',0.1,0.98),('<P4p>(B0->K*mumu)',1.1,2.5),('<P4p>(B0->K*mumu)',2.5,4.0),
+        ('<P4p>(B0->K*mumu)',4.0,6.0),('<P4p>(B0->K*mumu)',15.0,17.0),('<P4p>(B0->K*mumu)',17.0,19.0),
+        ('<P5p>(B0->K*mumu)',1.0,2.0),('<P5p>(B0->K*mumu)',2.0,4.3),('<P5p>(B0->K*mumu)',4.3,6.0),
+        ('<P5p>(B0->K*mumu)',14.18,16.0),('<P5p>(B0->K*mumu)',16.0,19.0),
+        ('<P5p>(B0->K*mumu)',0.04,2.0),('<P5p>(B0->K*mumu)',2.0,4.0),('<P5p>(B0->K*mumu)',4.0,6.0),
+        ('<P5p>(B0->K*mumu)',0.1,0.98),('<P5p>(B0->K*mumu)',1.1,2.5),('<P5p>(B0->K*mumu)',2.5,4.0),
+        ('<P5p>(B0->K*mumu)',4.0,6.0),('<P5p>(B0->K*mumu)',15.0,17.0),('<P5p>(B0->K*mumu)',17.0,19.0),
+        ('<P6p>(B0->K*mumu)',0.04,2.0),('<P6p>(B0->K*mumu)',2.0,4.0),('<P6p>(B0->K*mumu)',4.0,6.0),
+        ('<P6p>(B0->K*mumu)',0.1,0.98),('<P6p>(B0->K*mumu)',1.1,2.5),('<P6p>(B0->K*mumu)',2.5,4.0),
+        ('<P6p>(B0->K*mumu)',4.0,6.0),('<P6p>(B0->K*mumu)',15.0,17.0),('<P6p>(B0->K*mumu)',17.0,19.0),
+        ('<P8p>(B0->K*mumu)',0.04,2.0),('<P8p>(B0->K*mumu)',2.0,4.0),('<P8p>(B0->K*mumu)',4.0,6.0),
+        ('<P8p>(B0->K*mumu)',0.1,0.98),('<P8p>(B0->K*mumu)',1.1,2.5),('<P8p>(B0->K*mumu)',2.5,4.0),
+        ('<P8p>(B0->K*mumu)',4.0,6.0),('<P8p>(B0->K*mumu)',15.0,17.0),('<P8p>(B0->K*mumu)',17.0,19.0),
+
+        ('<dBR/dq2>(B0->Kmumu)',0.1,2.0),('<dBR/dq2>(B0->Kmumu)',2.0,4.0),('<dBR/dq2>(B0->Kmumu)',4.0,6.0),
         ('<dBR/dq2>(B0->Kmumu)',15.0,17.0),('<dBR/dq2>(B0->Kmumu)',17.0,19.0),
-        
-        ('<dBR/dq2>(B+->Kmumu)',1.1,2.0),('<dBR/dq2>(B+->Kmumu)',5.0,6.0),('<dBR/dq2>(B+->Kmumu)',2.0,3.0),
-        ('<dBR/dq2>(B+->Kmumu)',15.0,22.0),('<dBR/dq2>(B+->Kmumu)',3.0,4.0),('<dBR/dq2>(B+->Kmumu)',0.0,2.0),
-        ('<dBR/dq2>(B+->Kmumu)',4.0,5.0),('<dBR/dq2>(B+->Kmumu)',2.0,4.3),('<dBR/dq2>(B+->Kmumu)',0.1,4.0),
-        ('<dBR/dq2>(B+->Kmumu)',4.0,8.12),('<dBR/dq2>(B+->Kmumu)',1.0,6.0),
-        #('<dBR/dq2>(B+->Kmumu)',10.2,12.8),
+
+        ('<dBR/dq2>(B0->Kmumu)',0.0,2.0),('<dBR/dq2>(B0->Kmumu)',1.0,6.0),
+        ('<dBR/dq2>(B0->Kmumu)',15.0,22.0),('<dBR/dq2>(B0->Kmumu)',4.0,8.12),('<dBR/dq2>(B0->Kmumu)',0.1,4.0),
+#        ('<dBR/dq2>(B0->Kmumu)',0.1,2.0),('<dBR/dq2>(B0->Kmumu)',2.0,4.3),
+
+        ('<dBR/dq2>(B+->Kmumu)',1.0,6.0),('<dBR/dq2>(B+->Kmumu)',21.0,22.0),
+        ('<dBR/dq2>(B+->Kmumu)',0.1,0.98),('<dBR/dq2>(B+->Kmumu)',1.1,2.0),('<dBR/dq2>(B+->Kmumu)',2.0,3.0),
+        ('<dBR/dq2>(B+->Kmumu)',3.0,4.0),('<dBR/dq2>(B+->Kmumu)',4.0,5.0),('<dBR/dq2>(B+->Kmumu)',5.0,6.0),
         ('<dBR/dq2>(B+->Kmumu)',15.0,16.0),('<dBR/dq2>(B+->Kmumu)',16.0,17.0),('<dBR/dq2>(B+->Kmumu)',17.0,18.0),
         ('<dBR/dq2>(B+->Kmumu)',18.0,19.0),('<dBR/dq2>(B+->Kmumu)',19.0,20.0),('<dBR/dq2>(B+->Kmumu)',20.0,21.0),
-       ('<dBR/dq2>(B+->Kmumu)',21.0,22.0),('<dBR/dq2>(B+->Kmumu)',0.1,0.98),('<dBR/dq2>(B+->K*mumu)',0.1,2.0),
-        #('<dBR/dq2>(B+->K*mumu)',0.0,2.0),
-        ('<dBR/dq2>(B+->K*mumu)',2.0,4.0),
-        #('<dBR/dq2>(B+->K*mumu)',2.0,4.3),
-        ('<dBR/dq2>(B+->K*mumu)',4.0,6.0),('<dBR/dq2>(B+->K*mumu)',15.0,19.0),
-        ('<dBR/dq2>(B+->K*mumu)',15.0,17.0),('<dBR/dq2>(B+->K*mumu)',17.0,19.0)]
+        ('<AFB>(B+->Kmumu)',1.0,6.0),('<AFB>(B+->Kmumu)',16.0,18.0),('<AFB>(B+->Kmumu)',18.0,22.0),
+        ('<FH>(B+->Kmumu)',1.0,6.0),('<FH>(B+->Kmumu)',16.0,18.0),('<FH>(B+->Kmumu)',18.0,22.0),
+#        ('<dBR/dq2>(B+->Kmumu)',15.0,22.0),('<dBR/dq2>(B+->Kmumu)',0.0,2.0),('<dBR/dq2>(B+->Kmumu)',2.0,4.3),
+#        ('<dBR/dq2>(B+->Kmumu)',0.1,4.0),('<dBR/dq2>(B+->Kmumu)',4.0,8.12),
 
-obs8 = [('<dBR/dq2>(Bs->phimumu)',1.0,6.0),('<dBR/dq2>(Bs->phimumu)',15.0,19.0),
-        ('<FL>(Bs->phimumu)',0.1,2.0),('<FL>(Bs->phimumu)',2.0,5.0),('<FL>(Bs->phimumu)',15.0,19.0),
-        ('<S3>(Bs->phimumu)',0.1,2.0),('<S3>(Bs->phimumu)',2.0,5.0),('<S3>(Bs->phimumu)',15.0,19.0),
-        ('<S4>(Bs->phimumu)',0.1,2.0),('<S4>(Bs->phimumu)',2.0,5.0),('<S4>(Bs->phimumu)',15.0,19.0),
-        ('<S7>(Bs->phimumu)',0.1,2.0),('<S7>(Bs->phimumu)',2.0,5.0),('<S7>(Bs->phimumu)',15.0,19.0),
-        ('<dBR/dq2>(Lambdab->Lambdamumu)',1.0,6.0),('<dBR/dq2>(Lambdab->Lambdamumu)',15.0,20.0),
+        ('<dBR/dq2>(B+->K*mumu)',1.1,6.0),('<dBR/dq2>(B+->K*mumu)',15.0,19.0),
+        ('<dBR/dq2>(B+->K*mumu)',0.1,2.0),('<dBR/dq2>(B+->K*mumu)',2.0,4.0),('<dBR/dq2>(B+->K*mumu)',4.0,6.0),
+        ('<dBR/dq2>(B+->K*mumu)',15.0,19.0),('<dBR/dq2>(B+->K*mumu)',15.0,17.0),('<dBR/dq2>(B+->K*mumu)',17.0,19.0),
+        ('<FL>(B+->K*mumu)',0.1,0.98),('<FL>(B+->K*mumu)',1.1,2.5),('<FL>(B+->K*mumu)',2.5,4.0),
+        ('<FL>(B+->K*mumu)',4.0,6.0),('<FL>(B+->K*mumu)',15.0,17.0),('<FL>(B+->K*mumu)',17.0,19.0),
+        ('<P1>(B+->K*mumu)',0.1,0.98),('<P1>(B+->K*mumu)',1.1,2.5),('<P1>(B+->K*mumu)',2.5,4.0),
+        ('<P1>(B+->K*mumu)',4.0,6.0),('<P1>(B+->K*mumu)',15.0,17.0),('<P1>(B+->K*mumu)',17.0,19.0),
+        ('<P2>(B+->K*mumu)',0.1,0.98),('<P2>(B+->K*mumu)',1.1,2.5),('<P2>(B+->K*mumu)',2.5,4.0),
+        ('<P2>(B+->K*mumu)',4.0,6.0),('<P2>(B+->K*mumu)',15.0,17.0),('<P2>(B+->K*mumu)',17.0,19.0),
+        ('<P3>(B+->K*mumu)',0.1,0.98),('<P3>(B+->K*mumu)',1.1,2.5),('<P3>(B+->K*mumu)',2.5,4.0),
+        ('<P3>(B+->K*mumu)',4.0,6.0),('<P3>(B+->K*mumu)',15.0,17.0),('<P3>(B+->K*mumu)',17.0,19.0),
+        ('<P4p>(B+->K*mumu)',0.1,0.98),('<P4p>(B+->K*mumu)',1.1,2.5),('<P4p>(B+->K*mumu)',2.5,4.0),
+        ('<P4p>(B+->K*mumu)',4.0,6.0),('<P4p>(B+->K*mumu)',15.0,17.0),('<P4p>(B+->K*mumu)',17.0,19.0),
+        ('<P5p>(B+->K*mumu)',0.1,0.98),('<P5p>(B+->K*mumu)',1.1,2.5),('<P5p>(B+->K*mumu)',2.5,4.0),
+        ('<P5p>(B+->K*mumu)',4.0,6.0),('<P5p>(B+->K*mumu)',15.0,17.0),('<P5p>(B+->K*mumu)',17.0,19.0),
+        ('<P6p>(B+->K*mumu)',0.1,0.98),('<P6p>(B+->K*mumu)',1.1,2.5),('<P6p>(B+->K*mumu)',2.5,4.0),
+        ('<P6p>(B+->K*mumu)',4.0,6.0),('<P6p>(B+->K*mumu)',15.0,17.0),('<P6p>(B+->K*mumu)',17.0,19.0),
+        ('<P8p>(B+->K*mumu)',0.1,0.98),('<P8p>(B+->K*mumu)',1.1,2.5),('<P8p>(B+->K*mumu)',2.5,4.0),
+        ('<P8p>(B+->K*mumu)',4.0,6.0),('<P8p>(B+->K*mumu)',15.0,17.0),('<P8p>(B+->K*mumu)',17.0,19.0),
+        ]
+
+obs8 = [
+        ('<dBR/dq2>(Bs->phimumu)',0.1,2.0),('<dBR/dq2>(Bs->phimumu)',2.0,5.0),
+        ('<dBR/dq2>(Bs->phimumu)',15.0,17.0),('<dBR/dq2>(Bs->phimumu)',17.0,19.0),
+        ('<FL>(Bs->phimumu)',0.1,2.0),('<FL>(Bs->phimumu)',2.0,5.0),('<FL>(Bs->phimumu)',15.0,17.0),('<FL>(Bs->phimumu)',17.0,19.0),
+        ('<S3>(Bs->phimumu)',0.1,2.0),('<S3>(Bs->phimumu)',2.0,5.0),('<S3>(Bs->phimumu)',15.0,17.0),('<S3>(Bs->phimumu)',17.0,19.0),
+        ('<S4>(Bs->phimumu)',0.1,2.0),('<S4>(Bs->phimumu)',2.0,5.0),('<S4>(Bs->phimumu)',15.0,17.0),('<S4>(Bs->phimumu)',17.0,19.0),
+        ('<S7>(Bs->phimumu)',0.1,2.0),('<S7>(Bs->phimumu)',2.0,5.0),('<S7>(Bs->phimumu)',15.0,17.0),('<S7>(Bs->phimumu)',17.0,19.0),
+        ('<dBR/dq2>(Lambdab->Lambdamumu)',1.1,6.0),('<dBR/dq2>(Lambdab->Lambdamumu)',15.0,16.0),
+        ('<dBR/dq2>(Lambdab->Lambdamumu)',16.0,18.0),('<dBR/dq2>(Lambdab->Lambdamumu)',18.0,20.0),
         ('<AFBh>(Lambdab->Lambdamumu)',15.0,20.0),('<AFBl>(Lambdab->Lambdamumu)',15.0,20.0),
-        ('<AFBlh>(Lambdab->Lambdamumu)',15.0,20.0)]
+        ('<AFBlh>(Lambdab->Lambdamumu)',15.0,20.0)
+        ]
 
 
-angle_list = []
-for i in obs5:
-    rg = 9
-    if i in ['<FL>(B0->K*mumu)','<S3>(B0->K*mumu)','<S4>(B0->K*mumu)','<S5>(B0->K*mumu)','<S7>(B0->K*mumu)','<S8>(B0->K*mumu)']:
-        rg = 11
-    for j in range(rg):
-        angle_list.append((i,bins1[j],bins2[j]))
-    if i[1:2] == 'P5' or i[2] == 'P4':
-        angle_list.append((i,bins3[4],bins4[5]))
-        angle_list.append((i,bins3[4],bins4[5]))
-    if i[1:2] in ['P5','P1','AF']:
-        for k in range(3):
-            angle_list.append((i,bins3[k],bins4[k]))
-        if i[1:2] == 'AF':
-            angle_list.append((i,bins3[3],bins4[3]))
-angle_list += obs6 + obs7 + obs8
+angle_list = obs6 + obs7 + obs8
 #print(angle_list)
-#print(len(angle_list))
+print(len(angle_list))
+quit()
 
 #Fleps = FastLikelihood(name="trees",observables=my_obs[:9]+my_obs[14:]+obs2[:2],include_measurements=['Tree Level Leptonics','LFU D Ratios','Tree Level Semileptonics']) 
 #Fleps = FastLikelihood(name="trees",observables=my_obs[14:16],include_measurements=['LFU D Ratios',]) 
@@ -655,14 +729,14 @@ for op in range(2):
         obs_list = my_obs+obs2[:5]+angle_list
 #    print(len(angle_list))
 #    print(len(obs_list))
-#    FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1','LFU K Ratios 2']+ims)
-#    FL2.make_measurement(N=500,threads=4)
-    ms,us,ls = mk_measure(obs_list)
+    FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1','LFU K Ratios 2']+ims)
+    FL2.make_measurement(N=500,threads=4)
+#    ms,us,ls = mk_measure(obs_list)
 
     for i in range(1):
-#        globo = partial(func,i) 
-#        cdat = fpl.likelihood_contour_data(globo,-1,2,1.5,20, n_sigma=sigmas, threads=4, steps=150) 
-        cdat = test_func(i,obs_list,ms,us,ls,n_sigma=sigmas,hmax=6.0)
+        globo = partial(func,i) 
+        cdat = fpl.likelihood_contour_data(globo,-1,2,1.5,20, n_sigma=sigmas, threads=4, steps=150) 
+#        cdat = test_func(i,obs_list,ms,us,ls,n_sigma=sigmas,hmax=6.0,steps=50)
         pval_func(cdat,i,obs_list,sigmas)
 
         plt.figure(figsize=(6,5))
