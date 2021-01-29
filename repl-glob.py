@@ -12,6 +12,7 @@ from flavio.statistics.functions import pvalue, delta_chi2, pull
 from flavio.config import config
 import multiprocessing as mp
 from multiprocessing import Pool
+from numbers import Number
 import flavio.plots as fpl
 import matplotlib.pyplot as plt
 import numpy as np
@@ -141,7 +142,8 @@ ims = [
        'CMS-1710.02846 P 1.0-2.0','CMS-1710.02846 P 2.0-4.3','CMS-1710.02846 P 4.3-6.0',
        'CMS-1710.02846 P 14.18-16.0','CMS-1710.02846 P 16.0-19.0',
        'CMS-1806.00636 1.0-6.0','CMS-1806.00636 16.0-18.0','CMS-1806.00636 18.0-22.0',
-       'CDF 0.0-2.0','CDF 2.0-4.3','BaBar-1312.5364 Xs','BaBar-1204.3933 RKs',
+       #'CDF 0.0-2.0','CDF 2.0-4.3',
+       'BaBar-1312.5364 Xs','BaBar-1204.3933 RKs',
        'Belle-1908.01848','Belle-1908.01848 RKs','Belle-1904.02440','Belle-1904.02440 RKs 1','Belle-1904.02440 RKs 2']
 
 obs6 = [#('<dBR/dq2>(B+->Kee)',1.1,6.0),('<dBR/dq2>(B+->Kee)',1.0,6.0),('<dBR/dq2>(B+->Kee)',0.1,4.0),
