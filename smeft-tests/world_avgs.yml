@@ -1,0 +1,404 @@
+# This file has all the world averages for observables
+
+Anomalous Magnetic Moments:
+  experiment: PDG 2020
+  values:
+    a_mu: (116592091 ± 54 ± 33) e-11
+
+Tree Level Leptonics:
+  experiment: PDG 2020 
+  values:
+    BR(B+->munu): (5.3 ± 2.2) e-7
+    BR(B+->taunu): (1.09 ± 0.24) e-4
+    BR(D+->munu): (3.74 ± 0.17) e-4
+    BR(D+->taunu): (1.20 ± 0.27) e-3
+    BR(Ds->munu): (5.49 ± 0.16) e-3
+    BR(Ds->taunu): (5.48 ± 0.23) e-2
+    BR(tau->Knu): (6.96 ± 0.10) e-3
+    BR(tau->pinu): (10.82 ± 0.05) e-2
+    BR(K+->munu): (63.56 ± 0.11) e-2
+    Gamma(pi+->munu): (2.52809 ± 0.0050) e-17
+    RKpi(P+->munu): 1.337 ± 0.003
+
+Tree Level Semileptonics:
+  experiment: HFLAV and PDG
+  values:
+    BR(B0->Dlnu): (2.31 ± 0.10) e-2 
+    BR(B+->Dlnu): (2.35 ± 0.10) e-2
+    BR(B0->D*lnu): (5.06 ± 0.12) e-2
+    BR(B+->D*lnu): (5.66 ± 0.22) e-2
+    BR(Bs->Dsmunu): (2.49 ± 0.12 ± 0.14 ± 0.16) e-2
+    BR(Bs->Ds*munu): (5.38 ± 0.25 ± 0.46 ± 0.30) e-2
+    BR(B+->pilnu): (7.80 ± 0.27) e-5 
+    BR(B0->pilnu): (1.50 ± 0.06) e-4
+    BR(B+->rholnu): (1.58 ± 0.11) e-4 
+    BR(B0->rholnu): (2.94 ± 0.21) e-4
+    BR(D+->Kenu): (8.73 ± 0.10) e-2 
+    BR(D+->Kmunu): (8.76 ± 0.19) e-2 
+    BR(D+->pienu): (3.72 ± 0.17) e-3 
+    BR(D+->pimunu): (3.50 ± 0.15) e-3 
+    BR(D0->Kenu): (3.542 ± 0.035) e-2 
+    BR(D0->Kmunu): (3.41 ± 0.04) e-2 
+    BR(D0->pienu): (2.91 ± 0.04) e-3 
+    BR(D0->pimunu): (2.67 ± 0.12) e-3 
+    BR(K+->pienu): (5.07 ± 0.04) e-2 
+    BR(K+->pimunu): (3.352 ± 0.033) e-2 
+    BR(KL->pienu): (40.55 ± 0.11) e-2 
+    BR(KL->pimunu): (27.04 ± 0.07) e-2
+    BR(KS->pienu): (7.04 ± 0.08) e-4
+    BR(KS->pimunu): (4.69 ± 0.05) e-4
+
+Radiative Decays:
+  experiment: HFLAV 1909.12524
+  values:
+    BR(B->Xsgamma): (3.32 ± 0.15) e-4
+
+FCNC Leptonic Decays:
+  experiment: PDG 2020
+  values:
+    BR(B0->mumu): < 1.6e-10 @ 90% CL
+    BR(B0->mumu): < 1.9e-10 @ 95% CL
+    BR(Bs->mumu): (2.69 + 0.37 - 0.35) e-9
+    #BR(B0->mumu): (1.1 + 1.4 - 1.3) e-10
+    #BR(Bs->mumu): (3.0 ± 0.4) e-9
+
+B Mixing:
+  experiment: HFLAV 1909.12524
+  values:
+    # in GeV, convert from inv ps by /1.519267515435317e+12
+    DeltaM_d: 3.334(13)e-13 # this is 0.5065 ± 0.0019 ps^-1 
+    DeltaM_s: 1.1688(14)e-11 # this is  17.757 ± 0.02  ps^-1 
+
+LFU D Ratios:
+  experiment: PDG 2020 
+  values:
+    Rtaul(B->Dlnu): 0.340 ± 0.030
+    Rtaul(B->D*lnu): 0.295 ± 0.014
+
+LFU K Ratios 1:
+  experiment: LHCb 1903.09252
+  values:
+    - name: <Rmue>(B+->Kll)
+      q2min: 1.1
+      q2max: 6.0
+      value: 0.846 + 0.060 - 0.054 + 0.016 - 0.014
+    - name: <dBR/dq2>(B+->Kee)
+      q2min: 1.1
+      q2max: 6.0
+      value: 28.6 + 2.0 - 1.7 ± 1.4 1e-9
+
+LFU K Ratios 2:
+  experiment: LHCb 1705.05802 
+  values:
+    - name: <Rmue>(B0->K*ll)
+      q2min: 0.045
+      q2max: 1.1
+      value: 0.66 + 0.11 - 0.07 ± 0.03
+    - name: <Rmue>(B0->K*ll)
+      q2min: 1.1
+      q2max: 6.0
+      value: 0.69 + 0.11 - 0.07 ± 0.05
+
+
+CMS Run 2 Higgs 36/fb:
+  experiment: CMS
+  inspire: Sirunyan:2018koj
+  url: http://cms-results.web.cern.ch/cms-results/public-results/publications/HIG-17-031/
+  description: Taken from table 3 of this reference. Correlation taken from web page.
+  values:
+    mu_gg(h->gammagamma): 1.16 + 0.21 - 0.18
+    mu_gg(h->ZZ): 1.22 + 0.23 - 0.21
+    mu_gg(h->WW): 1.35 + 0.21 - 0.19
+    mu_gg(h->tautau): 1.05 + 0.53 - 0.47
+    mu_gg(h->bb): 2.51 + 2.43 - 2.01
+    mu_gg(h->mumu): 0.31 + 1.80 - 1.79
+    mu_VBF(h->gammagamma): 0.67 + 0.59 - 0.46
+    mu_VBF(h->ZZ): -0.09 + 1.02 - 0.76
+    mu_VBF(h->WW): 0.28 + 0.64 - 0.60
+    mu_VBF(h->tautau): 1.12 + 0.45 - 0.43
+    mu_VBF(h->mumu): 2.72 + 7.12 - 7.03
+    mu_Wh(h->gammagamma): 3.76 + 1.48 - 1.35
+    mu_Wh(h->ZZ): 0.00 ± 2.33
+    mu_Wh(h->WW): 3.91 + 2.26 - 2.01
+    mu_Wh(h->bb): 1.73 + 0.70 - 0.68
+    mu_Zh(h->gammagamma): 0.00 ± 1.14
+    mu_Zh(h->ZZ): 0.00 ± 4.26
+    mu_Zh(h->WW): 0.96 + 1.81 - 1.46
+    mu_Zh(h->bb): 0.99 + 0.47 - 0.45
+    mu_tth(h->gammagamma): 2.18 + 0.88 - 0.75
+    mu_tth(h->ZZ): 0.00 ± 1.50
+    mu_tth(h->WW): 1.60 + 0.65 - 0.59
+    mu_tth(h->bb): 0.91 + 0.45 - 0.43
+    mu_tth(h->tautau): 0.23 + 1.03 - 0.88
+  correlation:
+    [[1.0, 0.12, 0.16, 0.08, 0.0, 0.0, -0.28, 0.0, 0.0, 0.0, 0.0, -0.15, 0.0, 0.0, 0.0, -0.08, 0.0, 0.0, 0.0, 0.02, 0.0, 0.0, 0.0, 0.0],
+    [0.12, 1.0, 0.14, 0.04, 0.0, 0.0, 0.0, -0.41, 0.0, 0.0, 0.0, 0.0, -0.09, 0.0, 0.0, 0.0, -0.2, 0.0, 0.0, 0.0, 0.0, 0.02, 0.0, 0.0],
+    [0.16, 0.14, 1.0, 0.05, 0.0, 0.0, 0.0, 0.0, -0.21, 0.02, 0.0, 0.0, 0.0, -0.11, 0.0, 0.0, 0.0, -0.02, 0.02, 0.0, 0.0, 0.0, 0.0, 0.0],
+    [0.08, 0.04, 0.05, 1.0, 0.0, 0.0, 0.06, 0.05, 0.03, -0.32, 0.0, 0.05, 0.0, 0.02, 0.0, 0.0, 0.0, 0.0, 0.02, 0.02, -0.02, 0.0, 0.0, 0.0],
+    [0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.02, -0.02, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    [0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -0.54, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    [-0.28, 0.0, 0.0, 0.06, 0.0, 0.0, 1.0, 0.03, 0.02, 0.0, 0.0, 0.03, 0.0, 0.0, 0.0, 0.02, 0.0, 0.0, 0.0, -0.02, 0.0, 0.0, 0.0, 0.0],
+    [0.0, -0.41, 0.0, 0.05, 0.0, 0.0, 0.03, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.02, 0.0, 0.0, 0.0],
+    [0.0, 0.0, -0.21, 0.03, 0.0, 0.0, 0.02, 0.0, 1.0, -0.03, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    [0.0, 0.0, 0.02, -0.32, 0.0, 0.0, 0.0, 0.0, -0.03, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.02, 0.0, 0.0, 0.0, 0.02, 0.0, 0.0, 0.0],
+    [0.0, 0.0, 0.0, 0.0, 0.0, -0.54, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    [-0.15, 0.0, 0.0, 0.05, 0.0, 0.0, 0.03, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -0.2, 0.0, 0.0, 0.0, -0.08, 0.0, 0.0, 0.0, 0.0],
+    [0.0, -0.09, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -0.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    [0.0, 0.0, -0.11, 0.02, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -0.05, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    [0.0, 0.0, 0.0, 0.0, -0.02, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -0.03, 0.0, 0.0, 0.0, 0.0, 0.0],
+    [-0.08, 0.0, 0.0, 0.0, -0.02, 0.0, 0.02, 0.0, 0.0, 0.0, 0.0, -0.2, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -0.03, 0.0, 0.0, 0.0, 0.0],
+    [0.0, -0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.02, 0.0, 0.0, -0.3, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -0.02, 0.0, 0.0, 0.0],
+    [0.0, 0.0, -0.02, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.05, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    [0.0, 0.0, 0.02, 0.02, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.03, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    [0.02, 0.0, 0.0, 0.02, 0.0, 0.0, -0.02, 0.0, 0.0, 0.0, 0.0, -0.08, 0.0, 0.0, 0.0, -0.03, 0.0, 0.0, 0.0, 1.0, 0.0, 0.05, 0.04, 0.0],
+    [0.0, 0.0, 0.0, -0.02, 0.0, 0.0, 0.0, -0.02, 0.0, 0.02, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.02, 0.0, 0.0, 0.0, 1.0, -0.08, 0.0, -0.04],
+    [0.0, 0.02, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.05, -0.08, 1.0, 0.03, -0.42],
+    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.04, 0.0, 0.03, 1.0, 0.0],
+    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.04, -0.42, 0.0, 1.0]]
+
+
+ATLAS Run 2 Higgs 139/fb mumu:
+  description: 2007.07830 - Combined signal strength, intepreted as pure gluon fusion (by which it is dominated)
+  values:
+    mu_gg(h->mumu): 1.2 ± 0.6
+
+ATLAS Run 2 Higgs 139/fb Zgamma:
+  description: 2005.05382 - Combined signal strength, intepreted as pure gluon fusion (by which it is dominated)
+  values:
+    mu_gg(h->Zgamma): 2.0 + 1.0 - 0.9
+
+CMS h->cc 2019:
+  experiment: CMS
+  inspire: CMS:2019tbh
+  description: >
+    The $Vh$ combination for the signal strength is interpreted as pure $Zh$
+    since the correlation between the $Wh$ and $Zh$ channels is not specified.
+  values:
+    mu_Zh(h->cc): 37 + 20 - 19
+
+
+ATLAS Run 2 Higgs 139/fb:
+  experiment: ATLAS
+  inspire: http://cdsweb.cern.ch/record/2725733/files/ATLAS-CONF-2020-027.pdf
+  description: Figure 5 (and 6 for correlations)
+  values:
+    mu_gg(h->gammagamma): 1.03 ± 0.11
+    mu_gg(h->ZZ): 0.94 +0.11 -0.10
+    mu_gg(h->WW): 1.08 +0.19 -0.18
+    mu_gg(h->tautau): 1.02 +0.60 -0.55
+    mu_VBF(h->gammagamma): 1.31 +0.26 -0.23
+    mu_VBF(h->ZZ): 1.25 +0.50 -0.41
+    mu_VBF(h->WW): 0.60 +0.36 -0.34
+    mu_VBF(h->tautau): 1.15 +0.57 -0.53
+    mu_VBF(h->bb): 3.03 +1.67 -1.62
+    mu_Vh(h->gammagamma): 1.32 +0.33 -0.30
+    mu_Vh(h->ZZ): 1.53 +1.13 -0.92
+    mu_Vh(h->bb): 1.02 +0.18 -0.17
+    mu_tth(h->gammagamma): 0.90 +0.27 -0.24
+    mu_tth(h->VV): 1.72 +0.56 -0.53
+    mu_tth(h->tautau): 1.20 +1.07 -0.93
+    mu_tth(h->bb): 0.79 +0.60 -0.59
+  correlation:
+    [[1.0, 0.02, 0.01, 0.06, -0.11, 0.01, 0.01, 0.0, 0.01, -0.04, 0.03, 0.01, 0.07, 0.02, 0.0, 0.0],
+    [0.02, 1.0, 0.02, 0.0, 0.0, -0.21, 0.0, 0.01, 0.0, 0.01, -0.28, 0.01, 0.01, 0.02, 0.0, 0.0],
+    [0.01, 0.02, 1.0, 0.0, 0.01, 0.0, -0.08, 0.01, 0.01, 0.0, -0.01, 0.01, 0.01, 0.02, 0.01, -0.01],
+    [0.06, 0.0, 0.0, 1.0, 0.04, 0.03, 0.03, -0.45, 0.0, 0.03, 0.04, 0.01, 0.0, 0.02, -0.02, 0.01],
+    [-0.11, 0.0, 0.01, 0.04, 1.0, 0.07, 0.01, 0.0, 0.01, 0.02, 0.01, 0.01, 0.05, 0.01, 0.0, 0.0],
+    [0.01, -0.21, 0.0, 0.03, 0.07, 1.0, 0.01, 0.0, 0.0, 0.01, -0.04, 0.01, 0.0, 0.0, 0.0, 0.0],
+    [0.01, 0.0, -0.08, 0.03, 0.01, 0.01, 1.0, -0.01, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    [0.0, 0.01, 0.01, -0.45, 0.0, 0.0, -0.01, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.01],
+    [0.01, 0.0, 0.01, 0.0, 0.01, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.01],
+    [-0.04, 0.01, 0.0, 0.03, 0.02, 0.01, 0.0, 0.0, 0.0, 1.0, 0.02, 0.04, -0.04, 0.01, 0.0, 0.0],
+    [0.03, -0.28, -0.01, 0.04, 0.01, -0.04, 0.0, 0.0, 0.0, 0.02, 1.0, 0.01, 0.0, -0.07, 0.03, 0.0],
+    [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.0, 0.0, 0.0, 0.04, 0.01, 1.0, 0.01, 0.01, 0.0, 0.0],
+    [0.07, 0.01, 0.01, 0.0, 0.05, 0.0, 0.0, 0.0, 0.0, -0.04, 0.0, 0.01, 1.0, 0.0, 0.01, 0.01],
+    [0.02, 0.02, 0.02, 0.02, 0.01, 0.0, 0.0, 0.0, 0.0, 0.01, -0.07, 0.01, 0.0, 1.0, -0.42, 0.0],
+    [0.0, 0.0, 0.01, -0.02, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.03, 0.0, 0.01, -0.42, 1.0, 0.01],
+    [0.0, 0.0, -0.01, 0.01, 0.0, 0.0, 0.0, -0.01, -0.01, 0.0, 0.0, 0.0, 0.01, 0.0, 0.01, 1.0]]
+
+
+CMS Run 2 Higgs 137/fb:
+  experiment: CMS
+  inspire: CMS:2020gsy
+  url: http://cds.cern.ch/record/2706103  
+  description: Taken from table 4 of this reference. Correlation pending
+  values:
+    mu_gg(h->gammagamma): 1.09 + 0.15 - 0.14
+    mu_gg(h->ZZ): 0.98 + 0.12 - 0.11
+    mu_gg(h->WW): 1.28 + 0.20 - 0.19
+    mu_gg(h->tautau): 0.39 + 0.38 - 0.39
+    mu_gg(h->bb): 2.45 + 2.53 - 2.35
+    mu_gg(h->mumu): 0.31 + 1.82 - 1.81
+    mu_VBF(h->gammagamma): 0.77 + 0.37 - 0.29
+    mu_VBF(h->ZZ): 0.57 + 0.46 - 0.36
+    mu_VBF(h->WW): 0.63 + 0.65 - 0.61
+    mu_VBF(h->tautau): 1.05 + 0.30 - 0.29
+    mu_VBF(h->mumu): 3.18 + 8.22 - 7.93
+    mu_Vh(h->ZZ): 1.10 + 0.96 - 0.74
+    mu_Wh(h->WW): 2.85 + 2.11 - 1.87
+    mu_Wh(h->bb): 1.27 + 0.42 - 0.40
+    mu_Wh(h->tautau): 3.01 + 1.65 - 1.51
+    mu_Zh(h->WW): 0.90 + 1.77 - 1.43
+    mu_Zh(h->bb): 0.93 + 0.33 - 0.31
+    mu_Zh(h->tautau): 1.53 + 1.60 - 1.37
+    mu_tth(h->gammagamma): 1.62 + 0.52 - 0.43
+    mu_tth(h->ZZ): 0.25 + 1.03 - 0.25
+    mu_tth(h->WW): 0.93 + 0.48 - 0.45
+    mu_tth(h->bb): 1.13 + 0.33 - 0.30
+    mu_tth(h->tautau): 0.81 + 0.74 - 0.67
+
+CMS Run 2 Higgs 36/fb NR:
+  experiment: CMS
+  inspire: Sirunyan:2018koj
+  url: http://cms-results.web.cern.ch/cms-results/public-results/publications/HIG-17-031/
+  description: Taken from table 3 of this reference. Correlation taken from web page.
+  values:
+    mu_Wh(h->gammagamma): 3.76 + 1.48 - 1.35
+    mu_Zh(h->gammagamma): 0.00 ± 1.14
+
+Higgs signals old 1:
+  experiment: ATLAS & CMS
+  inspire: arxiv - 1711.02095
+  description: Table 2
+  values:
+    mu_gg(h->gammagamma): 1.10 ± 0.23
+    mu_VBF(h->gammagamma): 1.3 ± 0.5
+    mu_Wh(h->gammagamma): 0.5 ± 1.3
+    mu_Zh(h->gammagamma): 0.5 ± 2.8
+    mu_tth(h->gammagamma): 2.2 ± 1.5
+  correlation:
+    [[1, -0.25, 0, -0.14, 0],
+    [-0.25, 1, 0, 0, 0],
+    [0, 0, 1, -0.64, 0],
+    [-0.14, 0, -0.64, 1, -0.11],
+    [0, 0, 0, -0.11, 1]]
+
+Higgs signals old 2:
+  experiment: ATLAS
+  inspire: arxiv - 1711.02095
+  description: Table 3
+  values:
+    mu_gg(h->gammagamma): 0.80 ± 0.19
+    mu_VBF(h->gammagamma): 2.1 ± 0.6
+    mu_Vh(h->gammagamma): 0.7 ± 0.9
+    mu_tth(h->gammagamma): 0.5 ± 0.6
+  correlation:
+    [[1, 0.29, -0.22, 0],
+    [-0.29, 1, 0, 0],
+    [-0.22, 0, 1, -0.14],
+    [0, 0, -0.14, 1]]
+
+Higgs signals old 3:
+  experiment: CMS
+  inspire: arxiv - 1711.02095
+  description: Table 4
+  values:
+    mu_gg(h->gammagamma): 1.11 ± 0.19
+    mu_VBF(h->gammagamma): 0.5 ± 0.6
+    mu_Vh(h->gammagamma): 2.3 ± 1.1
+    mu_tth(h->gammagamma): 2.2 ± 0.9
+
+
+Higgs signals old2 1:
+  experiment: ATLAS & CMS
+  inspire: arxiv - 1711.02095
+  description: Table 2
+  values:
+    mu_gg(h->ZZ): 1.13 ± 0.33
+    mu_VBF(h->ZZ): 0.1 ± 0.9
+  correlation:
+    [[1, -0.26],
+    [-0.26, 1]]
+
+Higgs signals old2 2:
+  experiment: ATLAS
+  inspire: arxiv - 1711.02095
+  description: Table 3
+  values:
+    mu_gg(h->ZZ): 1.11 ± 0.24
+    mu_VBF(h->ZZ): 4.0 ± 1.6
+    mu_Vh(h->ZZ): 0 ± 1.9
+    mu_tth(h->ZZ): 0 ± 3.9
+  correlation:
+    [[1, -0.29, -0.22, 0],
+    [-0.29, 1, 0, 0],
+    [-0.22, 0, 1, -0.14],
+    [0, 0, -0.14, 1]]
+
+Higgs signals old2 3:
+  experiment: CMS
+  inspire: arxiv - 1711.02095
+  description: Table 4
+  values:
+    mu_gg(h->ZZ): 1.20 ± 0.22
+    mu_VBF(h->ZZ): 0.06 ± 1.03
+    mu_Vh(h->ZZ): 0 ± 2.80
+    mu_tth(h->ZZ): 0 ± 1.19
+
+
+Higgs Future CEPC Meas:
+  experiment: CEPC
+  inspire: arxiv - 1901.03170
+  description: Table 2, taking the current central values, of which there are few useful ones
+  values:
+    mu_Zh(h->WW): 0.90 ± 0.009
+    mu_Zh(h->bb): 0.93 ± 0.002
+    mu_Zh(h->tautau): 1.53 ± 0.01
+
+
+Higgs Future CEPC SM:
+  experiment: CEPC
+  inspire: arxiv - 1901.03170
+  description: Table 2, assuming that the central values match the SM
+  values:
+    mu_Zh(h->WW): 1.00 ± 0.01
+    mu_Zh(h->bb): 1.00 ± 0.003
+    mu_Zh(h->tautau): 1.00 ± 0.01
+    mu_Zh(h->cc): 1.00 ± 0.03
+    mu_Zh(h->ZZ): 1.00 ± 0.05
+    mu_Zh(h->gammagamma): 1.00 ± 0.07
+    mu_Zh(h->mumu): 1.00 ± 0.17
+
+
+Higgs future LHC 3000/fb Meas:
+  experiment: ATLAS
+  inspire: https://cds.cern.ch/record/1956710/files/ATL-PHYS-PUB-2014-016.pdf
+  description: Table 1, taking the current central values and applying the uncertainty. Taking combination as ggF.
+  values:
+    mu_gg(h->gammagamma): 1.03 ± 0.09
+    mu_gg(h->ZZ): 0.94 ± 0.08
+    mu_gg(h->WW): 1.08 ± 0.12
+    #mu_gg(h->bb): 2.45 ± 0.34 #CMS central
+    #mu_gg(h->mumu): 1.2 ± 0.2 #New result central
+    mu_VBF(h->gammagamma): 1.31 ± 0.21
+    mu_VBF(h->ZZ): 1.25 ± 0.26
+    mu_VBF(h->WW): 0.60 ± 0.09
+    mu_VBF(h->tautau): 1.15 ± 0.22
+    mu_Vh(h->gammagamma): 1.32 ± 0.31
+    mu_Vh(h->ZZ): 1.53 ± 0.20
+    mu_Vh(h->bb): 1.02 ± 0.14
+    #mu_Zh(h->bb): 0.93 ± 0.13 #CMS central
+    mu_tth(h->gammagamma): 0.90 ± 0.15
+    #mu_tth(h->ZZ): 0.25 ± 0.05 #CMS central
+
+Higgs future LHC 3000/fb SM:
+  experiment: ATLAS
+  inspire: https://e-publishing.cern.ch/index.php/CYRM/article/view/952/769
+  description: Scenario 2, data from Figs 9, 10, 11, 12, Tables 26, 27
+  values:
+    mu_gg(h->gammagamma): 1.00 ± 0.04
+    mu_gg(h->ZZ): 1.00 ± 0.04
+    mu_gg(h->WW): 1.00 + 0.05 - 0.04 
+    mu_gg(h->tautau): 1.00 + 0.12 - 0.11
+    mu_gg(h->mumu): 1.00 ± 0.13
+    mu_gg(h->Zgamma): 1.00 ± 0.04
+    mu_VBF(h->gammagamma): 1.00 + 0.10 - 0.09
+    mu_VBF(h->ZZ): 1.00 ± 0.12
+    mu_VBF(h->WW): 1.00 + 0.10 - 0.09
+    mu_VBF(h->tautau): 1.00 ± 0.08
+    mu_Vh(h->gammagamma): 1.00 ± 0.09
+    mu_Vh(h->ZZ): 1.00 + 0.19 - 0.18
+    mu_Zh(h->bb): 1.00 ± 0.12 
+    mu_Wh(h->bb): 1.00 ± 0.10
+    mu_tth(h->gammagamma): 1.00 + 0.08 - 0.07
+    mu_tth(h->ZZ): 1.00 + 0.23 - 0.20

@@ -76,7 +76,7 @@ def bsgamma2(par,CKM,mub1,tanb,mH):
     eu = np.array([[cob*mu[0]/vev,0,0],[0,cob*mu[1]/vev,0],[0,0,cob*mu[2]/vev]])
     ed = np.array([[-tanb*md[0]/vev,0,0],[0,-tanb*md[1]/vev,0],[0,0,-tanb*md[2]/vev]])
     zs = [(mu[0]/mH)**2,(mu[1]/mH)**2,(mu[2]/mH)**2]
-    mub2 = 4.18
+    mub2 = 4.2
     mul, mulb = (mub1/mH)**2, (mub2/mub1)**2
 
     def c7_1():
@@ -180,7 +180,7 @@ def bsgamma2(par,CKM,mub1,tanb,mH):
 
     return C7, C7p, C8, C8p
 
-def bsll(par,CKM,d,q,l,mH0,tanb,mH,mub2,ali):
+def bsll(par,CKM,d,q,l,mH0,tanb,mH,cba):
     '''
         Calculating C9, C9', C10, C10', CS, CS', CP, CP' 2HDM WCs
     '''
@@ -233,23 +233,10 @@ def bsll(par,CKM,d,q,l,mH0,tanb,mH,mub2,ali):
 
     cob = 1/tanb
     b = np.arctan(tanb)
-    if ali == 0:
-        a = b - np.pi/2 # alignment limit
-        cba,sba = np.cos(b-a),np.sin(b-a)
-    elif ali == 1:
-        a = b - np.arccos(0.05) 
-        cba,sba = np.cos(b-a),np.sin(b-a) 
-    elif ali == 2:
-        a = b - np.arccos(-0.05) 
-        cba,sba = np.cos(b-a),np.sin(b-a) 
-    elif ali == 3:
-        cba,sba = np.sin(2*b),-np.sin(2*b) 
+    sba = np.sqrt(1-cba**2)
 
-#    Vus, Vub = CKM[0,q], CKM[0,d]
-#    Vcs, Vcb = CKM[1,q], CKM[1,d]
-#    Vts, Vtb = CKM[2,q], CKM[2,d]
     vev,mW,QCD,s2w = par['vev'],par['m_W'],par['lam_QCD'],par['s2w']
-    e = np.sqrt(4*np.pi*get_alpha_e(par,mub2))
+    e = np.sqrt(4*np.pi*get_alpha_e(par,4.2))
     mu = [par['m_u'],par['m_c'],get_mt(par,par['m_t'])]
     muw = [par['m_u'],par['m_c'],get_mt(par,par['m_W'])]
     md = [par['m_d'],par['m_s'],par['m_b']]
@@ -261,9 +248,9 @@ def bsll(par,CKM,d,q,l,mH0,tanb,mH,mub2,ali):
     zs = [(mu[0]/mH)**2,(mu[1]/mH)**2,(mu[2]/mH)**2]
     zsw = [(mu[0]/mH)**2,(mu[1]/mH)**2,(muw[2]/mH)**2]
     ts = [mu[0]/md[d],mu[1]/md[d],mu[2]/md[d]]
-    mul = (mub2/mH)**2
+    mul = (4.2/mH)**2
     def Lp(yh,cba,yH0,sba,el):
-        return (yh*cba**2 + yH0*sba**2)*(2*el[mls[2],mls[2]])
+        return (yh*cba**2 + yH0*sba**2)*(2*el[l,l])
     def Lm(yh,cba,yH0,sba,el):
         return -1*Lp(yh,cba,yH0,sba,el)
     lam3 = 0.1
@@ -300,7 +287,7 @@ def bsll(par,CKM,d,q,l,mH0,tanb,mH,mub2,ali):
         p1 = 0
         for k in range(3):
             for n in range(3):
-                p1 += ed[k,1]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,2]
+                p1 += ed[k,1]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,d]
                 #p1 += ed[k,1]*ed[n,2]
         c10p = -1*p1*(I1(zs[2])-1)/(2*np.conj(CKM[2,q])*CKM[2,d]*e**2)
         #c10p = -1*p1*(I1(zs[2])-1)/(2*e**2)
@@ -382,9 +369,9 @@ def bsll(par,CKM,d,q,l,mH0,tanb,mH,mub2,ali):
         sq1, sq2, sq3 = 0,0,0
         for k in range(3):
             for n in range(3):
-                sq1 += -(y/2)*Lp*(4*I1(zs[2])*ts[2]*(zs[2]-1)*(ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d] - ed[d,d]*np.conj(CKM[2,q])*eu[n,2]*CKM[n,d]) - 2*np.log(mul)*(2*(ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d] - ed[d,d]*np.conj(CKM[2,q])*eu[n,2]*CKM[n,d])*ts[2] + 2*np.conj(CKM[2,q])*eu[2,2]*eu[n,2]*CKM[n,q] - np.conj(CKM[k,q])*eu[k,2]*eu[n,2]*CKM[n,q]) - I0(zs[2])*np.conj(CKM[k,q])*eu[k,2]*eu[n,2]*CKM[n,q] + 4*I5(zs[2],zs[2])*np.conj(CKM[2,q])*eu[2,2]*eu[n,2]*CKM[n,q])
-                sq2 += 2*I4(zs[2],zs[2])*np.conj(CKM[2,q])*eu[2,2]*eu[n,2]*CKM[n,q]*Lm*y
-                sq3 += np.conj(CKM[2,q])*eu[n,2]*CKM[n,q]*np.sqrt(y*zs[2])*(el[l,l]*2)*(2*(1-I1(zs[2]))*cba*0.652*sba*(yh-yH0) + I1(zs[2])*np.sqrt(y)*(cba*yh*lamh/mH - sba*yH0*lamH0/mH))
+                sq1 += -(y/2)*Lp*(4*I1(zs[2])*ts[2]*(zs[2]-1)*(ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d] - ed[d,d]*np.conj(CKM[2,q])*eu[n,2]*CKM[n,d]) - 2*np.log(mul)*(2*(ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d] - ed[d,d]*np.conj(CKM[2,q])*eu[n,2]*CKM[n,d])*ts[2] + 2*np.conj(CKM[2,q])*eu[2,2]*eu[n,2]*CKM[n,d] - np.conj(CKM[k,q])*eu[k,2]*eu[n,2]*CKM[n,d]) - I0(zs[2])*np.conj(CKM[k,q])*eu[k,2]*eu[n,2]*CKM[n,d] + 4*I5(zs[2],zs[2])*np.conj(CKM[2,q])*eu[2,2]*eu[n,2]*CKM[n,d])
+                sq2 += 2*I4(zs[2],zs[2])*np.conj(CKM[2,q])*eu[2,2]*eu[n,2]*CKM[n,d]*Lm*y
+                sq3 += np.conj(CKM[2,q])*eu[n,2]*CKM[n,d]*np.sqrt(y*zs[2])*(el[l,l]*2)*(2*(1-I1(zs[2]))*cba*0.652*sba*(yh-yH0) + I1(zs[2])*np.sqrt(y)*(cba*yh*lamh/mH - sba*yH0*lamH0/mH))
         p1 = (ed[q,q]/(s2w*np.conj(CKM[2,q])*CKM[2,d]*0.652**4))*(sq1+sq2-sq3)
         return p1
 
@@ -393,14 +380,17 @@ def bsll(par,CKM,d,q,l,mH0,tanb,mH,mub2,ali):
         q = 0
         for k in range(3):
             for n in range(3):
-                sq1 += y*Lm*(-2*I1(zs[2])*ts[2]*(zs[2]-1)*((ed[d,d]**2)*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d] - (ed[q,q]**2)*np.conj(CKM[2,q])*eu[n,2]*CKM[n,d]) + 2*np.log(mul)*(-ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*eu[2,2]*CKM[2,d] + ((ed[d,d]**2)*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d] - (ed[d,d]**2)*np.conj(CKM[2,q])*eu[n,2]*CKM[n,d])*ts[2]) + ed[d,d]*(I7(zs[2])*(ed[q,q]**2)*np.conj(CKM[2,q])*CKM[2,d] + 2*I5(zs[2],zs[2])*np.conj(CKM[k,q])*eu[k,2]*eu[2,2]*CKM[2,d]))
+                sq1 += y*Lm*(-2*I1(zs[2])*ts[2]*(zs[2]-1)*((ed[d,d]**2)*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d] - (ed[q,q]**2)*np.conj(CKM[2,q])*eu[n,2]*CKM[n,d]) + 2*np.log(mul)*(-ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*eu[2,2]*CKM[2,d] + ((ed[d,d]**2)*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d] - (ed[q,q]**2)*np.conj(CKM[2,q])*eu[n,2]*CKM[n,d])*ts[2]) + ed[d,d]*(I7(zs[2])*(ed[q,q]**2)*np.conj(CKM[2,q])*CKM[2,d] + 2*I5(zs[2],zs[2])*np.conj(CKM[k,q])*eu[k,2]*eu[2,2]*CKM[2,d]))
                 sq2 += -2*I4(zs[2],zs[2])*ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*eu[2,2]*CKM[2,d]*Lp*y 
                 sq3 += ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d]*np.sqrt(y*zs[2])*(el[l,l]*2)*(2*(1-I1(zs[2]))*cba*0.652*sba*(yh-yH0) + I1(zs[2])*np.sqrt(y)*(cba*yh*lamh/mH - sba*yH0*lamH0/mH))
+#        print('Lines 1-3: ',sq1)
+#        print('Line 4: ',sq2)
+#        print('Lines 5-6: ',sq3)
         p1 = (1/(s2w*np.conj(CKM[2,q])*CKM[2,d]*0.652**4))*(sq1+sq2-sq3)
         return p1
 
     def cs_2(Lp,Lm,el):
-        p1 = (ed[q,q]/(s2w*0.652**2))*(zsw[2]*np.log(mul)*Lp/4 + I3(y,zsw[2])*Lp/8 + I2(zsw[2])*el[l,l2]) 
+        p1 = (ed[q,q]/(s2w*0.652**2))*(zsw[2]*np.log(mul)*Lp/4 + I3(y,zsw[2])*Lp/8 + I2(zsw[2])*el[l,l]) 
         return p1
 
     def csp_2(Lp,Lm,el):
@@ -436,15 +426,18 @@ def bsll(par,CKM,d,q,l,mH0,tanb,mH,mub2,ali):
     CP = cs_1(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + cs_2(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + cs_3(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el)
     CPP = csp_1(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + csp_2(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + csp_3(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el)
 
-#    print("CS 3.34,3.35,6.5:")
-#    print(cs_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-#    print(cs_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-#    print(cs_3(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-#    print()
-#    print("CSp 3.34,3.35,6.6:")
-#    print(csp_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-#    print(csp_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-#    print(csp_3(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+    print('Eq. 3.34: ',csp_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+    print('Eq. 3.35: ',csp_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+    print('Eq. 6.5: ',csp_3(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+
+#    print('C9_'+str(q),C9,'\n')
+#    print('C9p_'+str(q),C9p,'\n')
+#    print('C10_'+str(q),C10,'\n')
+#    print('C10p_'+str(q),C10p,'\n')
+#    print('CS_'+str(q),CS,'\n')
+#    print('CSp_'+str(q),CSP,'\n')
+#    print('CP_'+str(q),CP,'\n')
+#    print('CPp_'+str(q),CPP,'\n')
 
     return C9, C9p, C10, C10p, CS, CSP, CP, CPP
 
@@ -654,3 +647,101 @@ def pval_func(cdat,app,obs,sigmas):
     print("p-value at chi2_min point with dof =",degs," is",pval*100,"%")
     return None
 
+
+def Two_HDM_WC(par, tanb, cosba):
+    v = par['vev']
+
+    sinba = np.sin(np.arccos(cosba))
+    theta_w = np.arcsin((par['s2w'])**0.5)
+    tan_tw = np.tan(theta_w)
+
+    #Coupling modifiers
+    K_u = sinba + cosba/tanb
+    K_d = sinba - cosba*tanb
+    K_v = sinba
+    
+    #K_d = abs(K_d)
+    #K_u = abs(K_u)
+    #K_v = abs(K_v)
+
+    #Setting up masses and Yukawa couplings
+    m_us = [par['m_u'], par['m_c'], get_mt(par, par['m_t'])] 
+    m_ds = [par['m_d'], par['m_s'], par['m_b']]
+    m_ls = [par['m_e'], par['m_mu'], par['m_tau']]
+    Y_us = [m_u * np.sqrt(2) /v for m_u in m_us]
+    Y_ds = [m_d * np.sqrt(2) /v for m_d in m_ds]
+    Y_ls = [m_l * np.sqrt(2) /v for m_l in m_ls]
+
+
+    #Calculating the couplings to use in flavio (hence kappa - 1)
+    C_uH_pre = -1 * (K_u-1) / (v**2)
+    C_uHs = [C_uH_pre * Y_u for Y_u in Y_us]
+
+    C_dH_pre = -1 * (K_d-1) / (v**2)
+    C_dHs = [C_dH_pre * Y_d for Y_d in Y_ds]
+    C_lHs = [C_dH_pre * Y_l for Y_l in Y_ls]
+
+    #Going off the form of the general SM Lagrangian and the usual 2HDM vector coupling modification
+    g_p, g = 0.3584551, 0.6534878
+    tan_W = tan_tw #g_p / g
+    mW = par['m_W'] 
+
+    C_W = (K_v-1)*(mW/v)**2 / (v**2)
+    C_B = (tan_W**2) * C_W      #(K_v-1)*(mW*tan_W/v)**2 /(v**2)  
+    C_WB = 4*tan_W * C_W        #(K_v-1)*4*tan_W* (mW/v)**2 /(v**2)  
+
+    #Thankfully, it is straightforward to identify these WCs with those in Flavio
+
+    #phi = C_H - Not used in SS calculations (flavio calls it phi also)
+
+    #Not all are used to calculate signal strengths in flavio, eg. all the phi_11s are neglected  
+    return C_uHs[1], C_uHs[2], C_dHs[1], C_dHs[2], C_lHs[1], C_lHs[2], C_W, C_B, C_WB
+
+if __name__=='__main__':
+    pars = flavio.default_parameters
+
+    vev = Parameter('vev')
+    vev.tex = r"$v$"
+    vev.description = "Vacuum Expectation Value of the SM Higgs"
+    pars.set_constraint('vev','246')
+
+    lam_QCD = Parameter('lam_QCD')
+    lam_QCD.tex = r"$\Lambda_{QCD}$"
+    lam_QCD.description = "QCD Lambda scale"
+    pars.set_constraint('lam_QCD','0.2275 + 0.01433 - 0.01372')
+
+    # Bag parameters update from 1909.11087
+    pars.set_constraint('bag_B0_1','0.835 +- 0.028')
+    pars.set_constraint('bag_B0_2','0.791 +- 0.034')
+    pars.set_constraint('bag_B0_3','0.775 +- 0.054')
+    pars.set_constraint('bag_B0_4','1.063 +- 0.041')
+    pars.set_constraint('bag_B0_5','0.994 +- 0.037')
+    pars.set_constraint('eta_tt_B0','0.537856') # Alex, private correspondence
+
+    pars.set_constraint('bag_Bs_1','0.849 +- 0.023')
+    pars.set_constraint('bag_Bs_2','0.835 +- 0.032')
+    pars.set_constraint('bag_Bs_3','0.854 +- 0.051')
+    pars.set_constraint('bag_Bs_4','1.031 +- 0.035')
+    pars.set_constraint('bag_Bs_5','0.959 +- 0.031')
+    pars.set_constraint('eta_tt_Bs','0.537856') # Alex, private correspondence
+
+    # a_mu SM from 2006.04822
+    pars.set_constraint('a_mu SM','116591810(43)e-11')
+
+    # Updating meson lifetimes
+    pars.set_constraint('tau_B0','2307767355946.246 +- 6077070061.741268')
+    pars.set_constraint('tau_Bs','2301690285884.505 +- 6077070061.741268')
+
+    # Updating Vub, Vus and Vcb from PDG 2020 Averages 
+    pars.set_constraint('Vus','0.2245 +- 0.0008') 
+    pars.set_constraint('Vcb','0.041 +- 0.0014') 
+    pars.set_constraint('Vub','0.00382 +- 0.00024') 
+
+    par = flavio.default_parameters.get_central_all()
+    ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
+    mH0, mH = 3200, 3200
+    tanb = 10
+    print("For mH0 = mH+ = 3200 GeV, tanb = 10:")
+    print()
+    C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,2,1,1,mH0,tanb,mH,0)
+    #C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,2,0,1,mH0,tanb,mH,0)

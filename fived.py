@@ -234,20 +234,10 @@ obs8 = [
         ('<AFBlh>(Lambdab->Lambdamumu)',15.0,20.0)]
 
 angle_list = obs7 + obs8 + obs6 #+ obs2[2:-1]
-
 #obs_list = my_obs+obs2[:2]+angle_list
-#FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1']+ims)
-#FL2.make_measurement(N=500)
 
-def func(app,wcs):
-    tanb, mH = wcs # state what the two parameters are going to be on the plot
-
-    if app == 0:
-        mH0,mA0 = mH, mH
-    elif app == 2:
-        mH0,mA0 = mH, np.log10(1500)
-    elif app == 1:
-        mH0,mA0 = np.log10(1500), mH
+def func(wcs):
+    tanb, mH, mH0, mA0, cba = wcs # state what the two parameters are going to be on the plot
 
     par = flavio.default_parameters.get_central_all()
     ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
@@ -271,9 +261,9 @@ def func(app,wcs):
     CSR_bc_m, CSL_bc_m = rh(par['m_c'],par['m_b'],par['m_mu'],10**tanb,10**mH)
     CSR_bc_e, CSL_bc_e = rh(par['m_c'],par['m_b'],par['m_e'],10**tanb,10**mH)
     C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],10**tanb,10**mH)
-    C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',1],10**mH0,10**tanb,10**mH,0)
-    C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],10**mH0,10**tanb,10**mH,0)
-    C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],10**mH0,10**tanb,10**mH,0)
+    C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,2,1,0,10**mH0,10**tanb,10**mH,cba)
+    C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,2,1,1,10**mH0,10**tanb,10**mH,cba)
+    C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,2,0,1,10**mH0,10**tanb,10**mH,cba)
     CVLL_bs, CVRR_bs, CSLL_bs, CSRR_bs, CSLR_bs, CVLR_bs = mixing(par,ckm_els,['m_s',1,'m_d'],10**tanb,10**mH)
     CVLL_bd, CVRR_bd, CSLL_bd, CSRR_bd, CSLR_bd, CVLR_bd = mixing(par,ckm_els,['m_d',0,'m_s'],10**tanb,10**mH)
 
@@ -306,36 +296,49 @@ def func(app,wcs):
         }, scale=4.2, eft='WET', basis='flavio')
     return wc
 
-def c2_test(app,wcs):
-    tanb, mH = wcs
-    ali,obs,m,u,l = app
-    if ali == 0:
-        mH0,mA0 = mH, mH
-    elif ali == 1:
-        mH0,mA0 = np.log10(1500), mH
-    elif ali == 2:
-        mH0,mA0 = mH, np.log10(1500)
+def func2(wcs):
+    tanb, mH, mH0, mA0, cba = wcs # state what the two parameters are going to be on the plot
 
-    c2 = chi2_func(10**tanb,10**mH,10**mH0,10**mA0,obs,m,u,l)
+    par = flavio.default_parameters.get_central_all()
+    u_22, u_33, d_22, d_33, e_22, e_33, C_W, C_B, C_WB = Two_HDM_WC(par, 10**tanb, cba)
+
+    wc = flavio.WilsonCoefficients()
+    wc.set_initial({
+        "uphi_33": u_33, "uphi_22": u_22,"dphi_33": d_33, "dphi_22": d_22,
+        "ephi_33": e_33, "ephi_22": e_22,"phiW": C_W, "phiWB": C_WB, "phiB": C_B,
+        }, scale=125,eft='SMEFT',basis='Warsaw')
+    return wc
+
+def c2_test(app,wcs):
+    obs,m,u,l = app
+    wc1 = func(wcs)
+    wc2 = func2(wcs)
+    c2 = chi2_func(obs,m,u,l,wc1,wc2)
     return c2
 
-def test_func(ali,obs,m,u,l,tmin=-1.0,tmax=2.0,hmin=2.5,hmax=6.0,steps=100,n_sigma=1,threads=4):
-    tanb, mH = np.linspace(tmin,tmax,steps),np.linspace(hmin,hmax,steps)
-    t,h = np.meshgrid(tanb,mH)
-    th = np.array([t,h]).reshape(2,steps**2).T
+def test_func(obs,m,u,l,
+        tmin=-1.0,tmax=2.0,hmin=2.0,hmax=5.0,omin=2.0,omax=5.0,amin=2.0,amax=5.0,cmin=-0.2,cmax=0.2,
+        steps=10,n_sigma=1,threads=4):
+    tanb = np.linspace(tmin,tmax,steps)
+    mH = np.linspace(hmin,hmax,steps)
+    mH0 = np.linspace(omin,omax,steps)
+    mA0 = np.linspace(amin,amax,steps)
+    cba = np.linspace(cmin,cmax,steps)
+    t,h,o,a,c = np.meshgrid(tanb,mH,mH0,mA0,cba)
+    th = np.array([t,h,o,a,c]).reshape(5,steps**5).T
 
-    c2t = partial(c2_test,(ali,obs,m,u,l))
+    c2t = partial(c2_test,(obs,m,u,l))
 
     pool = Pool(threads)
-    pred = np.array(pool.map(c2t,th)).reshape((steps,steps))
+    pred = np.array(pool.map(c2t,th)).reshape((steps,steps,steps,steps,steps))
     pool.close()
     pool.join()
 
     if isinstance(n_sigma, Number):
-        levels = [delta_chi2(n_sigma, dof=2)]
+        levels = [delta_chi2(n_sigma, dof=5)]
     else:
-        levels = [delta_chi2(n, dof=2) for n in n_sigma]
-    return {'x':t,'y':h,'z':pred,'levels':levels}
+        levels = [delta_chi2(n, dof=5) for n in n_sigma]
+    return {'x':t,'y':h,'o':o,'a':a,'c':c,'z':pred,'levels':levels}
 
 
 #------------------------------
@@ -345,236 +348,39 @@ def test_func(ali,obs,m,u,l,tmin=-1.0,tmax=2.0,hmin=2.5,hmax=6.0,steps=100,n_sig
 sigmas = (1,2)
 #sigmas = (1,2,3,4,5,6)
 
-#cmuon = fpl.likelihood_contour_data(muon,-1,2.5,-2,4, n_sigma=sigmas, threads=4, steps=60) 
-#cmuon = fpl.likelihood_contour_data(muon,0,4,-1,4, n_sigma=sigmas, threads=4, steps=60) 
-#cleps = fpl.likelihood_contour_data(leps,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=60) 
-#cmix = fpl.likelihood_contour_data(mix,-3,4,-2,6, n_sigma=sigmas, threads=4, steps=150) 
-#crad = fpl.likelihood_contour_data(rad,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=80) 
-#cmu = fpl.likelihood_contour_data(mu,2.5,4,-2,1, n_sigma=sigmas, threads=4, steps=60) 
-#cmu = fpl.likelihood_contour_data(mu,-1,2,0,4, n_sigma=sigmas, threads=4, steps=60) 
-#cmu0 = fpl.likelihood_contour_data(mu0,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=60) 
-#cmu1 = fpl.likelihood_contour_data(mu1,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=60) 
-#cdat = fpl.likelihood_contour_data(func,-1,2,1.5,4, n_sigma=sigmas, threads=4, steps=60) 
-#cdat = fpl.likelihood_contour_data(func,-1,2,2.9,3.2, n_sigma=sigmas, threads=4, steps=400) 
-
-#------------------------------
-#   Print Out Values
-#------------------------------
-
-minz_bsgam = -19.066889111832868
-minz_allsim = -759.1565659885084
-minz_Hsim = -757.8282739220956
-minz_Asim = -756.8886543429611
-
-#app = 0#,1,2
-#pval_func(cdat,app,obs_list)
-#quit()
-
-#------------------------------
-#   Plotting
-#------------------------------
-
-#plt.figure(figsize=(6,5))
-#fpl.contour(**cmuon,col=6) 
-#plt.title(r'$m_{A^0}\sim m_{H^+}$ and $m_{H^0} = 1500\,$GeV',fontsize=18)
-#plt.title(r'$m_{H^0}\sim m_{H^+}$ and $m_{A^0} = 1500\,$GeV',fontsize=18)
-#plt.title(r'$m_{H^0},m_{A^0}\sim m_{H^+}$',fontsize=18)
-#plt.axhline(y=np.log10(1220),color='black',linestyle='--') # Asim = 866, Hsim = 1220
-#plt.axhline(y=np.log10(1660),color='black',linestyle='--') # Asim = 1660, Hsim = 1660
-#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-#plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
-#plt.savefig('muon_Asim.png') # 1,2 sig
-#plt.savefig('muon_Hsim.png') # 3.3 sig
-#plt.savefig('muon_allsim.png') # 3.3 sig
-#plt.show()
-#quit()
-
-#plt.figure(figsize=(6,5))
-#fpl.contour(**cleps,col=2)#,interpolation_factor=1.09,interpolation_order=1) 
-###plt.title('Tree-Level Leptonic and Semileptonic Meson Decays and Hadronic Tau Decays')
-###plt.title('Tree-Level Semileptonic Meson Decays')
-###plt.title(r'$\mathcal{R}(D)$ and $\mathcal{R}(D^*)$')
-###plt.title(strings)
-#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-#plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
-##plt.savefig(strings+'.png')
-#plt.savefig('test_plot.pdf')
-#quit()
-
-#plt.figure(figsize=(6,5))
-#fpl.contour(**cmix,col=0)#,interpolation_factor=1.015,interpolation_order=1) 
-####plt.title(r'$\Delta M_{d,s}$')
-#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-#plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
-#plt.savefig('mix_plot.pdf')
-##plt.show()
-#
-##plt.figure(figsize=(6,5))
-##fpl.contour(**crad,col=3)#,z_min=minz_bsgam)
-###plt.title(r'$\bar{B}\to X_s\gamma$ Radiative Decay')
-##plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-##plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
-##plt.savefig('bsgamma_plot2.pdf')
-#quit()
-
-# (2.4,4.2,-2,1)
-z_min1 = -5.182818890948422
-
-#mt = [r'$m_{H^0}\sim m_{H^+},\,$',r'$m_{H^0}=1500\,$GeV,$\,$']
-#at = [r'$\cos(\beta-\alpha)=0$',r'$\cos(\beta-\alpha)=0.05$',r'$\cos(\beta-\alpha)=-0.05$',r'$\cos(\beta-\alpha)=\sin2\beta$']
-#bmu_mass = ['apx_','fix_']
-#bmu_ali = ['cba02','cbap2','cbam2']
-#for i in range(2):
-#    for j in range(3):
-#Fmu = FastLikelihood(name="mu",observables=my_obs[12:14],include_measurements=['FCNC Leptonic Decays',]) 
-#obs2_title = [r'$R(B^+\to K^+\ell\ell)$',r'$R(B^+\to K^+\ell\ell)$',r'$R(B^0\to K^{*0}\ell\ell)$',
-#              r'$R(B^0\to K^{*0}\ell\ell)$',r'$R(B^0\to K^{*0}\ell\ell)$',r'$R(B^+\to K^{*+}\ell\ell)$',
-#              r'$R(B^+\to K^{*+}\ell\ell)$',r'$R(B^+\to K^{*+}\ell\ell)$']
-#    
-#for i in range(8):
-#    ind = i + 2
-#    Fmu = FastLikelihood(name="mu",observables=[obs2[ind]],include_measurements=['LFU K Ratios 1','LFU K Ratios 2','Belle-1908.01848 RKs','Belle-1904.02440 RKs 1','Belle-1904.02440 RKs 2'])
-#    Fmu.make_measurement(N=500,threads=4)
-#
-#    mu0 = partial(mu,(0,0))
-#    ##cmu = fpl.likelihood_contour_data(mu0,-1,2,0,4, n_sigma=(3,4), threads=4, steps=60) 
-#    cmu = fpl.likelihood_contour_data(mu0,-8,8,-8,8, n_sigma=sigmas, threads=4, steps=300)
-#    plt.figure(figsize=(6,5))
-#    fpl.contour(**cmu,col=9)#,z_min=z_min1)
-#    n,mini,maxi = obs2[ind]
-#    plt.title(obs2_title[i]+' '+str(mini)+'-'+str(maxi),fontsize=18)
-#    #plt.title(r'$1,2\sigma\,$ Contours for Original Three',fontsize=18)
-#    #plt.title(mt[i]+at[j],fontsize=18)
-#    #if i == 1:
-#    #    plt.axhline(y=np.log10(866),color='black',linestyle='--')
-#    #    plt.axhline(y=np.log10(1658),color='black',linestyle='--')
-#    plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-#    plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
-#    plt.savefig('rks_plot_big'+str(i+1)+'.pdf')
-##    plt.savefig('rks_plot_og.pdf')
-#
-#Fmu = FastLikelihood(name="mu",observables=obs2[2:10],include_measurements=['LFU K Ratios 1','LFU K Ratios 2','Belle-1908.01848 RKs','Belle-1904.02440 RKs 1','Belle-1904.02440 RKs 2'])
-#Fmu.make_measurement(N=500,threads=4)
-#
-#cmu = fpl.likelihood_contour_data(mu0,-8,8,-8,8, n_sigma=sigmas, threads=4, steps=300)
-#plt.figure(figsize=(6,5))
-#fpl.contour(**cmu,col=9)
-#plt.title(r'$1,2\sigma$',fontsize=18)
-#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-#plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
-#plt.savefig('rks_plot_all_big.pdf')
-#
-#quit()
-
-#cmu = fpl.likelihood_contour_data(mu0,2.5,4,-2,1, n_sigma=(1,2), threads=4, steps=60) 
-#plt.figure(figsize=(6,5))
-#fpl.contour(**cmu,col=9,z_min=z_min1)
-#plt.title(r'$1,2\sigma\,$ Contours',fontsize=18)
-#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-#plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
-#plt.savefig('rks_plot.png')
-#
-#quit()
-
-#for i in range(len(obs3)):
-#    Fmu = FastLikelihood(name="mu",observables=[obs3[i]],include_measurements=ims)
-#    Fmu.make_measurement(N=500,threads=4)
-#
-#    cmu = fpl.likelihood_contour_data(mu0,-1,3,1.5,6, n_sigma=sigmas, threads=4, steps=80) 
-#    plt.figure(figsize=(6,5))
-#    fpl.contour(**cmu,col=9)
-#    plt.title(r'$m_{H^0}\sim m_{H^+},$'+'\n'+obs4[i],fontsize=18)
-#    plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-#    plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
-#    plt.savefig(obs3_png[i]+'_apx.png')
-#
-#    cmu = fpl.likelihood_contour_data(mu1,-1,3,1.5,6, n_sigma=sigmas, threads=4, steps=80) 
-#    plt.figure(figsize=(6,5))
-#    fpl.contour(**cmu,col=9)
-#    plt.axhline(y=np.log10(866),color='black',linestyle='--')
-#    plt.axhline(y=np.log10(1658),color='black',linestyle='--')
-#    plt.title(r'$m_{H^0}=1500\,$GeV,'+'\n'+obs4[i],fontsize=18)
-#    plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-#    plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
-#    plt.savefig(obs3_png[i]+'_fix.png')
-
-#Fmu = FastLikelihood(name="mu",observables=angle_list,include_measurements=ims+['LFU K Ratios 1','LFU K Ratios 2'])
-#Fmu.make_measurement(N=500,threads=4)
-#
-#mu0 = partial(mu,(0,0))
-#
-#cmu = fpl.likelihood_contour_data(mu0,-1,2,1.5,8, n_sigma=sigmas, threads=4, steps=150) 
-#plt.figure(figsize=(6,5))
-#fpl.contour(**cmu,col=9)#,z_min=z_min1) 
-#plt.title(r'$m_{H^0}\sim m_{H^+}$',fontsize=18)
-#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-#plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
-#plt.savefig('bkell_apx4.pdf')
-
-#cmu = fpl.likelihood_contour_data(mu1,-1,2,1.5,20, n_sigma=sigmas, threads=4, steps=60) 
-#plt.figure(figsize=(6,5))
-#fpl.contour(**cmu,col=9)#,z_min=z_min1) 
-#plt.axhline(y=np.log10(866),color='black',linestyle='--')
-#plt.axhline(y=np.log10(1658),color='black',linestyle='--')
-#plt.title(r'$m_{H^0}=1500\,$GeV',fontsize=18)
-#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-#plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$') 
-#plt.savefig('bkell_fix4.pdf')
-#FL2 = Likelihood(observables=my_obs,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics'])
-#FL2.make_measurement(N=500,threads=4)
-
-#globo = partial(func,FL2) 
-#cdat = fpl.likelihood_contour_data(globo,-1,2,1.5,8, n_sigma=sigmas, threads=4, steps=150) 
-#plt.figure(figsize=(6,5))
-#fpl.contour(**cdat,col=4) 
-#plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-#plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$')
-#plt.title(r'$m_{H^0}\sim m_{H^+}$',fontsize=18)
-#plt.savefig('comb4_test2.pdf')
-#
-#quit()
-#print("bklls done")
-
 for op in range(1):
-    op = 1
     if op == 0:
         obs_list = my_obs+obs2[:2]+angle_list
     elif op == 1:
         obs_list = my_obs+obs2[:12]+angle_list
     print(len(angle_list))
     print(len(obs_list))
-#    FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1','LFU K Ratios 2']+ims)
-#    FL2.make_measurement(N=500,threads=4)
+    FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1','LFU K Ratios 2']+ims)
+    FL2.make_measurement(N=500,threads=4)
     ms,us,ls = mk_measure(obs_list)
 
-    for i in range(1):
-#        globo = partial(func,i) 
-#        cdat = fpl.likelihood_contour_data(globo,-1,2,1.5,8, n_sigma=sigmas, threads=4, steps=60) 
-        cdat = test_func(i,obs_list,ms,us,ls,n_sigma=(1,2),hmax=6.0,steps=50)
-        pval_func(cdat,i,obs_list,sigmas)
+    cdat = test_func(obs_list,ms,us,ls,n_sigma=(1,2))
+    pval_func2(cdat,obs_list,sigmas)
 
-        plt.figure(figsize=(6,5))
-        fpl.contour(**cdat,col=4) 
-        plt.xlabel(r'$\log_{10}[\tan\beta]$') 
-        plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$')
-        #plt.title(r'Combined Tree-Level Leptonics, $\Delta M_{d,s}$, $\bar{B}\to X_s\gamma$')
-        if i == 0:
-            plt.title(r'$m_{H^0}\sim m_{H^+},\,$ excl. $R_K$s',fontsize=18)
-            plt.savefig('comb4_Hsim_test'+str(op)+'.pdf')
-        elif i == 2:
-            plt.title(r'$m_{H^0}\sim m_{H^+},\; m_{A^0}=1500\,$GeV',fontsize=18)
-            plt.axhline(y=np.log10(1220),color='black',linestyle='--') # Asim = 866, Hsim = 1220
-            plt.axhline(y=np.log10(1660),color='black',linestyle='--') # Asim = 1660, Hsim = 1660
-            plt.savefig('comb4_Hsim'+str(op)+'.pdf')
-        elif i == 1:
-            plt.title(r'$m_{H^0}=1500\,$GeV',fontsize=18)
-            plt.axhline(y=np.log10(866),color='black',linestyle='--') # Asim = 866, Hsim = 1220
-            plt.axhline(y=np.log10(1660),color='black',linestyle='--') # Asim = 1660, Hsim = 1660
-            plt.savefig('comb4_Hfix'+str(op)+'.pdf')
-        #plt.savefig('comb1_plot.png')
-        #plt.savefig('comb2_allsim.png')
-        #plt.savefig('comb2_Hsim.png')
-        #plt.savefig('comb2_Asim.png')
+    np.save("cdat_5D.npy",cdat)
+#        plt.figure(figsize=(6,5))
+#        fpl.contour(**cdat,col=4) 
+#        plt.xlabel(r'$\log_{10}[\tan\beta]$') 
+#        plt.ylabel(r'$\log_{10}[m_{H^+}/\text{GeV}]$')
+#        #plt.title(r'Combined Tree-Level Leptonics, $\Delta M_{d,s}$, $\bar{B}\to X_s\gamma$')
+#        if i == 0:
+#            plt.title(r'$m_{H^0}\sim m_{H^+},\,$ excl. $R_K$s',fontsize=18)
+#            plt.savefig('comb4_Hsim_test'+str(op)+'.pdf')
+#        elif i == 2:
+#            plt.title(r'$m_{H^0}\sim m_{H^+},\; m_{A^0}=1500\,$GeV',fontsize=18)
+#            plt.axhline(y=np.log10(1220),color='black',linestyle='--') # Asim = 866, Hsim = 1220
+#            plt.axhline(y=np.log10(1660),color='black',linestyle='--') # Asim = 1660, Hsim = 1660
+#            plt.savefig('comb4_Hsim'+str(op)+'.pdf')
+#        elif i == 1:
+#            plt.title(r'$m_{H^0}=1500\,$GeV',fontsize=18)
+#            plt.axhline(y=np.log10(866),color='black',linestyle='--') # Asim = 866, Hsim = 1220
+#            plt.axhline(y=np.log10(1660),color='black',linestyle='--') # Asim = 1660, Hsim = 1660
+#            plt.savefig('comb4_Hfix'+str(op)+'.pdf')
 
 print("--- %s seconds ---" % (time.time() - start_time))
 print(datetime.datetime.now())

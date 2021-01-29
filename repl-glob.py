@@ -88,15 +88,15 @@ flavio.measurements.read_file('world_avgs.yml') # read in the world averages we 
 flavio.measurements.read_file('bkll_avgs.yml') 
 config['renormalization scale']['bxgamma'] = 1.74
 
-par = flavio.default_parameters.get_central_all()
-ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
-mH0, mH = 3200, 3200
-tanb = 10
-print("For mH0 = mH+ = 3200 GeV, tanb = 10:")
-print()
-C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],mH0,tanb,mH,0)
-C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],mH0,tanb,mH,0)
-quit()
+#par = flavio.default_parameters.get_central_all()
+#ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
+#mH0, mH = 3200, 3200
+#tanb = 10
+#print("For mH0 = mH+ = 3200 GeV, tanb = 10:")
+#print()
+#C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,2,1,1,mH0,tanb,mH,0)
+#C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,2,0,1,mH0,tanb,mH,0)
+#quit()
 
 my_obs = [
     'BR(B+->taunu)', 'BR(B+->munu)', 'BR(D+->munu)', 'BR(Ds->munu)', 'BR(Ds->taunu)', 'BR(tau->Knu)', 'BR(K+->munu)', 'BR(tau->pinu)', 'Gamma(pi+->munu)', # [:9]
@@ -263,10 +263,12 @@ angle_list = obs7 + obs8 + obs6 #+ obs2[2:-1]
 #Fmu = FastLikelihood(name="mu",observables=obs2[2:5],include_measurements=['LFU K Ratios 1','LFU K Ratios 2']) 
 #Fmu = FastLikelihood(name="mu",observables=my_obs[12:14],include_measurements=['FCNC Leptonic Decays',]) 
 #------------------------------
-#obs_list = my_obs+obs2[:2]+angle_list
+obs_list = my_obs+obs2[:2]#+angle_list
 #print(len(angle_list))
 #print(len(obs_list))
-#FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1']+ims)
+FL2 = FastLikelihood(name="glob",observables=obs6,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1']+ims)
+FL2.make_measurement(N=500,threads=4)
+quit()
 #------------------------------
 #Fmuon = FastLikelihood(name="muons",observables=['a_mu'],include_measurements=['Anomalous Magnetic Moments'])
 #Fmuon.make_measurement(N=500,threads=4)
@@ -380,9 +382,9 @@ def mu(app,wcs):
     par = flavio.default_parameters.get_central_all()
     ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
 
-    C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',1],10**mH0,10**tanb,10**mH,align)
-    C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],10**mH0,10**tanb,10**mH,align)
-#    C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],10**mH0,10**tanb,10**mH,align)
+    C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,2,1,0,10**mH0,10**tanb,10**mH,align)
+    C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,2,1,1,10**mH0,10**tanb,10**mH,align)
+#    C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,2,0,1,10**mH0,10**tanb,10**mH,align)
     C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],10**tanb,10**mH)
 
     wc = flavio.WilsonCoefficients()
@@ -453,9 +455,9 @@ def func(app,wcs):
     CSR_bc_m, CSL_bc_m = rh(par['m_c'],par['m_b'],par['m_mu'],10**tanb,10**mH)
     CSR_bc_e, CSL_bc_e = rh(par['m_c'],par['m_b'],par['m_e'],10**tanb,10**mH)
     C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],10**tanb,10**mH)
-    C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',1],10**mH0,10**tanb,10**mH,0)
-    C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],10**mH0,10**tanb,10**mH,0)
-    C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],10**mH0,10**tanb,10**mH,0)
+    C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,2,1,0,10**mH0,10**tanb,10**mH,0)
+    C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,2,1,1,10**mH0,10**tanb,10**mH,0)
+#    C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,2,0,1,10**mH0,10**tanb,10**mH,0)
     CVLL_bs, CVRR_bs, CSLL_bs, CSRR_bs, CSLR_bs, CVLR_bs = mixing(par,ckm_els,['m_s',1,'m_d'],10**tanb,10**mH)
     CVLL_bd, CVRR_bd, CSLL_bd, CSRR_bd, CSLR_bd, CVLR_bd = mixing(par,ckm_els,['m_d',0,'m_s'],10**tanb,10**mH)
 

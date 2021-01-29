@@ -37,7 +37,6 @@ ims = [
        'CDF 0.0-2.0','CDF 2.0-4.3','BaBar-1312.5364 Xs','BaBar-1204.3933 RKs',
        'Belle-1908.01848','Belle-1908.01848 RKs','Belle-1904.02440','Belle-1904.02440 RKs 1','Belle-1904.02440 RKs 2']
 
-
 def mHmin(contour,minz=0):
     '''
         Finding the minimum mH and tanb range in the contours
@@ -74,6 +73,78 @@ def mHmin(contour,minz=0):
         maxt_loc.append(10**maxt)
 
     return [xbf,ybf], minh_loc, mint_loc, maxt_loc, mince
+
+def mHmin2(contour,minz=0):
+    '''
+        Finding the minimum for 5D fit
+    '''
+    x = contour['x']
+    y = contour['y']
+    a = contour['a']
+    o = contour['o']
+    c = contour['c']
+    z = contour['z']
+    levels = contour['levels']
+    
+    if minz == 0:
+        mince = np.min(z)
+    else:
+        mince = minz
+    z = z - mince
+
+    xf, yf, of, af, cf = np.where(z==np.min(z))
+    xbf = 10**x[xf[0],yf[0],of[0],af[0],cf[0]]
+    ybf = 10**y[xf[0],yf[0],of[0],af[0],cf[0]]
+    obf = 10**o[xf[0],yf[0],of[0],af[0],cf[0]]
+    abf = 10**a[xf[0],yf[0],of[0],af[0],cf[0]]
+    cbf = c[xf[0],yf[0],of[0],af[0],cf[0]]
+
+    mint_loc, maxt_loc = [],[]
+    minh_loc, maxh_loc = [],[] 
+    mino_loc, maxo_loc = [],[] 
+    mina_loc, maxa_loc = [],[] 
+    minc_loc, maxc_loc = [],[] 
+    for i in levels:
+        mint, maxt = 100,-2
+        minh, maxh = 100,-2
+        mino, maxo = 100,-2
+        mina, maxa = 100,-2
+        minc, maxc = 100,-2
+        x_loc, y_loc, o_loc, a_loc, c_loc = np.where(z<i)
+        for j in range(len(x_loc)):
+            k = (x_loc[j],y_loc[j],o_loc[j],a_loc[j],c_loc[j])
+            if x[k] < mint:
+                mint = x[k]
+            if x[k] > maxt:
+                maxt = x[k]
+            if y[k] < minh:
+                minh = y[k]
+            if y[k] > maxh:
+                maxh = y[k]
+            if o[k] < mino:
+                mino = o[k]
+            if o[k] > maxo:
+                maxo = o[k]
+            if a[k] < mina:
+                mina = a[k]
+            if a[k] > maxa:
+                maxa = a[k]
+            if c[k] < minc:
+                minc = c[k]
+            if c[k] > maxc:
+                maxc = c[k]
+        mint_loc.append(10**mint)
+        maxt_loc.append(10**maxt)
+        minh_loc.append(10**minh)
+        maxh_loc.append(10**maxh)
+        mino_loc.append(10**mino)
+        maxo_loc.append(10**maxo)
+        mina_loc.append(10**mina)
+        maxa_loc.append(10**maxa)
+        minc_loc.append(minc)
+        maxc_loc.append(maxc)
+
+    return [xbf,ybf,obf,abf,cbf], mint_loc, maxt_loc, minh_loc, maxh_loc, mino_loc, maxo_loc, mina_loc, maxa_loc, minc_loc, maxc_loc, mince
 
 def bsgamma2(par,CKM,mub1,tanb,mH):
     '''
@@ -208,7 +279,7 @@ def bsgamma2(par,CKM,mub1,tanb,mH):
 
     return C7, C7p, C8, C8p
 
-def bsll(par,CKM,mss,mls,mH0,tanb,mH,ali):
+def bsll(par,CKM,d,q,l,mH0,tanb,mH,cba):
     '''
         Calculating C9, C9', C10, C10', CS, CS', CP, CP' 2HDM WCs
     '''
@@ -261,37 +332,24 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH,ali):
 
     cob = 1/tanb
     b = np.arctan(tanb)
-    if ali == 0:
-        a = b - np.pi/2 # alignment limit
-        cba,sba = np.cos(b-a),np.sin(b-a)
-    elif ali == 1:
-        a = b - np.arccos(0.05) 
-        cba,sba = np.cos(b-a),np.sin(b-a) 
-    elif ali == 2:
-        a = b - np.arccos(-0.05) 
-        cba,sba = np.cos(b-a),np.sin(b-a) 
-    elif ali == 3:
-        cba,sba = np.sin(2*b),-np.sin(2*b) 
+    sba = np.sqrt(1-cba**2)
 
-    Vus, Vub = CKM[0,mss[2]], CKM[0,2]
-    Vcs, Vcb = CKM[1,mss[2]], CKM[1,2]
-    Vts, Vtb = CKM[2,mss[2]], CKM[2,2]
     vev,mW,QCD,s2w = par['vev'],par['m_W'],par['lam_QCD'],par['s2w']
-    e = np.sqrt(4*np.pi*get_alpha_e(par,4.18))
+    e = np.sqrt(4*np.pi*get_alpha_e(par,4.2))
     mu = [par['m_u'],par['m_c'],get_mt(par,par['m_t'])]
     muw = [par['m_u'],par['m_c'],get_mt(par,par['m_W'])]
-    md = [par[mss[1]],par[mss[0]],par['m_b']]
-    ml = [par[mls[1]],par[mls[0]],par['m_tau']]
+    md = [par['m_d'],par['m_s'],par['m_b']]
+    ml = [par['m_e'],par['m_mu'],par['m_tau']]
     y,yh,yH0 = (mW/mH)**2,(mH/par['m_h'])**2,(mH/mH0)**2
     eu = np.array([[cob*mu[0]/vev,0,0],[0,cob*mu[1]/vev,0],[0,0,cob*mu[2]/vev]])
     ed = np.array([[-tanb*md[0]/vev,0,0],[0,-tanb*md[1]/vev,0],[0,0,-tanb*md[2]/vev]])
     el = np.array([[-tanb*ml[0]/vev,0,0],[0,-tanb*ml[1]/vev,0],[0,0,-tanb*ml[2]/vev]])
     zs = [(mu[0]/mH)**2,(mu[1]/mH)**2,(mu[2]/mH)**2]
     zsw = [(mu[0]/mH)**2,(mu[1]/mH)**2,(muw[2]/mH)**2]
-    ts = [mu[0]/md[2],mu[1]/md[2],mu[2]/md[2]]
-    mul = (4.18/mH)**2
+    ts = [mu[0]/md[d],mu[1]/md[d],mu[2]/md[d]]
+    mul = (4.2/mH)**2
     def Lp(yh,cba,yH0,sba,el):
-        return (yh*cba**2 + yH0*sba**2)*(2*el[mls[2],mls[2]])
+        return (yh*cba**2 + yH0*sba**2)*(2*el[l,l])
     def Lm(yh,cba,yH0,sba,el):
         return -1*Lp(yh,cba,yH0,sba,el)
     lam3 = 0.1
@@ -302,18 +360,18 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH,ali):
         p1 = 0
         for k in range(3):
             for n in range(3):
-                p1 += np.conj(CKM[k,1])*eu[k,2]*eu[n,2]*CKM[n,2]
-        c9 = -p1*(1-4*s2w)*(I1(zs[2])-1)/(2*np.conj(Vts)*Vtb*e**2)
+                p1 += np.conj(CKM[k,q])*eu[k,2]*eu[n,2]*CKM[n,d]
+        c9 = -p1*(1-4*s2w)*(I1(zs[2])-1)/(2*np.conj(CKM[2,q])*CKM[2,d]*e**2)
         return c9
 
     def c10_1():
         p1 = 0
         for k in range(3):
             for n in range(3):
-                #p1 += np.conj(CKM[k,1])*eu[k,2]*eu[n,2]*CKM[n,2]
-                p1 += eu[k,2]*eu[n,2]
-        #c10 = p1*(I1(zs[2])-1)/(2*np.conj(Vts)*Vtb*e**2)
-        c10 = p1*(I1(zs[2])-1)/(2*e**2)
+                p1 += np.conj(CKM[k,q])*eu[k,2]*eu[n,2]*CKM[n,d]
+                #p1 += eu[k,2]*eu[n,2]
+        c10 = p1*(I1(zs[2])-1)/(2*np.conj(CKM[2,q])*CKM[2,d]*e**2)
+        #c10 = p1*(I1(zs[2])-1)/(2*e**2)
         return c10
 
     def c9p_1():
@@ -321,25 +379,25 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH,ali):
         for k in range(3):
             for n in range(3):
                 p1 += ed[k,1]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,2]
-        c9p = p1*(1-4*s2w)*(I1(zs[2])-1)/(2*np.conj(Vts)*Vtb*e**2)
+        c9p = p1*(1-4*s2w)*(I1(zs[2])-1)/(2*np.conj(CKM[2,q])*CKM[2,d]*e**2)
         return c9p
 
     def c10p_1():
         p1 = 0
         for k in range(3):
             for n in range(3):
-                #p1 += ed[k,1]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,2]
-                p1 += ed[k,1]*ed[n,2]
-        #c10p = -1*p1*(I1(zs[2])-1)/(2*np.conj(Vts)*Vtb*e**2)
-        c10p = -1*p1*(I1(zs[2])-1)/(2*e**2)
+                p1 += ed[k,1]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,d]
+                #p1 += ed[k,1]*ed[n,2]
+        c10p = -1*p1*(I1(zs[2])-1)/(2*np.conj(CKM[2,q])*CKM[2,d]*e**2)
+        #c10p = -1*p1*(I1(zs[2])-1)/(2*e**2)
         return c10p
 
     def c9_2():
         p1 = 0 
         for k in range(3):
             for n in range(3):
-                p1 += np.conj(CKM[k,1])*eu[k,2]*eu[n,2]*CKM[n,2]
-        c9 = p1*y*f5(zs[2])/(27*Vtb*np.conj(Vts)*0.652**2)
+                p1 += np.conj(CKM[k,q])*eu[k,2]*eu[n,2]*CKM[n,d]
+        c9 = p1*y*f5(zs[2])/(27*CKM[2,d]*np.conj(CKM[2,q])*0.652**2)
         return c9
 
     def c9p_2():
@@ -347,15 +405,15 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH,ali):
         for k in range(3):
             for n in range(3):
                 p1 += ed[k,1]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,2]
-        c9p = p1*y*f5(zs[2])/(27*Vtb*np.conj(Vts)*0.652**2)
+        c9p = p1*y*f5(zs[2])/(27*CKM[2,d]*np.conj(CKM[2,q])*0.652**2)
         return c9p
 
     def c9_3():
         p1 = 0 
         for k in range(3):
             for n in range(3):
-                p1 += np.conj(CKM[k,1])*eu[k,1]*eu[n,1]*CKM[n,2]
-        c9 = 2*p1*y*(19+12*np.log(mul))/(27*Vtb*np.conj(Vts)*0.652**2)
+                p1 += np.conj(CKM[k,q])*eu[k,1]*eu[n,1]*CKM[n,d]
+        c9 = 2*p1*y*(19+12*np.log(mul))/(27*CKM[2,d]*np.conj(CKM[2,q])*0.652**2)
         return c9
 
     def c9p_3():
@@ -363,7 +421,7 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH,ali):
         for k in range(3):
             for n in range(3):
                 p1 += ed[k,1]*np.conj(CKM[1,k])*CKM[1,n]*ed[n,2]
-        c9p = 2*p1*y*(19+12*np.log(mul))/(27*Vtb*np.conj(Vts)*0.652**2)
+        c9p = 2*p1*y*(19+12*np.log(mul))/(27*CKM[2,d]*np.conj(CKM[2,q])*0.652**2)
         return c9p
 
     def c9_4():
@@ -372,8 +430,8 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH,ali):
             for n in range(3):
                 for i in range(3):
                     for m in range(3):
-                        p1 += np.conj(CKM[k,1])*eu[k,i]*eu[n,i]*CKM[n,2]*I1(zs[i])*el[m,mls[2]]**2
-        c9 = -y*p1/(s2w*Vtb*np.conj(Vts)*0.652**4)
+                        p1 += np.conj(CKM[k,q])*eu[k,i]*eu[n,i]*CKM[n,d]*I1(zs[i])*el[m,l]**2
+        c9 = -y*p1/(s2w*CKM[2,d]*np.conj(CKM[2,q])*0.652**4)
         return c9
 
     def c10_2():
@@ -382,8 +440,8 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH,ali):
             for n in range(3):
                 for i in range(3):
                     for m in range(3):
-                        p1 += np.conj(CKM[k,1])*eu[k,i]*eu[n,i]*CKM[n,2]*I1(zs[i])*el[m,mls[2]]**2
-        c10 = -y*p1/(s2w*Vtb*np.conj(Vts)*0.652**4)
+                        p1 += np.conj(CKM[k,q])*eu[k,i]*eu[n,i]*CKM[n,d]*I1(zs[i])*el[m,l]**2
+        c10 = -y*p1/(s2w*CKM[2,d]*np.conj(CKM[2,q])*0.652**4)
         return c10
 
     def c9p_4():
@@ -392,8 +450,8 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH,ali):
             for n in range(3):
                 for i in range(3):
                     for m in range(3):
-                        p1 += ed[k,1]*np.conj(CKM[i,k])*CKM[i,n]*ed[n,2]*I1(zs[i])*el[m,mls[2]]**2
-        c9p = -y*p1/(s2w*Vtb*np.conj(Vts)*0.652**4)
+                        p1 += ed[k,q]*np.conj(CKM[i,k])*CKM[i,n]*ed[n,d]*I1(zs[i])*el[m,l]**2
+        c9p = -y*p1/(s2w*CKM[2,d]*np.conj(CKM[2,q])*0.652**4)
         return c9p
 
     def c10p_2():
@@ -402,18 +460,18 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH,ali):
             for n in range(3):
                 for i in range(3):
                     for m in range(3):
-                        p1 += ed[k,1]*np.conj(CKM[i,k])*CKM[i,n]*ed[n,2]*I1(zs[i])*el[m,mls[2]]**2
-        c10p = -y*p1/(s2w*Vtb*np.conj(Vts)*0.652**4)
+                        p1 += ed[k,q]*np.conj(CKM[i,k])*CKM[i,n]*ed[n,d]*I1(zs[i])*el[m,l]**2
+        c10p = -y*p1/(s2w*CKM[2,d]*np.conj(CKM[2,q])*0.652**4)
         return c10p
 
     def cs_1(Lp,Lm,el):
         sq1, sq2, sq3 = 0,0,0
         for k in range(3):
             for n in range(3):
-                sq1 += -(y/2)*Lp*(4*I1(zs[2])*ts[2]*(zs[2]-1)*(ed[2,2]*np.conj(CKM[k,1])*eu[k,2]*CKM[2,2] - ed[2,2]*np.conj(CKM[2,1])*eu[n,2]*CKM[n,2]) - 2*np.log(mul)*(2*(ed[2,2]*np.conj(CKM[k,1])*eu[k,2]*CKM[2,2] - ed[2,2]*np.conj(CKM[2,1])*eu[n,2]*CKM[n,2])*ts[2] + 2*np.conj(CKM[2,1])*eu[2,2]*eu[n,2]*CKM[n,2] - np.conj(CKM[k,1])*eu[k,2]*eu[n,2]*CKM[n,2]) - I0(zs[2])*np.conj(CKM[k,1])*eu[k,2]*eu[n,2]*CKM[n,2] + 4*I5(zs[2],zs[2])*np.conj(CKM[2,1])*eu[2,2]*eu[n,2]*CKM[n,2])
-                sq2 += 2*I4(zs[2],zs[2])*np.conj(CKM[2,1])*eu[2,2]*eu[n,2]*CKM[n,2]*Lm*y
-                sq3 += np.conj(CKM[2,1])*eu[n,2]*CKM[n,2]*np.sqrt(y*zs[2])*(el[mls[2],mls[2]]*2)*(2*(1-I1(zs[2]))*cba*0.652*sba*(yh-yH0) + I1(zs[2])*np.sqrt(y)*(cba*yh*lamh/mH - sba*yH0*lamH0/mH))
-        p1 = (ed[1,1]/(s2w*np.conj(Vts)*Vtb*0.652**4))*(sq1+sq2-sq3)
+                sq1 += -(y/2)*Lp*(4*I1(zs[2])*ts[2]*(zs[2]-1)*(ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d] - ed[d,d]*np.conj(CKM[2,q])*eu[n,2]*CKM[n,d]) - 2*np.log(mul)*(2*(ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d] - ed[d,d]*np.conj(CKM[2,q])*eu[n,2]*CKM[n,d])*ts[2] + 2*np.conj(CKM[2,q])*eu[2,2]*eu[n,2]*CKM[n,d] - np.conj(CKM[k,q])*eu[k,2]*eu[n,2]*CKM[n,d]) - I0(zs[2])*np.conj(CKM[k,q])*eu[k,2]*eu[n,2]*CKM[n,d] + 4*I5(zs[2],zs[2])*np.conj(CKM[2,q])*eu[2,2]*eu[n,2]*CKM[n,d])
+                sq2 += 2*I4(zs[2],zs[2])*np.conj(CKM[2,q])*eu[2,2]*eu[n,2]*CKM[n,d]*Lm*y
+                sq3 += np.conj(CKM[2,q])*eu[n,2]*CKM[n,d]*np.sqrt(y*zs[2])*(el[l,l]*2)*(2*(1-I1(zs[2]))*cba*0.652*sba*(yh-yH0) + I1(zs[2])*np.sqrt(y)*(cba*yh*lamh/mH - sba*yH0*lamH0/mH))
+        p1 = (ed[q,q]/(s2w*np.conj(CKM[2,q])*CKM[2,d]*0.652**4))*(sq1+sq2-sq3)
         return p1
 
     def csp_1(Lp,Lm,el):
@@ -421,38 +479,41 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH,ali):
         q = 0
         for k in range(3):
             for n in range(3):
-                sq1 += y*Lm*(-2*I1(zs[2])*ts[2]*(zs[2]-1)*((ed[2,2]**2)*np.conj(CKM[k,1])*eu[k,2]*CKM[2,2] - (ed[1,1]**2)*np.conj(CKM[2,1])*eu[n,2]*CKM[n,2]) + 2*np.log(mul)*(-ed[2,2]*np.conj(CKM[k,1])*eu[k,2]*eu[2,2]*CKM[2,2] + ((ed[2,2]**2)*np.conj(CKM[k,1])*eu[k,2]*CKM[2,2] - (ed[1,1]**2)*np.conj(CKM[2,1])*eu[n,2]*CKM[n,2])*ts[2]) + ed[2,2]*(I7(zs[2])*(ed[1,1]**2)*np.conj(CKM[2,1])*Vtb + 2*I5(zs[2],zs[2])*np.conj(CKM[k,1])*eu[k,2]*eu[2,2]*Vtb))
-                sq2 += -2*I4(zs[2],zs[2])*ed[2,2]*np.conj(CKM[k,1])*eu[k,2]*eu[2,2]*Vtb*Lp*y 
-                sq3 += ed[2,2]*np.conj(CKM[k,1])*eu[k,2]*Vtb*np.sqrt(y*zs[2])*(el[mls[2],mls[2]]*2)*(2*(1-I1(zs[2]))*cba*0.652*sba*(yh-yH0) + I1(zs[2])*np.sqrt(y)*(cba*yh*lamh/mH - sba*yH0*lamH0/mH))
-        p1 = (1/(s2w*np.conj(Vts)*Vtb*0.652**4))*(sq1+sq2-sq3)
+                sq1 += y*Lm*(-2*I1(zs[2])*ts[2]*(zs[2]-1)*((ed[d,d]**2)*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d] - (ed[q,q]**2)*np.conj(CKM[2,q])*eu[n,2]*CKM[n,d]) + 2*np.log(mul)*(-ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*eu[2,2]*CKM[2,d] + ((ed[d,d]**2)*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d] - (ed[q,q]**2)*np.conj(CKM[2,q])*eu[n,2]*CKM[n,d])*ts[2]) + ed[d,d]*(I7(zs[2])*(ed[q,q]**2)*np.conj(CKM[2,q])*CKM[2,d] + 2*I5(zs[2],zs[2])*np.conj(CKM[k,q])*eu[k,2]*eu[2,2]*CKM[2,d]))
+                sq2 += -2*I4(zs[2],zs[2])*ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*eu[2,2]*CKM[2,d]*Lp*y 
+                sq3 += ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d]*np.sqrt(y*zs[2])*(el[l,l]*2)*(2*(1-I1(zs[2]))*cba*0.652*sba*(yh-yH0) + I1(zs[2])*np.sqrt(y)*(cba*yh*lamh/mH - sba*yH0*lamH0/mH))
+        print('Lines 1-3: ',sq1)
+        print('Line 4: ',sq2)
+        print('Lines 5-6: ',sq3)
+        p1 = (1/(s2w*np.conj(CKM[2,q])*CKM[2,d]*0.652**4))*(sq1+sq2-sq3)
         return p1
 
     def cs_2(Lp,Lm,el):
-        p1 = (ed[1,1]/(s2w*0.652**2))*(zsw[2]*np.log(mul)*Lp/4 + I3(y,zsw[2])*Lp/8 + I2(zsw[2])*el[mls[2],mls[2]]) 
+        p1 = (ed[q,q]/(s2w*0.652**2))*(zsw[2]*np.log(mul)*Lp/4 + I3(y,zsw[2])*Lp/8 + I2(zsw[2])*el[l,l]) 
         return p1
 
     def csp_2(Lp,Lm,el):
-        p1 = (ed[2,2]/(s2w*0.652**2))*(zsw[2]*np.log(mul)*Lm/2 - I6(zsw[2])*Lm/2 + I2(zsw[2])*el[mls[2],mls[2]]) 
+        p1 = (ed[d,d]/(s2w*0.652**2))*(zsw[2]*np.log(mul)*Lm/2 - I6(zsw[2])*Lm/2 + I2(zsw[2])*el[l,l]) 
         return p1
 
     def cs_3(Lp,Lm,el):
         sq1, sq2, sq3 = 0,0,0
         for k in range(3):
             for n in range(3):
-                sq1 += 4*ts[1]*(ed[2,2]*np.conj(CKM[k,1])*eu[k,1]*CKM[1,2] - ed[2,2]*np.conj(CKM[1,1])*eu[n,1]*CKM[n,2]) + np.conj(CKM[k,1])*eu[k,1]*eu[n,1]*CKM[n,2]
-                sq2 += 2*np.log(mul)*(2*(ed[2,2]*np.conj(CKM[k,1])*eu[k,1]*CKM[1,2] - ed[2,2]*np.conj(CKM[1,1])*eu[n,1]*CKM[n,2])*ts[1] + CKM[n,2]*(2*np.conj(CKM[1,1])*eu[n,1]*eu[1,1] + 2*np.conj(CKM[1,1])*eu[n,2]*eu[1,2] + 2*np.conj(CKM[2,1])*eu[n,1]*eu[2,1] - np.conj(CKM[k,1])*eu[n,1]*eu[k,1]))
-                sq3 += 4*(np.conj(CKM[1,1])*eu[1,1]*eu[n,1]*CKM[n,2] - I5(zs[2],0)*(np.conj(CKM[1,1])*eu[1,2]*eu[n,2]*CKM[n,2] + np.conj(CKM[2,1])*eu[2,1]*eu[n,1]*CKM[n,2]))
-        p1 = -y*ed[1,1]*Lp*(sq1-sq2-sq3)/(2*s2w*np.conj(Vts)*Vtb*0.652**4)
+                sq1 += 4*ts[1]*(ed[d,d]*np.conj(CKM[k,q])*eu[k,1]*CKM[1,d] - ed[d,d]*np.conj(CKM[1,q])*eu[n,1]*CKM[n,d]) + np.conj(CKM[k,q])*eu[k,1]*eu[n,1]*CKM[n,d]
+                sq2 += 2*np.log(mul)*(2*(ed[d,d]*np.conj(CKM[k,q])*eu[k,1]*CKM[1,d] - ed[d,d]*np.conj(CKM[1,q])*eu[n,1]*CKM[n,d])*ts[1] + CKM[n,d]*(2*np.conj(CKM[1,q])*eu[n,1]*eu[1,1] + 2*np.conj(CKM[1,q])*eu[n,2]*eu[1,2] + 2*np.conj(CKM[2,q])*eu[n,1]*eu[2,1] - np.conj(CKM[k,q])*eu[n,1]*eu[k,1]))
+                sq3 += 4*(np.conj(CKM[1,q])*eu[1,1]*eu[n,1]*CKM[n,d] - I5(zs[2],0)*(np.conj(CKM[1,q])*eu[1,2]*eu[n,2]*CKM[n,d] + np.conj(CKM[2,q])*eu[2,1]*eu[n,1]*CKM[n,d]))
+        p1 = -y*ed[q,q]*Lp*(sq1-sq2-sq3)/(2*s2w*np.conj(CKM[2,q])*CKM[2,d]*0.652**4)
         return p1
 
     def csp_3(Lp,Lm,el):
         sq1, sq2, sq3 = 0,0,0
         for k in range(3):
             for n in range(3):
-                sq1 += -2*ts[1]*((ed[2,2]**2)*np.conj(CKM[k,1])*eu[k,1]*CKM[1,2] - (ed[1,1]**2)*np.conj(CKM[1,1])*eu[n,1]*CKM[n,2])
-                sq2 += 2*np.log(mul)*(-ed[2,2]*np.conj(CKM[k,1])*eu[k,1]*eu[1,1]*CKM[1,2] - ed[2,2]*np.conj(CKM[k,1])*eu[k,1]*eu[2,1]*CKM[2,2] - ed[2,2]*np.conj(CKM[k,1])*eu[k,2]*eu[1,2]*CKM[1,2] + ((ed[2,2]**2)*np.conj(CKM[k,1])*eu[k,1]*CKM[1,2] - (ed[1,1]**2)*np.conj(CKM[1,1])*eu[n,1]*CKM[n,2])*ts[1])
-                sq3 += -2*ed[2,2]*np.conj(CKM[k,1])*eu[k,1]*eu[1,1]*CKM[1,2] + ed[2,2]*(-(ed[1,1]**2)*np.conj(CKM[1,1])*CKM[1,2] + 2*I5(zs[2],0)*np.conj(CKM[k,1])*(eu[k,2]*eu[1,2]*CKM[1,2] + eu[k,1]*eu[2,1]*CKM[2,2]))
-        p1 = y*Lm*(sq1+sq2+sq3)/(s2w*np.conj(Vts)*Vtb*0.652**4)
+                sq1 += -2*ts[1]*((ed[d,d]**2)*np.conj(CKM[k,q])*eu[k,1]*CKM[1,d] - (ed[q,q]**2)*np.conj(CKM[1,q])*eu[n,1]*CKM[n,d])
+                sq2 += 2*np.log(mul)*(-ed[d,d]*np.conj(CKM[k,q])*eu[k,1]*eu[1,1]*CKM[1,d] - ed[d,d]*np.conj(CKM[k,q])*eu[k,1]*eu[2,1]*CKM[2,d] - ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*eu[1,2]*CKM[1,d] + ((ed[d,d]**2)*np.conj(CKM[k,q])*eu[k,1]*CKM[1,d] - (ed[q,q]**2)*np.conj(CKM[1,q])*eu[n,1]*CKM[n,d])*ts[1])
+                sq3 += -2*ed[d,d]*np.conj(CKM[k,q])*eu[k,1]*eu[1,1]*CKM[1,d] + ed[d,d]*(-(ed[q,q]**2)*np.conj(CKM[1,q])*CKM[1,d] + 2*I5(zs[2],0)*np.conj(CKM[k,q])*(eu[k,2]*eu[1,2]*CKM[1,d] + eu[k,1]*eu[2,1]*CKM[2,d]))
+        p1 = y*Lm*(sq1+sq2+sq3)/(s2w*np.conj(CKM[2,q])*CKM[2,d]*0.652**4)
         return p1
 
     C9 = c9_1() + c9_2() + c9_3() + c9_4()
@@ -463,15 +524,6 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH,ali):
     CSP = csp_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el) + csp_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el) + csp_3(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el)
     CP = cs_1(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + cs_2(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + cs_3(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el)
     CPP = csp_1(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + csp_2(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + csp_3(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el)
-
-    print('C9_'+mss[0][2],C9,'\n')
-    print('C9p_'+mss[0][2],C9p,'\n')
-    print('C10_'+mss[0][2],C10,'\n')
-    print('C10p_'+mss[0][2],C10p,'\n')
-    print('CS_'+mss[0][2],CS,'\n')
-    print('CSp_'+mss[0][2],CSP,'\n')
-    print('CP_'+mss[0][2],CP,'\n')
-    print('CPp_'+mss[0][2],CPP,'\n')
 
     return C9, C9p, C10, C10p, CS, CSP, CP, CPP
 
@@ -649,7 +701,7 @@ def rh(mu,md,ml,tanb,mH):
     csr = -1*md*ml*(tanb/mH)**2
     return csr, csl
 
-def chi2_func(tanb, mH, mH0, mA0, obs, measures, uppers, lowers):
+def chi2_func(obs, measures, uppers, lowers, wc, wch):
     '''
         Finding chisq value cause there's some extra factor going on in flavio's
     '''
@@ -657,87 +709,25 @@ def chi2_func(tanb, mH, mH0, mA0, obs, measures, uppers, lowers):
     par = flavio.default_parameters.get_central_all()
     ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
 
-#    csev = a_mu2(par,'m_mu',tanb,mH0,mA0,mH)
-    CSR_b_t, CSL_b_t = rh(par['m_u'],par['m_b'],par['m_tau'],tanb,mH)
-    CSR_b_m, CSL_b_m = rh(par['m_u'],par['m_b'],par['m_mu'],tanb,mH)
-    CSR_b_e, CSL_b_e = rh(par['m_u'],par['m_b'],par['m_e'],tanb,mH)
-    CSR_d_t, CSL_d_t = rh(par['m_c'],par['m_d'],par['m_tau'],tanb,mH)
-    CSR_d_m, CSL_d_m = rh(par['m_c'],par['m_d'],par['m_mu'],tanb,mH)
-    CSR_d_e, CSL_d_e = rh(par['m_c'],par['m_d'],par['m_e'],tanb,mH)
-    CSR_ds_t, CSL_ds_t = rh(par['m_c'],par['m_s'],par['m_tau'],tanb,mH)
-    CSR_ds_m, CSL_ds_m = rh(par['m_c'],par['m_s'],par['m_mu'],tanb,mH)
-    CSR_ds_e, CSL_ds_e = rh(par['m_c'],par['m_s'],par['m_e'],tanb,mH)
-    CSR_k_t, CSL_k_t = rh(par['m_u'],par['m_s'],par['m_tau'],tanb,mH)
-    CSR_k_m, CSL_k_m = rh(par['m_u'],par['m_s'],par['m_mu'],tanb,mH)
-    CSR_k_e, CSL_k_e = rh(par['m_u'],par['m_s'],par['m_e'],tanb,mH)
-    CSR_p_t, CSL_p_t = rh(par['m_u'],par['m_d'],par['m_tau'],tanb,mH)
-    CSR_p_m, CSL_p_m = rh(par['m_u'],par['m_d'],par['m_mu'],tanb,mH)
-    CSR_bc_t, CSL_bc_t = rh(par['m_c'],par['m_b'],par['m_tau'],tanb,mH)
-    CSR_bc_m, CSL_bc_m = rh(par['m_c'],par['m_b'],par['m_mu'],tanb,mH)
-    CSR_bc_e, CSL_bc_e = rh(par['m_c'],par['m_b'],par['m_e'],tanb,mH)
-    C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],tanb,mH)
-    C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',1],mH0,tanb,mH,0)
-    C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],mH0,tanb,mH,0)
-    C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],mH0,tanb,mH,0)
-    CVLL_bs, CVRR_bs, CSLL_bs, CSRR_bs, CSLR_bs, CVLR_bs = mixing(par,ckm_els,['m_s',1,'m_d'],tanb,mH)
-    CVLL_bd, CVRR_bd, CSLL_bd, CSRR_bd, CSLR_bd, CVLR_bd = mixing(par,ckm_els,['m_d',0,'m_s'],tanb,mH)
-
-    wc = flavio.WilsonCoefficients()
-    wc.set_initial({ # tell flavio what WCs you're referring to with your variables
-#            'C7_mumu': csev,
-            'CSR_bctaunutau': CSR_bc_t, 'CSL_bctaunutau': CSL_bc_t,
-            'CSR_bcmunumu': CSR_bc_m, 'CSL_bcmunumu': CSL_bc_m,
-            'CSR_bcenue': CSR_bc_e, 'CSL_bcenue': CSL_bc_e,
-            'CSR_butaunutau': CSR_b_t, 'CSL_butaunutau': CSL_b_t,
-            'CSR_bumunumu': CSR_b_m, 'CSL_bumunumu': CSL_b_m,
-            'CSR_buenue': CSR_b_e, 'CSL_buenue': CSL_b_e,
-            'CSR_dctaunutau': CSR_d_t, 'CSL_dctaunutau': CSL_d_t,
-            'CSR_dcmunumu': CSR_d_m, 'CSL_dcmunumu': CSL_d_m,
-            'CSR_dcenue': CSR_d_e, 'CSL_dcenue': CSL_d_e,
-            'CSR_sctaunutau': CSR_ds_t, 'CSL_sctaunutau': CSL_ds_t,
-            'CSR_scmunumu': CSR_ds_m, 'CSL_scmunumu': CSL_ds_m,
-            'CSR_scenue': CSR_ds_e, 'CSL_scenue': CSL_ds_e,
-            'CSR_sutaunutau': CSR_k_t, 'CSL_sutaunutau': CSL_k_t,
-            'CSR_sumunumu': CSR_k_m, 'CSL_sumunumu': CSL_k_m,
-            'CSR_suenue': CSR_k_e, 'CSL_suenue': CSL_k_e,
-            'CSR_dutaunutau': CSR_p_t, 'CSL_dutaunutau': CSL_p_t,
-            'CSR_dumunumu': CSR_p_m, 'CSL_dumunumu': CSL_p_m,
-            'C7_bs': C7,'C7p_bs': C7p, 
-            'C8_bs': C8,'C8p_bs': C8p, 
-            'C9_bsee': C9_se,'C9p_bsee': C9p_se,
-            'C9_bsmumu': C9_s,'C9p_bsmumu': C9p_s,
-            'C10_bsee': C10_se,'C10p_bsee': C10p_se,'CS_bsee': CS_se,'CSp_bsee': CSp_se,'CP_bsee': CP_se,'CPp_bsee': CPp_se,
-            'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CP_s,'CPp_bsmumu': CPp_s, # Bs->mumu
-            'C10_bdmumu': C10_d,'C10p_bdmumu': C10p_d,'CS_bdmumu': CS_d,'CSp_bdmumu': CSp_d,'CP_bdmumu': CP_d,'CPp_bdmumu': CPp_d, # B0->mumu
-            'CVLL_bsbs': CVLL_bs,'CVRR_bsbs': CVRR_bs,'CSLL_bsbs': CSLL_bs,'CSRR_bsbs': CSRR_bs,'CSLR_bsbs': CSLR_bs,'CVLR_bsbs': CVLR_bs, # DeltaM_s
-            'CVLL_bdbd': CVLL_bd,'CVRR_bdbd': CVRR_bd,'CSLL_bdbd': CSLL_bd,'CSRR_bdbd': CSRR_bd,'CSLR_bdbd': CSLR_bd,'CVLR_bdbd': CVLR_bd, # DeltaM_d
-        }, scale=4.2, eft='WET', basis='flavio')
     chisq = 0
     for i in obs:
-        if type(i) == str:
+        if i in Comb_meas:
             name = i
-            npp = flavio.np_prediction(i,wc_obj=wc) 
-            npe = flavio.np_uncertainty(i,wc_obj=wc) 
-        elif type(i) == tuple:
-            name = i[0]+' '+str(i[1])+' '+str(i[2])
-            ob, q1, q2 = i
-            npp = flavio.np_prediction(ob,wc_obj=wc,q2min=q1,q2max=q2)
-            npe = flavio.np_uncertainty(ob,wc_obj=wc,q2min=q1,q2max=q2)
+            npp = flavio.np_prediction(i,wc_obj=wch) 
+            npe = flavio.np_uncertainty(i,wc_obj=wch) 
+        else:
+            if type(i) == str:
+                name = i
+                npp = flavio.np_prediction(i,wc_obj=wc) 
+                npe = flavio.np_uncertainty(i,wc_obj=wc) 
+            elif type(i) == tuple:
+                name = i#[0]+' '+str(i[1])+' '+str(i[2])
+                ob, q1, q2 = i
+                npp = flavio.np_prediction(ob,wc_obj=wc,q2min=q1,q2max=q2)
+                npe = flavio.np_uncertainty(ob,wc_obj=wc,q2min=q1,q2max=q2)
         expc = measures[name]
         expr = uppers[name]
         expl = lowers[name]
-#    for i in obs:
-#        if type(i) == str:
-#            npp = flavio.np_prediction(i,wc_obj=wc) 
-#            npe = flavio.np_uncertainty(i,wc_obj=wc) 
-#        elif type(i) == tuple:
-#            ob, q1, q2 = i
-#            npp = flavio.np_prediction(ob,wc_obj=wc,q2min=q1,q2max=q2)
-#            npe = flavio.np_uncertainty(ob,wc_obj=wc,q2min=q1,q2max=q2)
-#        exp = flavio.combine_measurements(i,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1','LFU K Ratios 2']+ims)
-#        expc = exp.central_value
-#        expr = exp.error_right
-#        expl = exp.error_left
         expp = ((expc+expr)+(expc-expl))/2
         expe = (expc+expr)-expp
         sig = np.sqrt(npe**2 + expe**2)
@@ -777,44 +767,49 @@ def pval_func(cdat,app,obs,sigmas):
     print("p-value at chi2_min point with dof =",degs," is",pval*100,"%")
     return None
 
-def a_mu(par,ml,tanb,mH0,mA0,mH):
-    '''
-        Anomalous magnetic moment of the muon
-    '''
-    emu = -tanb*par[ml]/par['vev']
-#    e = np.sqrt(4*np.pi*get_alpha_e(par,1.0))
-    e = np.sqrt(4*np.pi*get_alpha_e(par,4.2))
-    b = np.arctan(tanb)
-    a = b - np.pi/2
-#    a = b - np.arccos(0.05)
-    cba, sba = np.cos(b-a),np.sin(b-a)
-    
-    def cr_1():
-        cr = e*(par[ml]**3)*(tanb**2)/(192*(np.pi*par['vev']*mH)**2)
-        return cr
+def pval_func2(cdat,obs,sigmas):
+    bf,mint,maxt,minh,maxh,mino,maxo,mina,maxa,minc,maxc,minz = mHmin2(cdat)
 
-    def cr_2():
-        def gamHh():
-            gam = cba*par[ml]/par['vev'] - sba*emu
-            return gam
-        def gamh0():
-            gam = sba*par[ml]/par['vev'] + cba*emu
-            return gam
-        def gamA0():
-            gam = 1j*emu
-            return gam
-        def eqn(gam,meh):
-            eq = -2*e*par[ml]*(abs(gam())**2)/(192*(np.pi*meh)**2) 
-            eq += e*par[ml]*(gam()**2)*(3+2*np.log((par[ml]/meh)**2))/(64*(np.pi*meh)**2)
-            return eq
+    chi2 = minz
+    degs = len(obs)-5
+    pval = pvalue(chi2,degs)
 
-        cr = eqn(gamHh,mH0) + eqn(gamA0,mA0) #+ eqn(gamh0,par['m_h']) 
+    with open('print_outs.txt','a') as f:
+        f.write("Best fit value is found for (tanb,mH,mH0,mA0,cba) =", bf)
+        f.write("Print outs are lists for values at", sigmas, "sigmas")
+        f.write("Minimum value of tanb is:", mint)
+        f.write("Maximum value of tanb is:", maxt)
+        f.write("Minimum value of mH is:", minh)
+        f.write("Maximum value of mH is:", maxh)
+        f.write("Minimum value of mH0 is:", mino)
+        f.write("Maximum value of mH0 is:", maxo)
+        f.write("Minimum value of mA0 is:", mina)
+        f.write("Maximum value of mA0 is:", maxa)
+        f.write("Minimum value of cba is:", minc)
+        f.write("Maximum value of cba is:", maxc,'\n')
+        f.write("chi2_min is:",chi2)
+        f.write("chi2_nu is:",chi2/degs)  
+        f.write("p-value at chi2_min point with dof =",degs," is",pval*100,"%")
 
-        return cr
+    print("Best fit value is found for (tanb,mH,mH0,mA0,cba) =", bf)
+    print("Print outs are lists for values at", sigmas, "sigmas")
+    print("Minimum value of tanb is:", mint)
+    print("Maximum value of tanb is:", maxt)
+    print("Minimum value of mH is:", minh)
+    print("Maximum value of mH is:", maxh)
+    print("Minimum value of mH0 is:", mino)
+    print("Maximum value of mH0 is:", maxo)
+    print("Minimum value of mA0 is:", mina)
+    print("Maximum value of mA0 is:", maxa)
+    print("Minimum value of cba is:", minc)
+    print("Maximum value of cba is:", maxc)
+    print(minz)
 
-    pref = e*par[ml]*par['GF']/(4*np.sqrt(2)*np.pi**2)
-    csev = (cr_1()+cr_2())/pref
-    return csev
+    print("chi2_min is:",chi2)
+    print("chi2_nu is:",chi2/degs)  
+    print("p-value at chi2_min point with dof =",degs," is",pval*100,"%")
+
+    return None
 
 def a_mu2(par,lep,tanb,mH0,mA0,mH):
     #----------------------------------------------
@@ -916,16 +911,6 @@ def a_mu2(par,lep,tanb,mH0,mA0,mH):
 
     d2 = aem*(mmu**2)*yhsl*lamhs*F2(1/rSMHp)/(8*(mhs**2)*np.pi**3)
     
-#    def F3(r):
-#        def integ(x):
-#            z = (x*(3*x*(4*x-1)+10)*r - x*(1-x))*np.log(r/(x*(1-x)))/(r-x*(1-x))
-#            return z
-#        inte, err = quad(integ,0,1)
-#        return inte/2
-#
-#    d3 = aem*(mmu**2)*yHl*RH1*F3(rWH0)/(8*(vev**2)*np.pi**3)
-
-    #----------------------------------------------
     ckms = flavio.physics.ckm.get_ckm(par)
     Vtb2 = abs(ckms[2,2])**2
     rtHp, rbHp, rtW, rbW = (mt/mH)**2, (mb/mH)**2, (mt/mW)**2, (mb/mW)**2
@@ -942,37 +927,12 @@ def a_mu2(par,lep,tanb,mH0,mA0,mH):
 
     d4 = aem*(mmu**2)*3*Vtb2*I4()/(32*(mH**2 - mW**2)*s2w*pow(vev,2)*np.pi**3)
     
-    #----------------------------------------------
     RSM1, RSM2 = sba, cba
 
-#    def I5(m):
-#        def integ(x):
-#            z = (x**2)*((mH**2 + mW**2 - m)*(1-x) - 4*mW**2)*(G(rWHp,m/(mH**2),x)-G(1,m/(mW**2),x))
-#            return z
-#        inte, err = quad(integ,0,1)
-#        return inte
-#
-#    d5 = -tanb*RSM1*RSM2*I5(mhs**2) - tanb*RH1*RH2*I5(mH0**2)
-#    d5 = d5*aem*(mmu**2)/(64*(mH**2 - mW**2)*pow(vev*s2w,2)*np.pi**3)
-
-    #----------------------------------------------
-#
-#    def I6(m):
-#        def integ(x):
-#            z = (x**2)*(x-1)*(G(1,m/(mH**2),x)-G(1/rWHp,m/(mW**2),x))
-#            return z
-#        inte, err = quad(integ,0,1)
-#        return inte
-#
-#    d6 = -tanb*RSM2*lamhs*I6(mhs**2)
-#    d6 = d6*aem*(mmu**2)/(64*(mH**2 - mW**2)*(vev**2)*np.pi**3)
-
-    #----------------------------------------------
     cr = (da + d1 + d2 + d4)*np.sqrt(2)*(np.pi**2)/(GF*mmu**2)
 
     return cr
 
-# maybe this one isn't working...
 def mk_measure(obs,N=500,Nexp=500,threads=4,force=False,force_exp=False):
     par_obj = flavio.default_parameters
     nuisance_parameters = par_obj.all_parameters
@@ -984,35 +944,65 @@ def mk_measure(obs,N=500,Nexp=500,threads=4,force=False,force_exp=False):
     cov_sm = sm_covariance.get(N, force=force, threads=threads)
     covariance = cov_exp + cov_sm
     # add the Pseudo-measurement
-    m = flavio.classes.Measurement('Pseudo-measurement for FastLikelihood instance:')
+    m = flavio.classes.Measurement('Pseudo-measurements')
     if np.asarray(central_exp).ndim == 0 or len(central_exp) <= 1: # for a 1D (or 0D) array
         m.add_constraint(obs,NormalDistribution(central_exp, np.sqrt(covariance)))
     else: 
         m.add_constraint(obs,MultivariateNormalDistribution(central_exp, covariance))
-    ms = m._constraints
-    measures, uppers, lowers = {},{},{}
-    for i in range(len(ms)):
-        obi = ms[i]
-        dist = obi[0]
-        obis = obi[1]
-        if type(obis) == tuple or type(obis) == str:
-            if type(obis) == str:
-                name = obis
-            elif type(obis) == tuple:
-                name = obis[0]+' '+str(obis[1])+' '+str(obis[2])
-            measures[name] = np.mean(dist.get_random(size=10)) 
-            uppers[name] = dist.get_error_right()
-            lowers[name] = dist.get_error_left()
-        elif type(obis) == list:
-            centrals = np.mean(dist.get_random(size=10),axis=0)
-            ups = dist.get_error_right()
-            los = dist.get_error_left()
-            for j in range(len(obis)):
-                if type(obis[j]) == str:
-                    name = obis[j]
-                elif type(obis[j]) == tuple:
-                    name = obis[j][0]+' '+str(obis[j][1])+' '+str(obis[j][2])
-                measures[name] = centrals[j]
-                uppers[name] = ups[j]
-                lowers[name] = los[j]
+    measures = m.get_central_all()
+    errs = m.get_1d_errors_rightleft()
+    uppers,lowers = {},{}
+    for k,v in errs.items():
+        uppers[k] = v[0]
+        lowers[k] = v[1]
     return measures, uppers, lowers
+
+
+def Two_HDM_WC(par, tanb, cosba):
+    v = par['vev']
+
+    sinba = np.sin(np.arccos(cosba))
+    theta_w = np.arcsin((par['s2w'])**0.5)
+    tan_tw = np.tan(theta_w)
+
+    #Coupling modifiers
+    K_u = sinba + cosba/tanb
+    K_d = sinba - cosba*tanb
+    K_v = sinba
+    
+    #K_d = abs(K_d)
+    #K_u = abs(K_u)
+    #K_v = abs(K_v)
+
+    #Setting up masses and Yukawa couplings
+    m_us = [par['m_u'], par['m_c'], get_mt(par, par['m_t'])] 
+    m_ds = [par['m_d'], par['m_s'], par['m_b']]
+    m_ls = [par['m_e'], par['m_mu'], par['m_tau']]
+    Y_us = [m_u * np.sqrt(2) /v for m_u in m_us]
+    Y_ds = [m_d * np.sqrt(2) /v for m_d in m_ds]
+    Y_ls = [m_l * np.sqrt(2) /v for m_l in m_ls]
+
+
+    #Calculating the couplings to use in flavio (hence kappa - 1)
+    C_uH_pre = -1 * (K_u-1) / (v**2)
+    C_uHs = [C_uH_pre * Y_u for Y_u in Y_us]
+
+    C_dH_pre = -1 * (K_d-1) / (v**2)
+    C_dHs = [C_dH_pre * Y_d for Y_d in Y_ds]
+    C_lHs = [C_dH_pre * Y_l for Y_l in Y_ls]
+
+    #Going off the form of the general SM Lagrangian and the usual 2HDM vector coupling modification
+    g_p, g = 0.3584551, 0.6534878
+    tan_W = tan_tw #g_p / g
+    mW = par['m_W'] 
+
+    C_W = (K_v-1)*(mW/v)**2 / (v**2)
+    C_B = (tan_W**2) * C_W      #(K_v-1)*(mW*tan_W/v)**2 /(v**2)  
+    C_WB = 4*tan_W * C_W        #(K_v-1)*4*tan_W* (mW/v)**2 /(v**2)  
+
+    #Thankfully, it is straightforward to identify these WCs with those in Flavio
+
+    #phi = C_H - Not used in SS calculations (flavio calls it phi also)
+
+    #Not all are used to calculate signal strengths in flavio, eg. all the phi_11s are neglected  
+    return C_uHs[1], C_uHs[2], C_dHs[1], C_dHs[2], C_lHs[1], C_lHs[2], C_W, C_B, C_WB
