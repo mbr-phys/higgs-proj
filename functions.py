@@ -464,15 +464,14 @@ def bsll(par,CKM,mss,mls,mH0,tanb,mH,ali):
     CP = cs_1(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + cs_2(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + cs_3(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el)
     CPP = csp_1(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + csp_2(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el) + csp_3(Lp(yh,cba,yH0,sba,-1*el),Lm(yh,cba,yH0,sba,-1*el),-1*el)
 
-#    print("CS 3.34,3.35,6.5:")
-#    print(cs_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-#    print(cs_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-#    print(cs_3(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-#    print()
-#    print("CSp 3.34,3.35,6.6:")
-#    print(csp_1(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-#    print(csp_2(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
-#    print(csp_3(Lp(yh,cba,yH0,sba,el),Lm(yh,cba,yH0,sba,el),el))
+    print('C9_'+mss[0][2],C9,'\n')
+    print('C9p_'+mss[0][2],C9p,'\n')
+    print('C10_'+mss[0][2],C10,'\n')
+    print('C10p_'+mss[0][2],C10p,'\n')
+    print('CS_'+mss[0][2],CS,'\n')
+    print('CSp_'+mss[0][2],CSP,'\n')
+    print('CP_'+mss[0][2],CP,'\n')
+    print('CPp_'+mss[0][2],CPP,'\n')
 
     return C9, C9p, C10, C10p, CS, CSP, CP, CPP
 

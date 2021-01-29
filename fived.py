@@ -19,8 +19,6 @@ import numpy as np
 from functools import partial
 from functions import *
 
-#np.seterr(divide='raise',over='raise',invalid='raise') 
-
 #### parameter setting
 
 # should add these to flavio's yml doc at some point, but this will do for now
@@ -88,16 +86,6 @@ flavio.measurements.read_file('world_avgs.yml') # read in the world averages we 
 flavio.measurements.read_file('bkll_avgs.yml') 
 config['renormalization scale']['bxgamma'] = 1.74
 
-par = flavio.default_parameters.get_central_all()
-ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
-mH0, mH = 3200, 3200
-tanb = 10
-print("For mH0 = mH+ = 3200 GeV, tanb = 10:")
-print()
-C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],mH0,tanb,mH,0)
-C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],mH0,tanb,mH,0)
-quit()
-
 my_obs = [
     'BR(B+->taunu)', 'BR(B+->munu)', 'BR(D+->munu)', 'BR(Ds->munu)', 'BR(Ds->taunu)', 'BR(tau->Knu)', 'BR(K+->munu)', 'BR(tau->pinu)', 'Gamma(pi+->munu)', # [:9]
     'BR(B->Xsgamma)', # [9]
@@ -114,10 +102,6 @@ obs2 = ['BR(B+->pilnu)', 'BR(B0->pilnu)',
         ("<Rmue>(B+->K*ll)",0.045,1.1),("<Rmue>(B+->K*ll)",1.1,6.0),("<Rmue>(B+->K*ll)",15.0,19.0),
         ("<Rmue>(B->Kll)",0.1,8.12),("<Rmue>(B->K*ll)",0.1,8.12),
         'a_mu']
-
-strings = 'B0topilnu'
-#Fleps = FastLikelihood(observables=my_obs[:9]+[my_obs[38]],include_measurements=['Tree Level Leptonics'])
-#Fleps = FastLikelihood(name="trees",observables=[obs2[1]],include_measurements=['Tree Level Semileptonics',])
 
 ims = [
 #       'LHCb-2003.04831 S 0.1-0.98','LHCb-2003.04831 S 1.1-2.5','LHCb-2003.04831 S 2.5-4.0',
@@ -249,178 +233,12 @@ obs8 = [
         ('<AFBh>(Lambdab->Lambdamumu)',15.0,20.0),('<AFBl>(Lambdab->Lambdamumu)',15.0,20.0),
         ('<AFBlh>(Lambdab->Lambdamumu)',15.0,20.0)]
 
-
 angle_list = obs7 + obs8 + obs6 #+ obs2[2:-1]
-#print(len(angle_list))
-#quit()
 
-#Fleps = Likelihood(observables=my_obs[:9]+my_obs[14:]+obs2[:2],include_measurements=['Tree Level Leptonics','LFU D Ratios','Tree Level Semileptonics']) 
-#Fleps = FastLikelihood(name="trees",observables=my_obs[14:16],include_measurements=['LFU D Ratios',]) 
-#------------------------------
-#Fmix = FastLikelihood(name='mix',observables=my_obs[10:12],include_measurements=['B Mixing',]) 
-#Frad = FastLikelihood(name="rad",observables=[my_obs[9]],include_measurements=['Radiative Decays'])
-#------------------------------
-#Fmu = FastLikelihood(name="mu",observables=obs2[2:5],include_measurements=['LFU K Ratios 1','LFU K Ratios 2']) 
-#Fmu = FastLikelihood(name="mu",observables=my_obs[12:14],include_measurements=['FCNC Leptonic Decays',]) 
-#------------------------------
 #obs_list = my_obs+obs2[:2]+angle_list
-#print(len(angle_list))
-#print(len(obs_list))
 #FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1']+ims)
-#------------------------------
-#Fmuon = FastLikelihood(name="muons",observables=['a_mu'],include_measurements=['Anomalous Magnetic Moments'])
-#Fmuon.make_measurement(N=500,threads=4)
+#FL2.make_measurement(N=500)
 
-#Fleps.make_measurement(N=500,threads=4)
-#Fmix.make_measurement(N=500,threads=4)
-#Frad.make_measurement(N=500,threads=4)
-#Fmu.make_measurement(N=500,threads=4)
-
-#------------------------------
-#   Leptonic and Semileptonic Tree Levels
-#------------------------------
-
-def leps(wcs):
-    tanb, mH = wcs # state what the two parameters are going to be on the plot
-
-    par = flavio.default_parameters.get_central_all()
-    ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
-
-    CSR_b_t, CSL_b_t = rh(par['m_u'],par['m_b'],par['m_tau'],10**tanb,10**mH)
-    CSR_b_m, CSL_b_m = rh(par['m_u'],par['m_b'],par['m_mu'],10**tanb,10**mH)
-    CSR_b_e, CSL_b_e = rh(par['m_u'],par['m_b'],par['m_e'],10**tanb,10**mH)
-    CSR_d_t, CSL_d_t = rh(par['m_c'],par['m_d'],par['m_tau'],10**tanb,10**mH)
-    CSR_d_m, CSL_d_m = rh(par['m_c'],par['m_d'],par['m_mu'],10**tanb,10**mH)
-    CSR_d_e, CSL_d_e = rh(par['m_c'],par['m_d'],par['m_e'],10**tanb,10**mH)
-    CSR_ds_t, CSL_ds_t = rh(par['m_c'],par['m_s'],par['m_tau'],10**tanb,10**mH)
-    CSR_ds_m, CSL_ds_m = rh(par['m_c'],par['m_s'],par['m_mu'],10**tanb,10**mH)
-    CSR_ds_e, CSL_ds_e = rh(par['m_c'],par['m_s'],par['m_e'],10**tanb,10**mH)
-    CSR_k_t, CSL_k_t = rh(par['m_u'],par['m_s'],par['m_tau'],10**tanb,10**mH)
-    CSR_k_m, CSL_k_m = rh(par['m_u'],par['m_s'],par['m_mu'],10**tanb,10**mH)
-    CSR_k_e, CSL_k_e = rh(par['m_u'],par['m_s'],par['m_e'],10**tanb,10**mH)
-    CSR_p_t, CSL_p_t = rh(par['m_u'],par['m_d'],par['m_tau'],10**tanb,10**mH)
-    CSR_p_m, CSL_p_m = rh(par['m_u'],par['m_d'],par['m_mu'],10**tanb,10**mH)
-    CSR_bc_t, CSL_bc_t = rh(par['m_c'],par['m_b'],par['m_tau'],10**tanb,10**mH)
-    CSR_bc_m, CSL_bc_m = rh(par['m_c'],par['m_b'],par['m_mu'],10**tanb,10**mH)
-    CSR_bc_e, CSL_bc_e = rh(par['m_c'],par['m_b'],par['m_e'],10**tanb,10**mH)
-
-    wc = flavio.WilsonCoefficients()
-    wc.set_initial({ # tell flavio what WCs you're referring to with your variables
-            'CSR_bctaunutau': CSR_bc_t, 'CSL_bctaunutau': CSL_bc_t,
-            'CSR_bcmunumu': CSR_bc_m, 'CSL_bcmunumu': CSL_bc_m,
-            'CSR_bcenue': CSR_bc_e, 'CSL_bcenue': CSL_bc_e, 
-            'CSR_butaunutau': CSR_b_t, 'CSL_butaunutau': CSL_b_t,
-            'CSR_bumunumu': CSR_b_m, 'CSL_bumunumu': CSL_b_m,
-            'CSR_buenue': CSR_b_e, 'CSL_buenue': CSL_b_e, 
-            'CSR_dctaunutau': CSR_d_t, 'CSL_dctaunutau': CSL_d_t,
-            'CSR_dcmunumu': CSR_d_m, 'CSL_dcmunumu': CSL_d_m,
-            'CSR_dcenue': CSR_d_e, 'CSL_dcenue': CSL_d_e, 
-            'CSR_sctaunutau': CSR_ds_t, 'CSL_sctaunutau': CSL_ds_t,
-            'CSR_scmunumu': CSR_ds_m, 'CSL_scmunumu': CSL_ds_m,
-            'CSR_scenue': CSR_ds_e, 'CSL_scenue': CSL_ds_e, 
-            'CSR_sutaunutau': CSR_k_t, 'CSL_sutaunutau': CSL_k_t, 
-            'CSR_sumunumu': CSR_k_m, 'CSL_sumunumu': CSL_k_m, 
-            'CSR_suenue': CSR_k_e, 'CSL_suenue': CSL_k_e, 
-            'CSR_dutaunutau': CSR_p_t, 'CSL_dutaunutau': CSL_p_t, 
-            'CSR_dumunumu': CSR_p_m, 'CSL_dumunumu': CSL_p_m, 
-        }, scale=4.2, eft='WET', basis='flavio')
-    return Fleps.log_likelihood(par,wc)
-
-#------------------------------
-#   B Mixing
-#------------------------------
-
-def mix(wcs):
-    tanb, mH = wcs # state what the two parameters are going to be on the plot
-
-    par = flavio.default_parameters.get_central_all()
-    ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
-
-    CVLL_bs, CVRR_bs, CSLL_bs, CSRR_bs, CSLR_bs, CVLR_bs = mixing(par,ckm_els,['m_s',1,'m_d'],10**tanb,10**mH)
-    CVLL_bd, CVRR_bd, CSLL_bd, CSRR_bd, CSLR_bd, CVLR_bd = mixing(par,ckm_els,['m_d',0,'m_s'],10**tanb,10**mH)
-
-    wc = flavio.WilsonCoefficients()
-    wc.set_initial({ # tell flavio what WCs you're referring to with your variables
-            'CVLL_bsbs': CVLL_bs,'CVRR_bsbs': CVRR_bs,'CSLL_bsbs': CSLL_bs,'CSRR_bsbs': CSRR_bs,'CSLR_bsbs': CSLR_bs,'CVLR_bsbs': CVLR_bs, # DeltaM_s
-            'CVLL_bdbd': CVLL_bd,'CVRR_bdbd': CVRR_bd,'CSLL_bdbd': CSLL_bd,'CSRR_bdbd': CSRR_bd,'CSLR_bdbd': CSLR_bd,'CVLR_bdbd': CVLR_bd, # DeltaM_d
-        }, scale=4.2, eft='WET', basis='flavio')
-    return Fmix.log_likelihood(par,wc)
-
-#------------------------------
-#   B->Xsgamma Radiative Decay
-#------------------------------
-
-def rad(wcs):
-    tanb, mH = wcs # state what the two parameters are going to be on the plot
-
-    par = flavio.default_parameters.get_central_all()
-    ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
-
-    C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],10**tanb,10**mH)
-
-    wc = flavio.WilsonCoefficients()
-    wc.set_initial({ # tell flavio what WCs you're referring to with your variables
-        'C7_bs': C7, 'C8_bs': C8,
-        'C7p_bs': C7p, 'C8p_bs': C8p,
-        }, scale=4.2, eft='WET', basis='flavio')
-    return Frad.log_likelihood(par,wc)
-
-#------------------------------
-#   B(s/d) -> mumu + R(K) & R(K*)
-#------------------------------
-
-def mu(app,wcs):
-    tanb, mH = wcs # state what the two parameters are going to be on the plot
-    mass, align = app
-    if mass == 0:
-        mH0 = mH
-    elif mass == 1:
-        mH0 = np.log10(1500)
-
-    par = flavio.default_parameters.get_central_all()
-    ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
-
-    C9_se, C9p_se, C10_se, C10p_se, CS_se, CSp_se, CP_se, CPp_se = bsll(par,ckm_els,['m_s','m_d',1],['m_e','m_mu',1],10**mH0,10**tanb,10**mH,align)
-    C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,['m_s','m_d',1],['m_mu','m_e',1],10**mH0,10**tanb,10**mH,align)
-#    C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,['m_d','m_s',0],['m_mu','m_e',1],10**mH0,10**tanb,10**mH,align)
-    C7, C7p, C8, C8p = bsgamma2(par,ckm_els,flavio.config['renormalization scale']['bxgamma'],10**tanb,10**mH)
-
-    wc = flavio.WilsonCoefficients()
-    wc.set_initial({ # tell flavio what WCs you're referring to with your variables
-           'C7_bs': C7,'C7p_bs': C7p, 
-           'C8_bs': C8,'C8p_bs': C8p, 
-           'C9_bsee': C9_se,'C9p_bsee': C9p_se,
-           'C9_bsmumu': C9_s,'C9p_bsmumu': C9p_s,
-           'C10_bsee': C10_se,'C10p_bsee': C10p_se,'CS_bsee': CS_se,'CSp_bsee': CSp_se,'CP_bsee': CP_se,'CPp_bsee': CPp_se, 
-           'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CP_s,'CPp_bsmumu': CPp_s, # Bs->mumu
-#           'C10_bdmumu': C10_d,'C10p_bdmumu': C10p_d,'CS_bdmumu': CS_d,'CSp_bdmumu': CSp_d,'CP_bdmumu': CP_d,'CPp_bdmumu': CPp_d, # B0->mumu
-        }, scale=4.2, eft='WET', basis='flavio')
-    return Fmu.log_likelihood(par,wc)
-
-#------------------------------
-#   Anomalous moments
-#------------------------------
-
-def muon(wcs):
-    tanb,mH = wcs
-    
-    mH0,mA0 = mH, mH
-#    mH0,mA0 = np.log10(1500), mH
-#    mH0,mA0 = mH, np.log10(1500)
-
-    par = flavio.default_parameters.get_central_all()
-
-    csev = a_mu2(par,'m_mu',10**tanb,10**mH0,10**mA0,10**mH)
-
-    wc = flavio.WilsonCoefficients()
-    wc.set_initial({'C7_mumu': csev},scale=1.0,eft='WET-3',basis='flavio')
-    return Fmuon.log_likelihood(par,wc)
-
-#------------------------------
-#   All Observables
-#------------------------------
-
-#def func(like,wcs):
 def func(app,wcs):
     tanb, mH = wcs # state what the two parameters are going to be on the plot
 
@@ -461,7 +279,6 @@ def func(app,wcs):
 
     wc = flavio.WilsonCoefficients()
     wc.set_initial({ # tell flavio what WCs you're referring to with your variables
-#            'C7_mumu': csev,
             'CSR_bctaunutau': CSR_bc_t, 'CSL_bctaunutau': CSL_bc_t,
             'CSR_bcmunumu': CSR_bc_m, 'CSL_bcmunumu': CSL_bc_m,
             'CSR_bcenue': CSR_bc_e, 'CSL_bcenue': CSL_bc_e, 
@@ -479,17 +296,15 @@ def func(app,wcs):
             'CSR_suenue': CSR_k_e, 'CSL_suenue': CSL_k_e, 
             'CSR_dutaunutau': CSR_p_t, 'CSL_dutaunutau': CSL_p_t, 
             'CSR_dumunumu': CSR_p_m, 'CSL_dumunumu': CSL_p_m, 
-            'C7_bs': C7,'C7p_bs': C7p, 
-            'C8_bs': C8,'C8p_bs': C8p, 
-            'C9_bsee': C9_se,'C9p_bsee': C9p_se,
-            'C9_bsmumu': C9_s,'C9p_bsmumu': C9p_s,
+            'C7_bs': C7,'C7p_bs': C7p, 'C8_bs': C8,'C8p_bs': C8p, 
+            'C9_bsee': C9_se,'C9p_bsee': C9p_se,'C9_bsmumu': C9_s,'C9p_bsmumu': C9p_s,
             'C10_bsee': C10_se,'C10p_bsee': C10p_se,'CS_bsee': CS_se,'CSp_bsee': CSp_se,'CP_bsee': CP_se,'CPp_bsee': CPp_se, 
             'C10_bsmumu': C10_s,'C10p_bsmumu': C10p_s,'CS_bsmumu': CS_s,'CSp_bsmumu': CSp_s,'CP_bsmumu': CP_s,'CPp_bsmumu': CPp_s, # Bs->mumu
             'C10_bdmumu': C10_d,'C10p_bdmumu': C10p_d,'CS_bdmumu': CS_d,'CSp_bdmumu': CSp_d,'CP_bdmumu': CP_d,'CPp_bdmumu': CPp_d, # B0->mumu
             'CVLL_bsbs': CVLL_bs,'CVRR_bsbs': CVRR_bs,'CSLL_bsbs': CSLL_bs,'CSRR_bsbs': CSRR_bs,'CSLR_bsbs': CSLR_bs,'CVLR_bsbs': CVLR_bs, # DeltaM_s
             'CVLL_bdbd': CVLL_bd,'CVRR_bdbd': CVRR_bd,'CSLL_bdbd': CSLL_bd,'CSRR_bdbd': CSRR_bd,'CSLR_bdbd': CSLR_bd,'CVLR_bdbd': CVLR_bd, # DeltaM_d
         }, scale=4.2, eft='WET', basis='flavio')
-    return FL2.log_likelihood(par,wc)
+    return wc
 
 def c2_test(app,wcs):
     tanb, mH = wcs
