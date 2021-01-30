@@ -10,6 +10,13 @@ from scipy.integrate import quad
 import matplotlib.pyplot as plt
 import numpy as np
 
+Comb_meas = ['mu_tth(h->VV)','mu_VBF(h->WW)', 'mu_gg(h->WW)', 'mu_tth(h->WW)','mu_Wh(h->WW)', 'mu_Zh(h->WW)',
+          'mu_VBF(h->ZZ)', 'mu_gg(h->ZZ)', 'mu_Vh(h->ZZ)', 'mu_tth(h->ZZ)','mu_gg(h->Zgamma)',
+          'mu_VBF(h->gammagamma)', 'mu_Vh(h->gammagamma)', 'mu_gg(h->gammagamma)', 'mu_tth(h->gammagamma)', 
+          'mu_Wh(h->gammagamma)', 'mu_Zh(h->gammagamma)','mu_VBF(h->mumu)', 'mu_gg(h->mumu)',
+          'mu_gg(h->tautau)', 'mu_VBF(h->tautau)', 'mu_tth(h->tautau)', 'mu_Wh(h->tautau)', 'mu_Zh(h->tautau)',
+          'mu_Vh(h->bb)', 'mu_VBF(h->bb)', 'mu_tth(h->bb)', 'mu_Wh(h->bb)', 'mu_Zh(h->bb)', 'mu_gg(h->bb)',
+          'mu_Zh(h->cc)']
 
 ims = [
 #       'LHCb-2003.04831 S 0.1-0.98','LHCb-2003.04831 S 1.1-2.5','LHCb-2003.04831 S 2.5-4.0',
@@ -482,9 +489,9 @@ def bsll(par,CKM,d,q,l,mH0,tanb,mH,cba):
                 sq1 += y*Lm*(-2*I1(zs[2])*ts[2]*(zs[2]-1)*((ed[d,d]**2)*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d] - (ed[q,q]**2)*np.conj(CKM[2,q])*eu[n,2]*CKM[n,d]) + 2*np.log(mul)*(-ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*eu[2,2]*CKM[2,d] + ((ed[d,d]**2)*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d] - (ed[q,q]**2)*np.conj(CKM[2,q])*eu[n,2]*CKM[n,d])*ts[2]) + ed[d,d]*(I7(zs[2])*(ed[q,q]**2)*np.conj(CKM[2,q])*CKM[2,d] + 2*I5(zs[2],zs[2])*np.conj(CKM[k,q])*eu[k,2]*eu[2,2]*CKM[2,d]))
                 sq2 += -2*I4(zs[2],zs[2])*ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*eu[2,2]*CKM[2,d]*Lp*y 
                 sq3 += ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d]*np.sqrt(y*zs[2])*(el[l,l]*2)*(2*(1-I1(zs[2]))*cba*0.652*sba*(yh-yH0) + I1(zs[2])*np.sqrt(y)*(cba*yh*lamh/mH - sba*yH0*lamH0/mH))
-        print('Lines 1-3: ',sq1)
-        print('Line 4: ',sq2)
-        print('Lines 5-6: ',sq3)
+        #print('Lines 1-3: ',sq1)
+        #print('Line 4: ',sq2)
+        #print('Lines 5-6: ',sq3)
         p1 = (1/(s2w*np.conj(CKM[2,q])*CKM[2,d]*0.652**4))*(sq1+sq2-sq3)
         return p1
 
@@ -936,7 +943,7 @@ def a_mu2(par,lep,tanb,mH0,mA0,mH):
 def mk_measure(obs,N=500,Nexp=500,threads=4,force=False,force_exp=False):
     par_obj = flavio.default_parameters
     nuisance_parameters = par_obj.all_parameters
-    ts = ['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1','LFU K Ratios 2']+ims
+    ts = ['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1','LFU K Ratios 2','ATLAS Run 2 Higgs 139/fb', 'CMS Run 2 Higgs 137/fb','ATLAS Run 2 Higgs 139/fb mumu', 'ATLAS Run 2 Higgs 139/fb Zgamma', 'CMS h->cc 2019', 'CMS Run 2 Higgs 36/fb NR']+ims
     full_measurement_likelihood = MeasurementLikelihood(obs,include_measurements=ts)
     sm_covariance = SMCovariance(obs,vary_parameters=nuisance_parameters,par_obj=par_obj)
     exp_covariance = MeasurementCovariance(full_measurement_likelihood)
@@ -953,8 +960,8 @@ def mk_measure(obs,N=500,Nexp=500,threads=4,force=False,force_exp=False):
     errs = m.get_1d_errors_rightleft()
     uppers,lowers = {},{}
     for k,v in errs.items():
-        uppers[k] = v[0]
-        lowers[k] = v[1]
+        uppers[k] = v[1]
+        lowers[k] = v[0]
     return measures, uppers, lowers
 
 

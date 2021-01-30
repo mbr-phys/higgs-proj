@@ -103,6 +103,14 @@ obs2 = ['BR(B+->pilnu)', 'BR(B0->pilnu)',
         ("<Rmue>(B->Kll)",0.1,8.12),("<Rmue>(B->K*ll)",0.1,8.12),
         'a_mu']
 
+Comb_meas = ['mu_tth(h->VV)','mu_VBF(h->WW)', 'mu_gg(h->WW)', 'mu_tth(h->WW)','mu_Wh(h->WW)', 'mu_Zh(h->WW)',
+          'mu_VBF(h->ZZ)', 'mu_gg(h->ZZ)', 'mu_Vh(h->ZZ)', 'mu_tth(h->ZZ)','mu_gg(h->Zgamma)',
+          'mu_VBF(h->gammagamma)', 'mu_Vh(h->gammagamma)', 'mu_gg(h->gammagamma)', 'mu_tth(h->gammagamma)', 
+          'mu_Wh(h->gammagamma)', 'mu_Zh(h->gammagamma)','mu_VBF(h->mumu)', 'mu_gg(h->mumu)',
+          'mu_gg(h->tautau)', 'mu_VBF(h->tautau)', 'mu_tth(h->tautau)', 'mu_Wh(h->tautau)', 'mu_Zh(h->tautau)',
+          'mu_Vh(h->bb)', 'mu_VBF(h->bb)', 'mu_tth(h->bb)', 'mu_Wh(h->bb)', 'mu_Zh(h->bb)', 'mu_gg(h->bb)',
+          'mu_Zh(h->cc)']
+
 ims = [
 #       'LHCb-2003.04831 S 0.1-0.98','LHCb-2003.04831 S 1.1-2.5','LHCb-2003.04831 S 2.5-4.0',
 #       'LHCb-2003.04831 S 4.0-6.0','LHCb-2003.04831 S 11.0-12.5','LHCb-2003.04831 S 15.0-17.0',
@@ -340,7 +348,6 @@ def test_func(obs,m,u,l,
         levels = [delta_chi2(n, dof=5) for n in n_sigma]
     return {'x':t,'y':h,'o':o,'a':a,'c':c,'z':pred,'levels':levels}
 
-
 #------------------------------
 #   Get Contour Data
 #------------------------------
@@ -350,13 +357,13 @@ sigmas = (1,2)
 
 for op in range(1):
     if op == 0:
-        obs_list = my_obs+obs2[:2]+angle_list
+        obs_list = my_obs+obs2[:2]+angle_list+Comb_meas
     elif op == 1:
-        obs_list = my_obs+obs2[:12]+angle_list
+        obs_list = my_obs+obs2[:12]+angle_list+Comb_meas
     print(len(angle_list))
     print(len(obs_list))
-    FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1','LFU K Ratios 2']+ims)
-    FL2.make_measurement(N=500,threads=4)
+#    FL2 = FastLikelihood(name="glob",observables=obs_list,include_measurements=['Tree Level Leptonics','Radiative Decays','FCNC Leptonic Decays','B Mixing','LFU D Ratios','Tree Level Semileptonics','LFU K Ratios 1','LFU K Ratios 2']+ims)
+#    FL2.make_measurement(N=500,threads=4)
     ms,us,ls = mk_measure(obs_list)
 
     cdat = test_func(obs_list,ms,us,ls,n_sigma=(1,2))
