@@ -88,15 +88,15 @@ flavio.measurements.read_file('world_avgs.yml') # read in the world averages we 
 flavio.measurements.read_file('bkll_avgs.yml') 
 config['renormalization scale']['bxgamma'] = 1.74
 
-#par = flavio.default_parameters.get_central_all()
-#ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
-#mH0, mH = 3200, 3200
-#tanb = 10
-#print("For mH0 = mH+ = 3200 GeV, tanb = 10:")
-#print()
-#C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,2,1,1,mH0,tanb,mH,0)
-#C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,2,0,1,mH0,tanb,mH,0)
-#quit()
+par = flavio.default_parameters.get_central_all()
+ckm_els = flavio.physics.ckm.get_ckm(par) # get out all the CKM elements
+mH0, mH = 3200, 3200
+tanb = 10
+print("For mH0 = mH+ = 3200 GeV, tanb = 10:")
+print()
+C9_s, C9p_s, C10_s, C10p_s, CS_s, CSp_s, CP_s, CPp_s = bsll(par,ckm_els,2,1,1,mH0,tanb,mH,0)
+C9_d, C9p_d, C10_d, C10p_d, CS_d, CSp_d, CP_d, CPp_d = bsll(par,ckm_els,2,0,1,mH0,tanb,mH,0)
+quit()
 
 my_obs = [
     'BR(B+->taunu)', 'BR(B+->munu)', 'BR(D+->munu)', 'BR(Ds->munu)', 'BR(Ds->taunu)', 'BR(tau->Knu)', 'BR(K+->munu)', 'BR(tau->pinu)', 'Gamma(pi+->munu)', # [:9]

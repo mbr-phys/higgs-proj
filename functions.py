@@ -385,7 +385,7 @@ def bsll(par,CKM,d,q,l,mH0,tanb,mH,cba):
         p1 = 0
         for k in range(3):
             for n in range(3):
-                p1 += ed[k,1]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,2]
+                p1 += ed[k,q]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,d]
         c9p = p1*(1-4*s2w)*(I1(zs[2])-1)/(2*np.conj(CKM[2,q])*CKM[2,d]*e**2)
         return c9p
 
@@ -393,7 +393,7 @@ def bsll(par,CKM,d,q,l,mH0,tanb,mH,cba):
         p1 = 0
         for k in range(3):
             for n in range(3):
-                p1 += ed[k,1]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,d]
+                p1 += ed[k,q]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,d]
                 #p1 += ed[k,1]*ed[n,2]
         c10p = -1*p1*(I1(zs[2])-1)/(2*np.conj(CKM[2,q])*CKM[2,d]*e**2)
         #c10p = -1*p1*(I1(zs[2])-1)/(2*e**2)
@@ -411,7 +411,7 @@ def bsll(par,CKM,d,q,l,mH0,tanb,mH,cba):
         p1 = 0 
         for k in range(3):
             for n in range(3):
-                p1 += ed[k,1]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,2]
+                p1 += ed[k,q]*np.conj(CKM[2,k])*CKM[2,n]*ed[n,d]
         c9p = p1*y*f5(zs[2])/(27*CKM[2,d]*np.conj(CKM[2,q])*0.652**2)
         return c9p
 
@@ -427,7 +427,7 @@ def bsll(par,CKM,d,q,l,mH0,tanb,mH,cba):
         p1 = 0 
         for k in range(3):
             for n in range(3):
-                p1 += ed[k,1]*np.conj(CKM[1,k])*CKM[1,n]*ed[n,2]
+                p1 += ed[k,q]*np.conj(CKM[1,k])*CKM[1,n]*ed[n,d]
         c9p = 2*p1*y*(19+12*np.log(mul))/(27*CKM[2,d]*np.conj(CKM[2,q])*0.652**2)
         return c9p
 
@@ -489,9 +489,6 @@ def bsll(par,CKM,d,q,l,mH0,tanb,mH,cba):
                 sq1 += y*Lm*(-2*I1(zs[2])*ts[2]*(zs[2]-1)*((ed[d,d]**2)*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d] - (ed[q,q]**2)*np.conj(CKM[2,q])*eu[n,2]*CKM[n,d]) + 2*np.log(mul)*(-ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*eu[2,2]*CKM[2,d] + ((ed[d,d]**2)*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d] - (ed[q,q]**2)*np.conj(CKM[2,q])*eu[n,2]*CKM[n,d])*ts[2]) + ed[d,d]*(I7(zs[2])*(ed[q,q]**2)*np.conj(CKM[2,q])*CKM[2,d] + 2*I5(zs[2],zs[2])*np.conj(CKM[k,q])*eu[k,2]*eu[2,2]*CKM[2,d]))
                 sq2 += -2*I4(zs[2],zs[2])*ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*eu[2,2]*CKM[2,d]*Lp*y 
                 sq3 += ed[d,d]*np.conj(CKM[k,q])*eu[k,2]*CKM[2,d]*np.sqrt(y*zs[2])*(el[l,l]*2)*(2*(1-I1(zs[2]))*cba*0.652*sba*(yh-yH0) + I1(zs[2])*np.sqrt(y)*(cba*yh*lamh/mH - sba*yH0*lamH0/mH))
-        #print('Lines 1-3: ',sq1)
-        #print('Line 4: ',sq2)
-        #print('Lines 5-6: ',sq3)
         p1 = (1/(s2w*np.conj(CKM[2,q])*CKM[2,d]*0.652**4))*(sq1+sq2-sq3)
         return p1
 
@@ -690,13 +687,6 @@ def mixing(par,CKM,mds,tanb,mH):
     CSRR = c2p()
     CSLR = c4_1() + c4_2()
     CVLR = 2*c5()
-
-#    print("CVLL:",CVLL)
-#    print("CVRR:",CVRR)
-#    print("CSLL:",CSLL)
-#    print("CSRR:",CSRR)
-#    print("CSLR:",CSLR)
-#    print("CVLR:",CVLR)
 
     return CVLL, CVRR, CSLL, CSRR, CSLR, CVLR
 
